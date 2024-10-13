@@ -1,2 +1,2 @@
 import e from "express";
-console.log("Hi");
+console.log("WHAT MAN");
