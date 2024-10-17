@@ -1,0 +1,90 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 200vh;
+    font-family: Arial, sans-serif;
+}
+
+a{
+    text-decoration: none;
+}
+
+/* Initial Navbar Style */
+.navbar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: red;
+    position: relative;
+    transition: all 0.3s ease; /* For smooth transition when scroll triggers */
+    top: 0;
+}
+
+/* Sticky Effect */
+.sticky {
+    scale: 0.92;
+    margin-top: 10px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    border-bottom-left-radius: 30px;  /* Rounded bottom left */
+    border-bottom-right-radius: 30px; /* Rounded bottom right */
+    border-radius: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a shadow effect */
+}
+
+.left-sticky{
+    border-radius: 40px;
+}
+
+
+.left-nav {
+    background-color: white;
+    height: 100%;
+    flex-basis: 35%; /* Controls how far the white part goes */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 6px;
+
+    /* Short rounded curve effect using clip-path */
+    clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+}
+
+.right-nav {
+    padding: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.left-nav .logo {
+    
+    color: red;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.right-nav a {
+    color: white;
+    text-decoration: none;
+    padding: 0 15px;
+    font-size: 1.1em;
+}
+
+.right-nav a:hover {
+    text-decoration: underline;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .left-nav {
+        flex-basis: 45%; /* Adjust the width for smaller screens */
+    }
+}

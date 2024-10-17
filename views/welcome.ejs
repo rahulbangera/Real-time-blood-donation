@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../public/css/welcome.css">
+    <title></title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="left-nav">
+            <!-- Left-side content (logo, etc.) -->
+            <a href="#" class="logo">Tedss Talksss</a>
+        </div>
+        <div class="right-nav">
+            <!-- Right-side content (nav links, buttons, etc.) -->
+            <a href="#">Home</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+    <script>
+        // Get the navbar element
+const navbar = document.querySelector('.navbar');
+const leftSticky = document.querySelector('.left-nav');
+
+// Get the offset position of the navbar
+const sticky = navbar.offsetTop;
+
+// Add the sticky class to the navbar when you reach its scroll position
+// Remove "sticky" when you leave the scroll position
+function stickyNavbar() {
+  if (window.pageYOffset > sticky) {
+    leftSticky.classList.add('left-sticky');
+    navbar.classList.add('sticky');
+  } else {
+    navbar.classList.remove('sticky');
+    leftSticky.classList.remove('left-sticky');
+  }
+}
+
+// When the user scrolls the page, execute stickyNavbar
+window.onscroll = function() {
+    stickyNavbar();
+};
+
+    </script>
+</body>
+</html>
