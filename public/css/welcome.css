@@ -1,4 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap');
+
 :root{
+    --lightBloodColor: rgb(218, 69, 69);
     --bloodColor: rgb(218, 57, 57);
     --oppBlood: white;
 }
@@ -23,10 +26,13 @@ a{
     display: flex;
     align-items: center;
     width: 100%;
-    background-color: var(--bloodColor);
+    background-color: var(--lightBloodColor);
     position: relative;
     transition: all 0.3s ease; /* For smooth transition when scroll triggers */
     top: 0;
+    font-family: inconsolata;
+    font-weight: 900;
+    font-size: 1.2rem;
 }
 
 /* Sticky Effect */
@@ -56,7 +62,7 @@ a{
     justify-content: center;
     position: relative;
     padding: 20px;
-
+    font-family: joti one;
     /* Short rounded curve effect using clip-path */
     clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
 }
@@ -94,9 +100,9 @@ a{
     }
 }
 
-/* .others{
+.others{
     display: none;
-    animation: 0.4s transist ease-in-out;
+    animation: 0.6s transist ease-in-out;
 }
 
 
@@ -107,4 +113,41 @@ a{
     100%{
         opacity: 1;
     }
-} */
+}
+
+*{
+    /* outline: rgb(240, 22, 22) solid 1px; */
+}
+
+.hero{
+    height: 90vh;
+    background-color: rgb(231, 179, 179);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.4rem;
+    font-family: joti one;
+    font-weight: 200;
+}
+
+.heroButtons{
+    height: 9vh;
+    width: 34vw;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.heroButtons button{
+    height: 80%;
+    width: 40%;
+    background-color: var(--bloodColor);
+    color: var(--oppBlood);
+    border: none;
+    border-radius: 10px;
+    font-family: inconsolata;
+    font-weight: 700;
+    font-size: 50%;
+}
