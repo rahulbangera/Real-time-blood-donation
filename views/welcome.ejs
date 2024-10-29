@@ -3,23 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../public/css/load.css">
     <link rel="stylesheet" href="../public/css/welcome.css">
     <title></title>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="left-nav">
-            <!-- Left-side content (logo, etc.) -->
-            <a href="#" class="logo">Tedss Talksss</a>
+    <!-- <div class="wrapper" id="loader">
+        <div class="box-wrap">
+            <div class="box one"></div>
+            <div class="box two"></div>
+            <div class="box three"></div>
+            <div class="box four"></div>
+            <div class="box five"></div>
+            <div class="box six"></div>
         </div>
-        <div class="right-nav">
-            <!-- Right-side content (nav links, buttons, etc.) -->
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </div>
-    </nav>
+    </div> -->
+    <div class="others" id="content">
+        <nav class="navbar">
+            <div class="left-nav">
+                <!-- Left-side content (logo, etc.) -->
+                <a href="#" class="logo">Tedss Talksss</a>
+            </div>
+            <div class="right-nav">
+                <!-- Right-side content (nav links, buttons, etc.) -->
+                <a href="#">Home</a>
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+            </div>
+        </nav>
+    </div>
+  
     <script>
+
+// window.addEventListener('load', function() {
+//     const loader = document.getElementById('loader');
+//     const content = document.getElementById('content');
+    
+//     // Set a minimum load time of 1 second
+//     const minLoadTime = 2000; // in milliseconds
+//     const startTime = performance.now();
+
+//     // Function to hide loader and show content
+//     function hideLoader() {
+//         const elapsedTime = performance.now() - startTime;
+
+//         // If the page loads too fast, wait for the minimum load time
+//         const delay = Math.max(0, minLoadTime - elapsedTime);
+        
+//         setTimeout(() => {
+//             loader.style.display = 'none';
+//             content.style.display = 'block';
+//         }, delay);
+//     }
+
+//     // Call hideLoader function
+//     hideLoader();
+// });
+
+
         // Get the navbar element
 const navbar = document.querySelector('.navbar');
 const leftSticky = document.querySelector('.left-nav');

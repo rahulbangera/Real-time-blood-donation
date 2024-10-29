@@ -1,5 +1,5 @@
 :root{
-    --bloodColor: rgb(138, 3, 3);
+    --bloodColor: rgb(218, 57, 57);
     --oppBlood: white;
 }
 
@@ -55,7 +55,7 @@ a{
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 6px;
+    padding: 20px;
 
     /* Short rounded curve effect using clip-path */
     clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
@@ -93,3 +93,18 @@ a{
         flex-basis: 45%; /* Adjust the width for smaller screens */
     }
 }
+
+/* .others{
+    display: none;
+    animation: 0.4s transist ease-in-out;
+}
+
+
+@keyframes transist{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+} */
