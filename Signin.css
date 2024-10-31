@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap');
+
+:root {
+    --lightBloodColor: rgb(218, 69, 69);
+    --bloodColor: rgb(218, 57, 57);
+    --oppBlood: white;
+    --specialFont: 'Joti One', cursive;
+    --normalFont: 'Inconsolata', monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--bloodColor);
+    font-family: var(--normalFont);
+    color: var(--oppBlood);
+}
+
+.container {
+    width: 400px; /* Increased width for a larger layout */
+    max-width: 90%;
+    padding: 30px;
+    text-align: center;
+    background-color: var(--oppBlood);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    color: #333;
+}
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.logo-img {
+    width: 80px;
+    height: auto;
+    border-radius: 10px;
+}
+
+h1 {
+    font-size: 28px; 
+    margin-bottom: 20px;
+    color: var(--bloodColor);
+    font-family: var(--specialFont);
+}
+
+/* Subheading and link for sign-in */
+h6 {
+    font-size: 16px;
+    margin-bottom: 25px;
+    font-family: var(--normalFont);
+}
+
+h6 a {
+    color: var(--lightBloodColor);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+h6 a:hover {
+    text-decoration: underline;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #555;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+label {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 8px;
+    align-self: flex-start;
+    font-family: var(--normalFont);
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px; 
+    font-size: 16px; /* Larger text size */
+    margin-bottom: 18px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.button {
+    display: inline-block;
+    background-color: var(--lightBloodColor);
+    color: var(--oppBlood);
+    padding: 12px 24px; /* Larger padding for bigger button */
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-family: var(--normalFont);
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+}
+
+.button:hover {
+    background-color: darkred;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    .button {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
