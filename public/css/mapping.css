@@ -1,0 +1,109 @@
+/* *{
+    outline: rgb(80, 121, 18) solid 1px;
+} */
+
+body{
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    background-color: rgb(255, 187, 0);
+}
+
+nav{
+    background-color: rgb(0, 0, 0);
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.outsidePopup{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.popupContainer{
+    background-color: rgba(0, 0, 0, 0.8);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popupContent{
+    background-color: white;
+    width: 50%;
+    height: 70%;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar{
+    width: 1px;
+}
+
+#map{
+    height: 80%;
+    width: 100%;
+}
+
+.buttonContainer{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 4px;
+    align-items: center;
+}
+
+
+.getLoc{
+    background-color: rgb(78, 173, 252);
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+    border: 1px solid rgb(96, 153, 238);
+    padding: 9px 6px;
+    cursor: pointer;
+}
+
+.popupContent input{
+    width: 60%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgb(0, 0, 0);
+}
+.finalMapContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 4px;
+}
+
+.finalMapContainer button{
+    background-color: rgb(78, 173, 252);
+    color: rgb(0, 0, 0);
+    border-radius: 10px;
+    border: 1px solid rgb(96, 153, 238);
+    padding: 9px 12px;
+    cursor: disabled;
+}
+
+
+@media (width<800px){
+    .popupContent{
+        width: 80%;
+        height: 70%;
+    }
+    .popupContent input{
+        width: 80%;
+    }
+    .finalMapContainer button{
+        padding: 9px 6px;
+    }
+}
