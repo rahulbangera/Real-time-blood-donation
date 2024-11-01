@@ -15,12 +15,16 @@ import MongoStore from "connect-mongo";
 const app = e();
 const PORT = process.env.PORT || 5000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false, // true for 465, false for other ports
+  auth: {
+    user: "coderangersverify@gmail.com",
+    pass: "vzhykowzuabnjscw ",
+  },
+});
 
-app.use(e.static("public"));
-app.use(e.json());
-app.use(e.urlencoded({ extended: true }));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.set("view engine", "ejs");
@@ -57,27 +61,28 @@ app.use(
   })
 );
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(e.static("public"));
+app.use(e.json());
+app.use(e.urlencoded({ extended: true }));
+
+
 // service: "smtp.gmail.com",
 //   auth: {
 //     user: "coderangersverify@gmail.com",
 //     pass: "vzhykowzuabnjscw ",
 //   }
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: "coderangersverify@gmail.com",
-    pass: "vzhykowzuabnjscw ",
-  },
-});
+
 
 app.get("/", (req, res) => {
+  console.log(req.session.email);
+  console.log(req.session.name);
+  console.log(req.session.username);
   if (req.session.email) {
     res.render("welcome", { userLoggedIn: true });
-  }
-  else{
+  } else {
     res.render("welcome", { userLoggedIn: false });
   }
 });
@@ -95,18 +100,17 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/requestblood", (req, res) => {
-if (req.session.email) {
+  if (req.session.email) {
     res.render("request", { userLoggedIn: true });
-  }
-  else{
+  } else {
     res.render("request", { userLoggedIn: false });
-  }});
+  }
+});
 
 app.get("/donateblood", (req, res) => {
   if (req.session.email) {
     res.render("donate", { userLoggedIn: true });
-  }
-  else{
+  } else {
     res.render("donate", { userLoggedIn: false });
   }
 });
@@ -229,11 +233,11 @@ app.get("/checkSession", (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  req.session.email = email;
   console.log(email);
   const currentUser = await LocalUser.findOne({ email });
   if (currentUser) {
     if (currentUser.password === password) {
-      req.session.email = currentUser.email;
       req.session.name = currentUser.name;
       req.session.username = currentUser.username;
       res.redirect("/");
@@ -243,6 +247,7 @@ app.post("/login", async (req, res) => {
   } else {
     res.send("User not found");
   }
+  console.log(req.session.email);
 });
 
 app.get("/logout", (req, res) => {
