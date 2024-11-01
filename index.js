@@ -10,10 +10,9 @@ import LocalUser from "./Models/localuser";
 import session from "express-session";
 import Otps from "./Models/otpverifications.js";
 import bodyParser from "body-parser";
-import MongoStore from "connect-mongo";
 
 const app = e();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -28,11 +27,17 @@ app.set("views", path.join(__dirname, "views"));
 
 app.use(
   session({
-    secret: "yourSecret",
+    secret: process.env.SESSION_SECRET || "secret",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true, 
+      maxAge: 24 * 60 * 60 * 1000 
+    },
   })
 );
+
 // service: "smtp.gmail.com",
 //   auth: {
 //     user: "coderangersverify@gmail.com",
