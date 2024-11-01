@@ -32,8 +32,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === "production",
-      httpOnly: true, 
-      maxAge: 24 * 60 * 60 * 1000 
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
     },
   })
 );
@@ -69,7 +69,7 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/signin", (req, res) => {
-  res.render("signin");
+  res.render("login");
 });
 
 app.get("/requestblood", (req, res) => {
@@ -81,7 +81,6 @@ app.get("/donateblood", (req, res) => {
   userLoggedIn = true;
   res.render("donate", { userLoggedIn });
 });
-
 
 app.post("/signup", async (req, res) => {
   const data = req.body;
