@@ -201,7 +201,6 @@ app.post("/otpVerify", async (req, res) => {
       }
 
       user.verified = true;
-      userLoggedIn = true;
       await user.save();
       res.send("User verified");
     } else {
@@ -234,7 +233,6 @@ app.post("/login", async (req, res) => {
   const currentUser = await LocalUser.findOne({ email });
   if (currentUser) {
     if (currentUser.password === password) {
-      userLoggedIn = true;
       req.session.email = currentUser.email;
       req.session.name = currentUser.name;
       req.session.username = currentUser.username;
