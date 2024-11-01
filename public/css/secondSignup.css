@@ -9,7 +9,7 @@ body{
 
 .formContainer{
     height: 80%;
-    max-height: 1000px;
+    max-height: 700px;
 }
 
 .splitDiv2{
@@ -25,4 +25,11 @@ body{
     margin-bottom: 18px;
     border-radius: 6px;
     border: 1px solid #ccc;
+}
+
+@media (max-width: 1000px) {
+    .formContainer{
+        height: 60%;
+        max-height: 700px;
+    }
 }

@@ -183,3 +183,9 @@ body {
 .signinDiv2{
     margin-bottom: 14px;
 }
+
+@media (width<1000px){
+   .formContainer{
+       width: 90%;
+   }
+}
