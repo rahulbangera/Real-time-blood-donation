@@ -17,7 +17,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 app.set("view engine", "ejs");
+
 app.set("views", path.join(__dirname, "views"));
+console.log("Views directory:", path.join(__dirname, "views"));
 
 app.get("/", (req, res) => {
   res.render("welcome");
@@ -25,6 +27,10 @@ app.get("/", (req, res) => {
 
 app.get("/profile", (req, res) => {
   res.render("components/mapping");
+});
+
+app.get("/requestblood", (req, res) => {
+  res.render("request");
 });
 
 app.listen(PORT, () => {
