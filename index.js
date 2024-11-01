@@ -12,23 +12,6 @@ import Otps from "./Models/otpverifications.js";
 import bodyParser from "body-parser";
 import MongoStore from "connect-mongo";
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "secret",
-    resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({
-      mongoUrl: "mongodb+srv://myAtlasDBUser:Hero123456@test1.bu7v6.mongodb.net/bloodDonation?retryWrites=true&w=majority&appName=Test1", // Use your MongoDB connection string
-      collectionName: "sessions",
-    }),
-    cookie: {
-      maxAge: 1000 * 60 * 60 * 24, // 1 day (or adjust as needed)
-      sameSite: "lax", // Adjust if needed based on app behavior
-      secure: true, // Set to true if using HTTPS
-    },
-  })
-);
-
 const app = e();
 const PORT = process.env.PORT || 5000;
 
@@ -43,15 +26,33 @@ const __dirname = dirname(__filename);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET || "secret",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: process.env.NODE_ENV === "production",
+//       httpOnly: true,
+//       maxAge: 24 * 60 * 60 * 1000,
+//     },
+//   })
+// );
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl:
+        "mongodb+srv://myAtlasDBUser:Hero123456@test1.bu7v6.mongodb.net/bloodDonation?retryWrites=true&w=majority&appName=Test1", // Use your MongoDB connection string
+      collectionName: "sessions",
+    }),
     cookie: {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 1000 * 60 * 60 * 24, // 1 day (or adjust as needed)
+      sameSite: "lax", // Adjust if needed based on app behavior
+      secure: true, // Set to true if using HTTPS
     },
   })
 );
