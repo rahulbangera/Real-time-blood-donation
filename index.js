@@ -10,6 +10,24 @@ import LocalUser from "./Models/localuser";
 import session from "express-session";
 import Otps from "./Models/otpverifications.js";
 import bodyParser from "body-parser";
+import MongoStore from "connect-mongo";
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "secret",
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: "mongodb+srv://myAtlasDBUser:Hero123456@test1.bu7v6.mongodb.net/bloodDonation?retryWrites=true&w=majority&appName=Test1", // Use your MongoDB connection string
+      collectionName: "sessions",
+    }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, // 1 day (or adjust as needed)
+      sameSite: "lax", // Adjust if needed based on app behavior
+      secure: true, // Set to true if using HTTPS
+    },
+  })
+);
 
 const app = e();
 const PORT = process.env.PORT || 5000;
