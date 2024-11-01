@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate Blood</title>
+    <link rel="stylesheet" href="css/mapping.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/donate.css">
+    <script src="https://kit.fontawesome.com/1b792d3ec8.js" crossorigin="anonymous"></script>
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+          key: "AIzaSyB5gpPpgiOxj-_RHUah9P5auYPtOqRMmqo",
+          v: "weekly",
+          // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+          // Add other bootstrap parameters as needed, using camel case.
+        });
+      </script>
+</head>
+<body>
+    <%- include('components/navbar') %>
+    <div class="popupContainer">
+        <div class="popupContent" id="popupContent">
+            <h1>Select your location</h1>
+            <hr>
+            <div class="buttonContainer">
+                <p>Mark your location on the map</p>
+                <button class="getLoc" id="getLoc">Get Current Location</button>
+            </div>
+           
+            <div class="mapContainer" id="map"></div>
+            <div class="finalMapContainer">
+                <input id="cityValue" type="text" placeholder="City name" disabled>
+                <button id="mapNextButton">Next</button>
+            </div>
+        </div>
+
+    </div>
+    <script src="js/mapping.js"></script>
+    <script>
+        
+    </script>
+</body>
+</html>

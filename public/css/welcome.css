@@ -6,6 +6,7 @@
     --oppBlood: white;
     --specialFont: Joti One, cursive;
     --normalFont: 'Inconsolata', monospace;
+    --darkBloodColor: rgb(77, 0, 0);
 }
 
 button{
@@ -315,4 +316,19 @@ a{
     .container-two > .col1{
         border-right: none;
     }
+}
+
+.donateStatus{
+    font-size: 1.2rem;
+    display: inline;
+    font-weight: 400;
+    font-family: inconsolata;
+}
+
+.green{
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
 }

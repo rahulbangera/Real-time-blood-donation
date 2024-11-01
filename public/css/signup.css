@@ -8,6 +8,8 @@
     --oppBlood: white;
     --specialFont: 'Joti One', cursive;
     --normalFont: 'Inconsolata', monospace;
+    --darkBloodColor: rgb(77, 0, 0);
+
 }
 
 * {

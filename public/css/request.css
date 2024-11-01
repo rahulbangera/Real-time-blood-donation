@@ -1,7 +1,101 @@
+@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap');
+
+:root {
+    --lightBloodColor: rgb(218, 69, 69);
+    --bgColor: rgb(229, 160, 160);
+
+    --bloodColor: rgb(218, 57, 57);
+    --oppBlood: white;
+    --specialFont: 'Joti One', cursive;
+    --normalFont: 'Inconsolata', monospace;
+    --darkBloodColor: rgb(77, 0, 0);
+
+}
+
+
 .navbar{
-    position: fixed;
+    position: relative;
 }
 
 .sticky{
     position: fixed;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    background-color: var(--darkBloodColor);
+    overflow: hidden;
+}
+.quote-section {
+    font-family: var(--specialFont);
+    width: 100%;
+    color: var(--bloodColor);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 1.5em;
+}
+.main-container {
+    display: flex;
+    width: 100%;
+    max-width: 1600px;
+    margin-top: 20px;
+    margin: 0 auto;
+    height: calc(100vh - 100px); 
+}
+.filters-column {
+    width: 25%;
+    padding: 10px;
+    background-color: #f1f1f1;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden; 
+}
+.donors-column {
+    width: 75%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto; 
+    height: 100%;
+}
+.donor-card {
+    padding: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+.popup {
+    background: white;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+    position: relative;
+}
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 1.2em;
+    color: #d32f2f;
+}
+#map {
+    width: 100%;
+    height: 400px;
 }

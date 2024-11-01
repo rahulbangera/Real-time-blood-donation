@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap');
+
+:root {
+    --lightBloodColor: rgb(218, 69, 69);
+    --bgColor: rgb(229, 160, 160);
+
+    --bloodColor: rgb(218, 57, 57);
+    --oppBlood: white;
+    --specialFont: 'Joti One', cursive;
+    --normalFont: 'Inconsolata', monospace;
+    --darkBloodColor: rgb(77, 0, 0);
+
+}
+
+
+.navbar{
+    position: relative;
+}
+
+.sticky{
+    position: fixed;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    background-color: var(--darkBloodColor);
+}
+
+.popupContainer{
+    background-color: var(--darkBloodColor);
+}

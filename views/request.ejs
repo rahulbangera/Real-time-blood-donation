@@ -6,9 +6,121 @@
     <title>Document</title>
     <link rel="stylesheet" href="css/navbar.css">
     <link rel="stylesheet" href="css/request.css">
+    <script src="https://kit.fontawesome.com/1b792d3ec8.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
     <%- include('components/navbar')%>
 
+    <div class="quote-section">
+        "When every second counts, connect with nearby donors – hope starts with a single match."
+    </div>
+
+    <div class="main-container">
+        <div class="filters-column">
+            <h2>Filter Donors</h2>
+            <button onclick="openMapPopup()">Select Location Radius</button>
+            <br>                
+            <label>
+                Blood Group:
+                <select>
+                    <option>Any</option>
+                    <option>A+</option>
+                    <option>A-</option>
+                    <option>B+</option>
+                    <option>B-</option>
+                    <option>AB+</option>
+                    <option>AB-</option>
+                    <option>O+</option>
+                    <option>O-</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="donors-column">
+            <!-- Donor cards here -->
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+            <div class="donor-card">
+                <h3>Donor Name</h3>
+                <p>Blood Group: A+</p>
+                <p>Location: City</p>
+                <p>Contact: 123-456-7890</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup with map -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup">
+            <span class="close-btn" onclick="closeMapPopup()">&times;</span>
+            <h3>Select Location Radius</h3>
+            <div id="map"></div>
+        </div>
+    </div>
 </body>
 </html>

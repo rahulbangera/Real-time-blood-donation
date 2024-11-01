@@ -68,8 +68,16 @@ app.get("/signin", (req, res) => {
 });
 
 app.get("/requestblood", (req, res) => {
-  res.render("request");
+  userLoggedIn = true;
+  res.render("request", { userLoggedIn });
 });
+
+app.get("/donateblood", (req, res) => {
+  userLoggedIn = true;
+  res.render("donate", { userLoggedIn });
+});
+
+
 app.post("/signup", async (req, res) => {
   const data = req.body;
   const { name, userName, email, password, mbNumber, bdGroup } = data; // Destructure for cleaner access
