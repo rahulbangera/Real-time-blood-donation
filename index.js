@@ -73,10 +73,13 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-let userLoggedIn = false;
-
 app.get("/", (req, res) => {
-  res.render("welcome", { userLoggedIn });
+  if (req.session.email) {
+    res.render("welcome", { userLoggedIn: true });
+  }
+  else{
+    res.render("welcome", { userLoggedIn: false });
+  }
 });
 
 app.get("/profile", (req, res) => {
@@ -92,13 +95,20 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/requestblood", (req, res) => {
-  userLoggedIn = true;
-  res.render("request", { userLoggedIn });
-});
+if (req.session.email) {
+    res.render("request", { userLoggedIn: true });
+  }
+  else{
+    res.render("request", { userLoggedIn: false });
+  }});
 
 app.get("/donateblood", (req, res) => {
-  userLoggedIn = true;
-  res.render("donate", { userLoggedIn });
+  if (req.session.email) {
+    res.render("donate", { userLoggedIn: true });
+  }
+  else{
+    res.render("donate", { userLoggedIn: false });
+  }
 });
 
 app.post("/signup", async (req, res) => {
@@ -240,7 +250,6 @@ app.post("/login", async (req, res) => {
 app.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) throw err;
-    userLoggedIn = false;
     res.redirect("/");
   });
 });
