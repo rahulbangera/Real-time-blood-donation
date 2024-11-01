@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -52,5 +52,88 @@
     </form>
 </div>
 </center>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in</title>
+    <link rel="stylesheet" href="css/signup.css">
+    <link rel="stylesheet" href="css/secondSignup.css">
+</head>
+<body>
+    <div class="headerContent">
+        <div class="headingItem">
+            <h1>SIGN UP PAGE</h1>
+        </div>
+      
+        <div class="quote">
+        <p>Your blood donation is a gift straight from the heart &#9829;</p>
+        </div>
+    </div>
+    <div class="mainContent">
+        <div class="formContainer">
+            <div class="logo">
+                <img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="Blood Drop" class="logo-img">        </div>
+            <h1>Sign up</h1>
+            <form action="/login" method="post">
+                <div class="inputDiv splitDiv2">
+                    <div class="">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Full Name" required>
+                       </div>
+                       <div class="">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Username (include numbers)" pattern="(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+" required>
+                       </div>
+                </div>
+               
+                <div class="inputDiv">
+                    <label for="Email">Email</label>
+                    <input type="email" id="email" name="Email" placeholder="me@example.com" required>
+                </div>
+               
+               <div class="inputDiv">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="e.g., ********" required>
+               </div>
+<div class="inputDiv splitDiv2">
+    <div class="">
+        <label for="mbNumber">Mobile Number:</label>
+        <input type="tel" id="mbNumber" class="mbNumber" required>
+    </div>
+    <div class="">
+        <label for="bGroup">Blood Group:</label>
+        <select name="bGroup" id="bGroup" required>
+            <option value="" disabled selected>Select your blood group</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            </select>
+    </div>
+</div>
+       <div class="inputDiv signinDiv2">
+        <p>Already have an account? <a href="/signin">Sign in</a></p>
+       </div>
+        <div class="inputDiv">
+            
+      
+
+               <div class="formOthers">
+                <button type="submit" class="button">Signup</button>
+               </div>
+
+            </form>
+        </div>
+    </div>
+    
 </body>
 </html>

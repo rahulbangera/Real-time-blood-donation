@@ -2,8 +2,6 @@
 
 :root {
     --lightBloodColor: rgb(218, 69, 69);
-    --bgColor: rgb(229, 160, 160);
-
     --bloodColor: rgb(218, 57, 57);
     --oppBlood: white;
     --specialFont: 'Joti One', cursive;
@@ -17,52 +15,18 @@
 }
 
 body {
-    background-color: var(--bgColor);
-    text-align: center;
-    border:2px solid black;
-    border-width: 1vh;
-    height:100vh;
-    font-family: var(--normalFont);
-    justify-content: center;
-    align-items: center;
-    color: var(--oppBlood);
-    overflow: hidden;
-}
-
-
-
-.headerContent .quote{
-    background-color: black;
-    color:var(--lightBloodColor);
-    padding: 12px;
-    font-size: large;
-    font-family: var(--specialFont);
-}
-
-.headingItem{
-    padding: 5px;
-    background-color: rgb(209, 132, 102);
-}
-
-.headingItem h1{
-    font-family: var(--specialFont);
-}
-
-.headerContent{
-    height: 10vh;
-}
-
-.mainContent {
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: calc(100vh - 6vh);
+    justify-content: center;
+    height: 100vh;
+    background-color: var(--bloodColor);
+    font-family: var(--normalFont);
+    color: var(--oppBlood);
 }
 
-.formContainer {
-    width: 60%; /* Increased width for a larger layout */
-    max-width: 600px;
-    max-height: 500px;
+.container {
+    width: 400px; /* Increased width for a larger layout */
+    max-width: 90%;
     padding: 30px;
     text-align: center;
     background-color: var(--oppBlood);
@@ -80,20 +44,9 @@ body {
     width: 80px;
     height: auto;
     border-radius: 10px;
-    animation: bounce 2s infinite;
 }
 
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-
-.formContainer h1 {
+h1 {
     font-size: 28px; 
     margin-bottom: 20px;
     color: var(--bloodColor);
@@ -101,29 +54,35 @@ body {
 }
 
 /* Subheading and link for sign-in */
-.formContainer h6 {
+h6 {
     font-size: 16px;
     margin-bottom: 25px;
     font-family: var(--normalFont);
 }
 
-.formContainer h6 a {
+h6 a {
     color: var(--lightBloodColor);
     text-decoration: none;
     font-weight: bold;
 }
 
-.formContainer h6 a:hover {
+h6 a:hover {
     text-decoration: underline;
 }
 
-.formContainer form {
+p {
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #555;
+}
+
+form {
     display: flex;
     flex-direction: column;
     align-items: stretch;
 }
 
-.formContainer label {
+label {
     font-size: 16px;
     color: #333;
     margin-bottom: 8px;
@@ -131,8 +90,8 @@ body {
     font-family: var(--normalFont);
 }
 
-.formContainer input[type="email"],
-.formContainer input[type="password"] {
+input[type="email"],
+input[type="password"] {
     width: 100%;
     padding: 12px; 
     font-size: 16px; /* Larger text size */
@@ -141,7 +100,7 @@ body {
     border: 1px solid #ccc;
 }
 
-.formContainer .button {
+.button {
     display: inline-block;
     background-color: var(--lightBloodColor);
     color: var(--oppBlood);
@@ -155,31 +114,17 @@ body {
     width: 100%;
 }
 
-.formContainer .button:hover {
+.button:hover {
     background-color: darkred;
 }
 
 @media (max-width: 768px) {
-    .formContainer h1 {
+    h1 {
         font-size: 24px;
     }
 
-    .formContainer .button {
+    .button {
         font-size: 16px;
         padding: 10px;
     }
-}
-
-.splitDiv2{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.splitDiv2 h6{
-    margin: 0;
-}
-
-.signinDiv2{
-    margin-bottom: 14px;
 }

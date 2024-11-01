@@ -4,22 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign in</title>
-    <link rel="stylesheet" href="Signin.css">
+    <link rel="stylesheet" href="css/signup.css">
 </head>
 <body>
-    <div class="container">
-        <div class="logo">
-            <img src="path/to/logo.png" alt="Logo" class="logo-img">
+    <div class="headerContent">
+        <div class="headingItem">
+            <h1>SIGN IN PAGE</h1>
         </div>
-        <h1>Sign in</h1>
-        <form action="/login" method="post">
-            <label for="Email">Email</label>
-            <input type="email" id="email" name="Email" placeholder="me@example.com" required>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="e.g., ********" required>
-            <h6><a href="forgotpassword.html"> Forgot password</a></h6>
-            <button type="submit" class="button">Login</button>
-        </form>
+      
+        <div class="quote">
+        <p>Your blood donation is a gift straight from the heart &#9829;</p>
+        </div>
     </div>
+    <div class="mainContent">
+        <div class="formContainer">
+            <div class="logo">
+                <img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="Blood Drop" class="logo-img">        </div>
+            <h1>Sign in</h1>
+            <form action="/login" method="post">
+                <div class="inputDiv">
+                    <label for="Email">Email</label>
+                    <input type="email" id="email" name="Email" placeholder="me@example.com" required>
+                </div>
+               
+               <div class="inputDiv">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="e.g., ********" required>
+               </div>
+               <div class="formOthers">
+                <div class="splitDiv2 signinDiv2">
+                    <div class=""><p>Don't have an account? <a href="/signup">Create One</a></p></div>
+                    <div class=""><h6><a href="forgotpassword.html"> Forgot password?</a></h6></div>
+                </div>
+               
+                <button type="submit" class="button">Signin</button>
+               </div>
+
+            </form>
+        </div>
+    </div>
+    
 </body>
 </html>

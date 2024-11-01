@@ -3,8 +3,11 @@
         <a href="#" class="logo">Blood Daani</a>
     </div>
     <div class="right-nav">
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
+        <% if(!userLoggedIn) {%>
+        <a href="/signup">Register</a>
+        <a href="/signin">Login</a>
+        <% } else{ %>
+        <a href="/profile">Profile</a>
+        <% } %>
     </div>
 </nav>

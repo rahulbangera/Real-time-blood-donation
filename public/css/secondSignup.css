@@ -1,0 +1,28 @@
+body{
+    overflow: scroll;
+    height: 130vh;
+}
+
+.mainContent{
+    height: calc(130vh - 12vh);
+}
+
+.formContainer{
+    height: 80%;
+    max-height: 1000px;
+}
+
+.splitDiv2{
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+}
+
+.splitDiv2 input, .splitDiv2 select{
+    width: 100%;
+    padding: 6px; 
+    font-size: 16px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}

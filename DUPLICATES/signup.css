@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap');
+
+:root{
+    --lightBloodColor: rgb(218, 69, 69);
+    --bloodColor: rgb(218, 57, 57);
+    --oppBlood: white;
+    --bgColor: #f2e8cf;
+}
+
+
+body{
+    background-color: var(--bgColor);
+    text-align: center;
+    border:2px solid black;
+    border-width: 1vh;
+    height:95vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.quote{
+    background-color: black;
+    color:red;
+    padding: 3px;
+    font-size: large;
+
+}
+
+.inputBox{
+    background-color: var(--oppBlood);
+    border: 5px solid var(--bloodColor);
+    padding: 1vh;
+    justify-content: center;
+    margin: 2vh;
+    display: flex;
+    height:63vh;
+    width: 40vh;
+    flex-direction: column;
+
+}
+
+.inputBox img{
+    height:160px;
+    width:auto;
+}
+
+button {
+    background-color: var(--bloodColor);
+    color: var(--oppBlood);
+    padding: 10px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: transform 0.3s, background-color 0.3s;
+    width: 100%;
+}
+button:hover{
+    cursor:pointer;
+}
+
+label,input{
+    color:var(--lightBloodColor);
+    height:20px;
+    width:auto;
+    margin: 0;
+    margin-right: 0.5em;
+    grid-column: label;
+  align-self: center;
+}
+
+/* Blood Drop Bounce Animation */
+.blood-drop {
+    height: 100px;
+    width: auto;
+    animation: bounce 2s infinite;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Bounce animation for the blood drop */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .form-container {
+        width: 90%; 
+        margin: 0 auto;         
+        padding: 1em; 
+    }
+
+}

@@ -30,9 +30,10 @@
                 <h2>Be A Hero</h2>
             </div>
             <div class="heroButtons">
-                <button>Donate Blood</button>
-                <button>Request Blood</button>
-            </div>
+                <button onclick="<% if(!userLoggedIn) { %> window.location.href = '/signin' <% } else{ %>window.location.href = '/donateblood'<% } %> ">Donate Blood</button>
+               <button onclick="<% if(!userLoggedIn) { %> window.location.href = '/signin'<% } else{ %>window.location.href = '/requestblood'<% } %> ">Request Blood</button>
+        </div>
+           
         </div>
         <div class="mainSection">
             <div class="section whyDonate">
