@@ -141,6 +141,15 @@ body {
     border: 1px solid #ccc;
 }
 
+.popupContainer input{
+    width: 100%;
+    padding: 12px; 
+    font-size: 16px; /* Larger text size */
+    margin-bottom: 18px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
 .formContainer .button {
     display: inline-block;
     background-color: var(--lightBloodColor);
@@ -188,4 +197,61 @@ body {
    .formContainer{
        width: 90%;
    }
+}
+
+
+
+.popupContainer{
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+}
+
+.popupContainer{
+    display: none;
+}
+
+.popupContent{
+    background-color: white;
+    width: 50%;
+    height: 50%;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+
+.popupContainer .button{
+    width: 100%;
+    padding: 12px;
+    background-color: var(--lightBloodColor);
+    color: var(--oppBlood);
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-family: var(--normalFont);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.popupContainer h1{
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: var(--bloodColor);
+    font-family: var(--specialFont);
+}
+
+.popupContainer p{
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #555;
+    text-align: left;
+}
+
+.popupContent{
+    height: auto;
 }

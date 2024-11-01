@@ -19,8 +19,7 @@ button{
 }
 
 body {
-    height: 400vh;
-    font-family: Arial, sans-serif;
+    font-family: inconsolata, sans-serif;
 }
 
 a{
@@ -160,3 +159,160 @@ a{
     }
 }
 
+.aboutUsSection{
+    padding: 20px;
+    background-color: rgb(231, 179, 179);;
+    display: flex;
+    width: 100%;
+}
+
+.container-two{
+    width: 94%;
+    margin: 0 auto;
+    margin-top: 60px;
+    display: grid;
+    
+    grid-template-columns: 1fr 1fr;
+}
+
+.container-two > .col1>h1{
+    color: rgb(131 127 115 / 68%);
+    font-size: 2.4rem;
+    margin-top: 0;
+    font-family: joti one;
+}
+
+.container-two > .col1{
+    align-self: self-start;
+    border-right: 1px solid grey;
+    padding: 8px;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+.container-two > .col2{
+    align-self: center;
+    padding: 8px;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-content: center;
+}
+
+.container-two > .col2 > .im1>img{
+    width: 80%;
+    border: 4px solid white;
+    border-radius: 6px;
+    max-height: 360px;
+    max-width: 360px;
+}
+
+
+.container-two > .col2 > .im1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.container-two > .col1 > button {
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid grey;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-color: rgb(58 170 56);
+    transition: 0.3s;
+    width: 40%;
+}
+
+.container-two > .col1 > button:hover {
+    background-color: rgba(207, 113, 123, 0.698);
+    cursor: pointer;
+}
+
+.container-two{
+    margin-bottom: 60px;
+}
+
+.container-two p{
+    font-size: 1.4rem;
+    font-family: inconsolata;
+    font-weight: 400;
+    text-align: justify;
+    margin-top: 20px;
+}
+
+
+.footer {
+    background-color: var(--bloodColor); 
+    color: white; 
+    text-align: center; 
+    padding: 20px 0; 
+    position: relative; 
+    bottom: 0; 
+    width: 100%; 
+}
+
+.footer-content {
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 0 20px; 
+}
+
+.footer-links {
+    margin-bottom: 10px; 
+}
+
+.footer-links a {
+    color: white; 
+    text-decoration: none; 
+    margin: 0 15px; 
+    transition: color 0.3s; 
+}
+
+.footer-links a:hover {
+    color: #61dafb; 
+}
+
+.footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+
+@media (width>1700px){
+    .mainSection{
+        height: 70vh;
+    }
+    .whyDonate{
+        width: 70%;
+    }
+    .container-two{
+        width: 70%;
+    }
+}
+
+@media (width<600px){
+    img.background-image{
+        height: 100vh;
+    }
+    div.heade{
+        width: 400px;
+    }
+    .container-two{
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    div.im1{
+        grid-row: 1;
+    }
+    div.col1{
+        grid-row: 2;
+    }
+    .container-two > .col1{
+        border-right: none;
+    }
+}

@@ -75,12 +75,34 @@
         <p>Your blood donation is a gift straight from the heart &#9829;</p>
         </div>
     </div>
+
+
+    <div class="popupContainer">
+        <div class="popupContent">
+            <form action="/otpVerify" method="post">
+            <h1>Verify your Email Address</h1>
+            <p>OTP has been sent to your email address</p>
+            <hr>
+            <div class="otpBox">
+                <input style="display: none;" type="email" name="hidemail" id="hidEmail" value="">
+                <input type="text" placeholder="Enter the 6 digit OTP" pattern="^\d{6}$" name="otp" id="otp" required>
+            </div>
+            <div class="verifyButton">
+                <button class="button">Verify otp</button>
+            </div>
+        </form>
+        </div>
+
+    </div>
+    
+    
+    
     <div class="mainContent">
         <div class="formContainer">
             <div class="logo">
                 <img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="Blood Drop" class="logo-img">        </div>
             <h1>Sign up</h1>
-            <form action="/login" method="post">
+            <form action="/signup" method="post" class="signupForm">
                 <div class="inputDiv splitDiv2">
                     <div class="">
                         <label for="name">Name</label>
@@ -88,13 +110,13 @@
                        </div>
                        <div class="">
                         <label for="username">Username</label>
-                        <input type="text" id="username" name="username" placeholder="Username (include numbers)" pattern="(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+" required>
+                        <input type="text" id="username" name="userName" placeholder="Username (include numbers)" pattern="(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]+" required>
                        </div>
                 </div>
                
                 <div class="inputDiv">
                     <label for="Email">Email</label>
-                    <input type="email" id="email" name="Email" placeholder="me@example.com" required>
+                    <input type="email" id="actemail" name="email" placeholder="me@example.com" required>
                 </div>
                
                <div class="inputDiv">
@@ -104,11 +126,11 @@
 <div class="inputDiv splitDiv2">
     <div class="">
         <label for="mbNumber">Mobile Number:</label>
-        <input type="tel" id="mbNumber" class="mbNumber" required>
+        <input type="tel" id="mbNumber" class="mbNumber" name="mbNumber" required>
     </div>
     <div class="">
         <label for="bGroup">Blood Group:</label>
-        <select name="bGroup" id="bGroup" required>
+        <select name="bdGroup" id="bdGroup" required>
             <option value="" disabled selected>Select your blood group</option>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
@@ -135,6 +157,16 @@
             </form>
         </div>
     </div>
+
     
+    <script>
+        
+        document.querySelector('.signupForm').onsubmit = function() {
+    const emailValue = document.getElementById('actemail').value;
+    document.getElementById('hidEmail').value = emailValue; // Set email for OTP verification
+};
+
+    </script>
+    <script src="/js/signup.js"></script>
 </body>
 </html>
