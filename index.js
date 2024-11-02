@@ -92,8 +92,8 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-app.get("/login", (req, res) => {
-  res.render("login");
+app.get("/signin", (req, res) => {
+  res.render("signin");
 });
 
 app.get("/requestblood", (req, res) => {
