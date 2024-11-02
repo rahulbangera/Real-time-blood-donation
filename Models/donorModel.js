@@ -12,9 +12,9 @@ try {
 
   const donorUserSchema = new mongoose.Schema({
     username: {
-        type: String,
-        required: true,
-      },
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -23,29 +23,32 @@ try {
       type: String,
       required: true,
     },
-    latitude: {
-        type: Number,
-        required: true,
+    hospitals: [
+      {
+        placeId: {
+          type: String,
+          required: true,
         },
-    longitude: {
-        type: Number,
-        required: true,
+        name: {
+          type: String,
+          required: true,
         },
-    address: {
-      type: String,
-      required: true,
-    },
-    city: {
-      type: String,
-      required: true,
-    },
-    zip: {
-      type: Number,
-      required: true,
-    },
+        location: {
+          lat: {
+            type: Number,
+            required: true,
+          },
+          lng: {
+            type: Number,
+            required: true,
+          },
+        },
+      },
+    ],
     date: {
       type: Date,
       default: Date.now,
+      expires: 2592000, // expires in 30 days (30 days * 24 hours * 60 minutes * 60 seconds)
     },
   });
 
