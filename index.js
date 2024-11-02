@@ -73,6 +73,7 @@ app.use(e.urlencoded({ extended: true }));
 //     pass: "vzhykowzuabnjscw ",
 //   }
 
+
 app.get("/", (req, res) => {
   console.log(req.session.email);
   console.log(req.session.name);
@@ -92,8 +93,8 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-app.get("/signin", (req, res) => {
-  res.render("signin");
+app.get("/login", (req, res) => {
+  res.render("login");
 });
 
 app.get("/requestblood", (req, res) => {
@@ -104,10 +105,12 @@ app.get("/requestblood", (req, res) => {
   }
 });
 
+
 app.get("/donateblood", (req, res) => {
   if (req.session.email) {
     res.render("donate", { userLoggedIn: true });
-  } else {
+  }
+  else{
     res.render("donate", { userLoggedIn: false });
   }
 });
