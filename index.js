@@ -75,7 +75,6 @@ app.use(e.urlencoded({ extended: true }));
 
 
 app.get("/", (req, res) => {
-  req.session.email= "testing";
   console.log(req.session.email);
   console.log(req.session.name);
   console.log(req.session.username);
