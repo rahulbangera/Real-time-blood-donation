@@ -6,6 +6,10 @@ window.onload = function () {
   let hospitalMarkers = [];
   let selectedHospitals = new Set();
   let previousInfoWindow;
+  let sublocality;
+  let locality;
+  let town;
+  let city;
 
   const cityValue = document.getElementById("cityValue");
   const mapNextButton = document.getElementById("mapNextButton");
@@ -37,7 +41,7 @@ window.onload = function () {
     if (selectedHospitals.size > 0) {
       try {
         result = await getDetails(selectedHospitals);
-        showStatusPopup(result);
+        showStatusPopup(result, sublocality, town);
       } catch (error) {
         console.error(error);
         alert("An error occurred. Please try again.");
@@ -80,7 +84,7 @@ window.onload = function () {
     return Promise.all(promises);
   }
 
-  function showStatusPopup(result) {
+  function showStatusPopup(result, sublocality, town) {
     const statusPopup = document.getElementById("statusPopup");
     statusPopup.style.display = "flex";
 
@@ -93,6 +97,8 @@ window.onload = function () {
         },
         body: JSON.stringify({
           selectedHospitals: result,
+          sublocality: sublocality,
+          town: town,
         }),
       }).then((res) => {
         if (res.status === 200) {
@@ -174,10 +180,10 @@ window.onload = function () {
 
     geocoder.geocode({ location: pos }, (results, status) => {
       if (status === "OK" && results[0]) {
-        const sublocality = results[0].address_components[1].short_name;
-        const locality = results[0].address_components[2].long_name;
-        const town = results[0].address_components[3].long_name;
-        const city = results[0].address_components[4].long_name;
+         sublocality = results[0].address_components[1].short_name;
+         locality = results[0].address_components[2].long_name;
+         town = results[0].address_components[3].long_name;
+         city = results[0].address_components[4].long_name;
 
         const address = `${sublocality}, ${locality}, ${town} - ${city}`;
         console.log("City:", address);

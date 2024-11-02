@@ -102,6 +102,31 @@ app.get("/signin", (req, res) => {
   res.render("signin");
 });
 
+app.post("/nearbysearch", async (req, res) => {
+  const { nearbyHospitals, bdGroup } = req.body;
+  let selectedHospitals = [];
+  for (const hospital of nearbyHospitals) {
+    const donorexist = await Donor.find({
+      hospitals: {
+        $elemMatch: { placeId: hospital.place_id },
+      },
+      bloodGroup: bdGroup,
+    });
+    if (donorexist.length > 0) {
+      for (let i = 0; i < donorexist.length; i++) {
+        // if(donorexist[i].email === req.session.email) {
+        //   continue;
+        // }
+        let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
+        let hospital1 = { name: hospital.name, donorName: donorexist[i].name, donorUserName: donorexist[i].username, donorPlace: loc };
+        selectedHospitals.push(hospital1);
+      }
+    }
+  }
+  console.log(selectedHospitals);
+  res.status(200).json({ selectedHospitals });
+});
+
 app.get("/requestblood", (req, res) => {
   if (req.session.email) {
     res.render("request", { userLoggedIn: true });
@@ -123,15 +148,19 @@ app.get("/donateblood", async (req, res) => {
 });
 
 app.post("/donoractive", async (req, res) => {
-  const { selectedHospitals } = req.body;
-  console.log(selectedHospitals);
+  const { selectedHospitals, sublocality, town } = req.body;
   await Donor.deleteOne({ email: req.session.email });
   const currentUser = await LocalUser.findOne({ email: req.session.email });
   const newDonor = await new Donor({
+    name: currentUser.name,
     username: currentUser.username,
     email: currentUser.email,
     bloodGroup: currentUser.bloodgroup,
     hospitals: selectedHospitals,
+    location: {
+      sublocality,
+      town,
+    },
   });
 
   await newDonor.save();
@@ -141,7 +170,7 @@ app.post("/donoractive", async (req, res) => {
 
 app.post("/donorinactive", async (req, res) => {
   const curr = await Donor.deleteOne({ email: req.session.email });
-    res.status(200).send("Deleted");
+  res.status(200).send("Deleted");
 });
 
 app.post("/signup", async (req, res) => {
@@ -279,6 +308,16 @@ app.get("/logout", (req, res) => {
     if (err) throw err;
     res.redirect("/");
   });
+});
+
+app.post("/fetchUserData", async (req, res) => {
+  const { email } = req.session.email;
+  const userData = await LocalUser.findOne({ email });
+  if (userData) {
+    res.status(200).json({ userData });
+  } else {
+    res.status(400).json({ status: 400 });
+  }
 });
 
 app.listen(PORT, () => {
