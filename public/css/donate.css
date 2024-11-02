@@ -15,10 +15,11 @@
 
 .navbar{
     position: relative;
+    padding: 0;
 }
 
 .sticky{
-    position: fixed;
+    position: relative;
 }
 
 body{

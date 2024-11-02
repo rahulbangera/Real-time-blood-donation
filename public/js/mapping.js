@@ -2,6 +2,9 @@ window.onload = function () {
   let map;
   let marker;
   let geocoder;
+  let placeService;
+  let hospitalMarkers = [];
+  let selectedHospitals = new Set();
 
   const cityValue = document.getElementById("cityValue");
   const mapNextButton = document.getElementById("mapNextButton");
@@ -37,6 +40,7 @@ window.onload = function () {
     });
 
     geocoder = new google.maps.Geocoder();
+    placeService = new google.maps.places.PlacesService(map);
 
     map.addListener("click", (e) => {
       const pos = {
@@ -46,6 +50,7 @@ window.onload = function () {
       setMarker(pos);
       map.setCenter(pos);
       map.setZoom(14);
+      showNearbyHospitals(pos);
     });
   }
 
@@ -109,6 +114,83 @@ window.onload = function () {
     // });
   }
 
+  function showNearbyHospitals(pos) {
+    const request = {
+      location: pos,
+      radius: 5000,
+      type: "hospital",
+    };
+
+    placeService.nearbySearch(request, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        selectedHospitals = new Set();
+        hospitalMarkers.forEach((marker) => marker.setMap(null));
+        hospitalMarkers = [];
+
+        results.forEach((place) => {
+          const hospitalMarker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location,
+            icon: {
+              url: "https://maps.google.com/mapfiles/ms/icons/hospitals.png",
+              scaledSize: new google.maps.Size(32, 32),
+            },
+            title: place.name,
+          });
+
+          hospitalMarkers.push(hospitalMarker);
+
+          const infoWindow = new google.maps.InfoWindow({
+            content: `<strong>${place.name}</strong><br><button class="hopitalbtn" id="select-btn-${place.place_id}">Select</button>`,
+          });
+
+          google.maps.event.addListener(hospitalMarker, "click", () => {
+            infoWindow.open(map, hospitalMarker);
+
+            google.maps.event.addListenerOnce(infoWindow, "domready", () => {
+              const selectBtn = document.getElementById(
+                `select-btn-${place.place_id}`
+              );
+              selectBtn.addEventListener("click", () => {
+                toggleHospitalSelection(
+                  place.place_id,
+                  hospitalMarker,
+                  selectBtn,
+                  place.name
+                );
+              });
+            });
+          });
+        });
+      } else {
+        console.error("PlacesService failed due to:", status);
+      }
+    });
+  }
+
+  // SMALL BUG IS IN THIS CODE WHICH IS LIKE, IF U SELECT FEW HOSPITALS AND THEN GO TO OTHER LOCATION TO SEE OTHER HOSPITALS, THEN THE PREVIOUSLY SELECTED HOSPITALS WILL BE MARKED RED BUT STILL BE SELECTED IN THE SET
+  // OK GUYS, it was fixed by just emptying the selectedHospitals set before adding new hospitals to the map, hehehehe
+
+  function toggleHospitalSelection(placeId, marker, button, placeName) {
+    if (selectedHospitals.has(placeId)) {
+      selectedHospitals.delete(placeId);
+      marker.setIcon({
+        url: "https://maps.google.com/mapfiles/ms/icons/hospitals.png",
+        scaledSize: new google.maps.Size(32, 32),
+      });
+      button.innerText = "Select";
+      console.log("Deselected:", placeName);
+    } else {
+      selectedHospitals.add(placeId);
+      marker.setIcon({
+        url: "https://maps.google.com/mapfiles/ms/icons/green-dot.png",
+        scaledSize: new google.maps.Size(32, 32),
+      });
+      button.innerText = "Deselect";
+      console.log("Selected:", placeName);
+    }
+  }
+
   function onSuccessLocation(position) {
     const pos = {
       lat: position.coords.latitude,
@@ -117,6 +199,7 @@ window.onload = function () {
     setMarker(pos);
     map.setCenter(pos);
     map.setZoom(14);
+    showNearbyHospitals(pos);
   }
 
   function onErrorLocation() {

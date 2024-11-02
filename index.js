@@ -75,6 +75,7 @@ app.use(e.urlencoded({ extended: true }));
 
 
 app.get("/", (req, res) => {
+  req.session.email= "testing";
   console.log(req.session.email);
   console.log(req.session.name);
   console.log(req.session.username);
@@ -93,8 +94,8 @@ app.get("/signup", (req, res) => {
   res.render("signup");
 });
 
-app.get("/login", (req, res) => {
-  res.render("login");
+app.get("/signin", (req, res) => {
+  res.render("signin");
 });
 
 app.get("/requestblood", (req, res) => {
@@ -201,7 +202,7 @@ app.post("/otpVerify", async (req, res) => {
 
       user.verified = true;
       await user.save();
-      res.redirect("/login");
+      res.redirect("/signin");
     } else {
       res.redirect("/signup");
     }
