@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 5000;
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
-  secure: false, // true for 465, false for other ports
+  secure: false,
   auth: {
     user: "coderangersverify@gmail.com",
     pass: "vzhykowzuabnjscw ",
@@ -47,16 +47,16 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET || "secret",
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: MongoStore.create({
       mongoUrl:
-        "mongodb+srv://myAtlasDBUser:Hero123456@test1.bu7v6.mongodb.net/bloodDonation?retryWrites=true&w=majority&appName=Test1", // Use your MongoDB connection string
+        "mongodb+srv://myAtlasDBUser:Hero123456@test1.bu7v6.mongodb.net/bloodDonation?retryWrites=true&w=majority&appName=Test1",
       collectionName: "sessions",
     }),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24, // 1 day (or adjust as needed)
-      sameSite: "lax", // Adjust if needed based on app behavior
-      secure: true, // Set to true if using HTTPS
+      maxAge: 1000 * 60 * 60 * 24, 
+      sameSite: "lax",
+      secure: false, // true if HTTPS
     },
   })
 );
@@ -67,14 +67,11 @@ app.use(e.static("public"));
 app.use(e.json());
 app.use(e.urlencoded({ extended: true }));
 
-
 // service: "smtp.gmail.com",
 //   auth: {
 //     user: "coderangersverify@gmail.com",
 //     pass: "vzhykowzuabnjscw ",
 //   }
-
-
 
 app.get("/", (req, res) => {
   console.log(req.session.email);
@@ -117,11 +114,10 @@ app.get("/donateblood", (req, res) => {
 
 app.post("/signup", async (req, res) => {
   const data = req.body;
-  const { name, userName, email, password, mbNumber, bdGroup } = data; // Destructure for cleaner access
+  const { name, userName, email, password, mbNumber, bdGroup } = data;
   const verified = false;
 
   console.log("in");
-  req.session.username = userName;
 
   if (name && userName && email && password && mbNumber && bdGroup) {
     console.log("in2");
@@ -142,13 +138,11 @@ app.post("/signup", async (req, res) => {
         verified,
       });
 
-      // Save the new user and set session variables
-      const savedUser = await newUser.save();
-      req.session.email = savedUser.email; // Set session variables
-      req.session.name = savedUser.name;
-      console.log(`Session email: ${req.session.email}`); // Check if it's set
+      req.session.email = email;
+      req.session.name = userName;
 
-      // Generate OTP
+      const savedUser = await newUser.save();
+
       const otp = Math.floor(100000 + Math.random() * 900000);
       const mailOptions = {
         from: "coderangersverify@gmail.com",
@@ -163,9 +157,9 @@ app.post("/signup", async (req, res) => {
         emailOtp: otp,
       });
 
-      await newOtpUser.save(); // Save OTP user
-      req.session.email = await newOtpUser.email; // Set session variables
-      // Send OTP email
+      await newOtpUser.save();
+      req.session.email = await newOtpUser.email; 
+    
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
@@ -184,31 +178,29 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/otpVerify", async (req, res) => {
-  const { hidemail } = req.body;
-  console.log(hidemail);
-  console.log(req.session.email);
-  const email = hidemail;
-  let { otp } = req.body;
+  let { hidemail, otp } = req.body;
+  const email1 = hidemail;
   console.log(otp);
+  console.log(email1);
   otp = parseInt(otp);
 
   try {
-    const otpUser = await Otps.findOne({ email });
+    const otpUser = await Otps.findOne({ email: email1 });
     if (!otpUser) {
       return res.status(400).send("No OTP found for this email.");
     }
 
     if (otpUser.emailOtp === otp) {
-      const user = await LocalUser.findOne({ email });
+      const user = await LocalUser.findOne({ email: email1 });
       if (!user) {
         return res.status(400).send("User not found.");
       }
 
       user.verified = true;
       await user.save();
-      res.send("User verified");
+      res.redirect("/login");
     } else {
-      res.send("Invalid OTP");
+      res.redirect("/signup");
     }
   } catch (error) {
     console.error("Error during OTP verification:", error);
@@ -216,20 +208,20 @@ app.post("/otpVerify", async (req, res) => {
   }
 });
 
-app.get("/createSession", (req, res) => {
-  req.session.email = "myname";
-  res.send("Session created");
-  console.log("I created: " + req.session.email);
-});
+// app.get("/createSession", (req, res) => {
+//   req.session.email = "myname";
+//   res.send("Session created");
+//   console.log("I created: " + req.session.email);
+// });
 
-app.get("/checkSession", (req, res) => {
-  if (req.session.email) {
-    res.send("Session exists");
-    console.log("I have: " + req.session.email);
-  } else {
-    res.send("Session does not exist");
-  }
-});
+// app.get("/checkSession", (req, res) => {
+//   if (req.session.email) {
+//     res.send("Session exists");
+//     console.log("I have: " + req.session.email);
+//   } else {
+//     res.send("Session does not exist");
+//   }
+// });
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
