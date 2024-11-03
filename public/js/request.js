@@ -6,6 +6,21 @@ let nearbyHospitals = [];
 let placesService;
 let bdGroup;
 
+function showPopup() {
+  const popup = document.getElementById("popupSuccess");
+  popup.style.display = "block";
+  popup.style.opacity = "1";
+  popup.style.top = "20px";
+
+  setTimeout(() => {
+    popup.style.opacity = "0";
+    popup.style.top = "0";
+    setTimeout(() => {
+      popup.style.display = "none";
+    }, 500);
+  }, 3000);
+}
+
 function findNearbyDonors(nearbyHospitals, bdGroup) {
   let selectedHospitals = [];
   fetch("/nearbysearch", {
@@ -18,6 +33,15 @@ function findNearbyDonors(nearbyHospitals, bdGroup) {
     .then((res) => res.json())
     .then((data) => {
       selectedHospitals = data.selectedHospitals;
+      console.log("Selected Hospitals:", selectedHospitals);
+      document.querySelector(".popupContent").style.animation =
+        "popup-disappear 0.6s forwards";
+
+      setTimeout(() => {
+        document.getElementById("popupContainer").style.display = "none";
+        document.querySelector(".popupContent").style.display = "none";
+      }, 600);
+      showPopup();
     });
 }
 
