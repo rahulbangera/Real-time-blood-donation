@@ -74,8 +74,13 @@ app.use(e.urlencoded({ extended: true }));
 //     pass: "vzhykowzuabnjscw ",
 //   }
 
-app.get("/", async (req, res) => {
+
+
   // req.session.email = "testing";
+
+
+app.get("/", (req, res) => {
+
   console.log(req.session.email);
   console.log(req.session.name);
   console.log(req.session.username);
