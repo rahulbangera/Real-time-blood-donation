@@ -112,6 +112,7 @@ body{
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    transition: 1s ease-in-out;
 }
 
 .popupContent{
@@ -176,6 +177,34 @@ body{
     }
   }
 
+  @keyframes popup-disappear {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+  }
+
   #map{
     margin-bottom: 20px;
   }
+
+  .popupSuccess {
+    position: fixed;
+    top: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background-color: #4CAF50; 
+    color: white;
+    padding: 10px 100px; 
+    font-family: joti one;
+    font-size: 1.2rem;
+    border-radius: 5px; 
+    display: none; 
+    z-index: 1000; 
+    transition: opacity 0.5s, top 0.5s;
+  }
+  

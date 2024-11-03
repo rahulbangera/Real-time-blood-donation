@@ -123,7 +123,6 @@ app.post("/nearbysearch", async (req, res) => {
       }
     }
   }
-  console.log(selectedHospitals);
   res.status(200).json({ selectedHospitals });
 });
 
