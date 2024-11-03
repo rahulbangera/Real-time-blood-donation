@@ -79,7 +79,7 @@ app.use(e.urlencoded({ extended: true }));
   // req.session.email = "testing";
 
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
 
   console.log(req.session.email);
   console.log(req.session.name);
