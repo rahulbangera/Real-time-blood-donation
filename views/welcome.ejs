@@ -29,8 +29,12 @@
                 <h1>Every Drop Counts</h1>
                 <h2>Be A Hero</h2>
             </div>
-            <p class="donateStatus">Donating Visibility: Active <span class="green"></span></p>
-
+            <p class="donateStatus">
+                <% if(active) { %>
+                Donating Visibility: Active <span class="green"></span></p>
+                    <% } else if (!active && userLoggedIn ) { %>
+                Donating Visibility: Inactive <span class="red"></span></p>
+                        <% } %>
             <div class="heroButtons">
                 <button onclick="<% if(!userLoggedIn) { %> window.location.href = '/signin' <% } else{ %>window.location.href = '/donateblood'<% } %> ">Donate Blood</button>
                <button onclick="<% if(!userLoggedIn) { %> window.location.href = '/signin'<% } else{ %>window.location.href = '/requestblood'<% } %> ">Request Blood</button>

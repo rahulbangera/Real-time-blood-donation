@@ -31,3 +31,96 @@ body{
 .popupContainer{
     background-color: var(--darkBloodColor);
 }
+
+.statusPopup {
+    display: none; 
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.visibilityPopup{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.statusContent {
+    background: white;
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+.tickMark i {
+    font-size: 40px;
+    color: green;
+    animation: popIn 0.5s ease-out;
+}
+
+/* Animation for tick mark */
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Fade-in animation for popup */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.visibility-btn{
+    background-color: var(--lightBloodColor);
+    color: var(--oppBlood);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-family: var(--normalFont);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.visibility-btn:hover{
+    background-color: var(--bloodColor);
+}
+
+/* .goback{
+    background-color: var(--lightBloodColor);
+    color: var(--oppBlood);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-family: var(--normalFont);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s;
+} */

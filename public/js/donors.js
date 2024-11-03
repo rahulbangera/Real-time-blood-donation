@@ -5,18 +5,119 @@ window.onload = function () {
   let placeService;
   let hospitalMarkers = [];
   let selectedHospitals = new Set();
+  let previousInfoWindow;
+  let sublocality;
+  let locality;
+  let town;
+  let city;
 
   const cityValue = document.getElementById("cityValue");
   const mapNextButton = document.getElementById("mapNextButton");
   const popupContent = document.getElementById("popupContent");
+  const visibilityTurnOff = document.getElementById("turnOffVisibility");
 
-  mapNextButton.addEventListener("click", () => {
-    if (cityValue.value === "") {
-      alert("Please select a location");
+  visibilityTurnOff.addEventListener("click", () => {
+    const visibilityPopup = document.getElementById("visibilityPopup");
+    visibilityPopup.style.display = "flex";
+    setTimeout(() => {
+      fetch("/donorinactive", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => {
+        if (res.status === 200) {
+          console.log("Success");
+          window.location.href = "/";
+        } else {
+          console.log("Error");
+        }
+      });
+    }, 3000);
+  });
+
+  mapNextButton.addEventListener("click", async () => {
+    // Check if hospitals have been selected
+    if (selectedHospitals.size > 0) {
+      try {
+        result = await getDetails(selectedHospitals);
+        showStatusPopup(result, sublocality, town);
+      } catch (error) {
+        console.error(error);
+        alert("An error occurred. Please try again.");
+      }
     } else {
-      window.location.href = "/register";
+      alert("Please select at least one hospital before proceeding.");
     }
   });
+
+  function getDetails(selectedHospitals) {
+    const promises = Array.from(selectedHospitals).map((placeId) => {
+      return new Promise((resolve, reject) => {
+        placeService.getDetails(
+          {
+            placeId: placeId,
+            fields: ["name", "geometry", "formatted_address"],
+          },
+          (place, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+              const hospital = {
+                placeId: placeId,
+                name: place.name,
+                location: {
+                  lat: place.geometry.location.lat(),
+                  lng: place.geometry.location.lng(),
+                },
+                // WE HAVEN'T USED THE FORMATTED ADDRESS YET, BUT WE CAN USE IT TO DISPLAY THE ADDRESS OF THE HOSPITAL IF WE WISH
+              };
+              // console.log(result);
+              // result.push(hospital);
+              resolve(hospital);
+            } else {
+              console.error("Places Service failed due to:", status);
+              reject(status);
+            }
+          }
+        );
+      });
+    });
+    return Promise.all(promises);
+  }
+
+  function showStatusPopup(result, sublocality, town) {
+    const statusPopup = document.getElementById("statusPopup");
+    statusPopup.style.display = "flex";
+
+    console.log("Res: " + result);
+    setTimeout(() => {
+      fetch("/donoractive", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          selectedHospitals: result,
+          sublocality: sublocality,
+          town: town,
+        }),
+      }).then((res) => {
+        if (res.status === 200) {
+          console.log("Success");
+          window.location.href = "/";
+        } else {
+          console.log("Error");
+        }
+      });
+    }, 3000);
+  }
+
+  // mapNextButton.addEventListener("click", () => {
+  //   if (cityValue.value === "") {
+  //     alert("Please select a location");
+  //   } else {
+  //     window.location.href = "/register";
+  //   }
+  // });
 
   const scrollDown = () => {
     if (cityValue.value === "") {
@@ -40,7 +141,6 @@ window.onload = function () {
     });
 
     geocoder = new google.maps.Geocoder();
-    placeService = new google.maps.places.PlacesService(map);
 
     map.addListener("click", (e) => {
       const pos = {
@@ -80,10 +180,10 @@ window.onload = function () {
 
     geocoder.geocode({ location: pos }, (results, status) => {
       if (status === "OK" && results[0]) {
-        const sublocality = results[0].address_components[1].short_name;
-        const locality = results[0].address_components[2].long_name;
-        const town = results[0].address_components[3].long_name;
-        const city = results[0].address_components[4].long_name;
+         sublocality = results[0].address_components[1].short_name;
+         locality = results[0].address_components[2].long_name;
+         town = results[0].address_components[3].long_name;
+         city = results[0].address_components[4].long_name;
 
         const address = `${sublocality}, ${locality}, ${town} - ${city}`;
         console.log("City:", address);
@@ -120,6 +220,7 @@ window.onload = function () {
       radius: 5000,
       type: "hospital",
     };
+    placeService = new google.maps.places.PlacesService(map);
 
     placeService.nearbySearch(request, (results, status) => {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
@@ -141,24 +242,32 @@ window.onload = function () {
           hospitalMarkers.push(hospitalMarker);
 
           const infoWindow = new google.maps.InfoWindow({
-            content: `<strong>${place.name}</strong><br><button class="hopitalbtn" id="select-btn-${place.place_id}">Select</button>`,
+            content: `<strong>${place.name}</strong><br><button class="hospital-btn" id="select-btn-${place.place_id}" data-place-id="${place.place_id}">Select</button>`,
           });
 
           google.maps.event.addListener(hospitalMarker, "click", () => {
+            if (previousInfoWindow) previousInfoWindow.close();
+
             infoWindow.open(map, hospitalMarker);
+            previousInfoWindow = infoWindow;
 
             google.maps.event.addListenerOnce(infoWindow, "domready", () => {
               const selectBtn = document.getElementById(
                 `select-btn-${place.place_id}`
               );
-              selectBtn.addEventListener("click", () => {
-                toggleHospitalSelection(
-                  place.place_id,
-                  hospitalMarker,
-                  selectBtn,
-                  place.name
-                );
-              });
+
+              // Check if the listener has already been added
+              if (!selectBtn.dataset.listenerAdded) {
+                selectBtn.addEventListener("click", () => {
+                  toggleHospitalSelection(
+                    place.place_id,
+                    hospitalMarker,
+                    selectBtn,
+                    place.name
+                  );
+                  selectBtn.dataset.listenerAdded = "true"; // Mark listener as added
+                });
+              }
             });
           });
         });
@@ -179,7 +288,6 @@ window.onload = function () {
         scaledSize: new google.maps.Size(32, 32),
       });
       button.innerText = "Select";
-      console.log("Deselected:", placeName);
     } else {
       selectedHospitals.add(placeId);
       marker.setIcon({
@@ -187,7 +295,6 @@ window.onload = function () {
         scaledSize: new google.maps.Size(32, 32),
       });
       button.innerText = "Deselect";
-      console.log("Selected:", placeName);
     }
   }
 

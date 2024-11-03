@@ -11,6 +11,7 @@ import session from "express-session";
 import Otps from "./Models/otpverifications.js";
 import bodyParser from "body-parser";
 import MongoStore from "connect-mongo";
+import Donor from "./Models/donorModel.js";
 
 const app = e();
 const PORT = process.env.PORT || 5000;
@@ -54,7 +55,7 @@ app.use(
       collectionName: "sessions",
     }),
     cookie: {
-      maxAge: 1000 * 60 * 60 * 24, 
+      maxAge: 1000 * 60 * 60 * 24,
       sameSite: "lax",
       secure: false, // true if HTTPS
     },
@@ -74,14 +75,23 @@ app.use(e.urlencoded({ extended: true }));
 //   }
 
 
+
+  // req.session.email = "testing";
+
+
 app.get("/", (req, res) => {
+
   console.log(req.session.email);
   console.log(req.session.name);
   console.log(req.session.username);
-  if (req.session.email) {
-    res.render("welcome", { userLoggedIn: true });
+  const foundUser = await Donor.findOne({ email: req.session.email }).lean();
+  console.log(foundUser);
+  if (foundUser) {
+    res.render("welcome", { userLoggedIn: true, active: true });
+  } else if (req.session.email) {
+    res.render("welcome", { userLoggedIn: true, active: false });
   } else {
-    res.render("welcome", { userLoggedIn: false });
+    res.render("welcome", { userLoggedIn: false, active: false });
   }
 });
 
@@ -97,6 +107,31 @@ app.get("/signin", (req, res) => {
   res.render("signin");
 });
 
+app.post("/nearbysearch", async (req, res) => {
+  const { nearbyHospitals, bdGroup } = req.body;
+  let selectedHospitals = [];
+  for (const hospital of nearbyHospitals) {
+    const donorexist = await Donor.find({
+      hospitals: {
+        $elemMatch: { placeId: hospital.place_id },
+      },
+      bloodGroup: bdGroup,
+    });
+    if (donorexist.length > 0) {
+      for (let i = 0; i < donorexist.length; i++) {
+        // if(donorexist[i].email === req.session.email) {
+        //   continue;
+        // }
+        let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
+        let hospital1 = { name: hospital.name, donorName: donorexist[i].name, donorUserName: donorexist[i].username, donorPlace: loc };
+        selectedHospitals.push(hospital1);
+      }
+    }
+  }
+  console.log(selectedHospitals);
+  res.status(200).json({ selectedHospitals });
+});
+
 app.get("/requestblood", (req, res) => {
   if (req.session.email) {
     res.render("request", { userLoggedIn: true });
@@ -105,14 +140,42 @@ app.get("/requestblood", (req, res) => {
   }
 });
 
+app.get("/donateblood", async (req, res) => {
+  const currentUser = await Donor.findOne({ email: req.session.email });
+  console.log(currentUser);
+  if (currentUser) {
+    res.render("donate", { userLoggedIn: true, active: true });
+  } else if (req.session.email) {
+    res.render("donate", { userLoggedIn: true, active: false });
+  } else {
+    res.render("donate", { userLoggedIn: false, active: false });
+  }
+});
 
-app.get("/donateblood", (req, res) => {
-  if (req.session.email) {
-    res.render("donate", { userLoggedIn: true });
-  }
-  else{
-    res.render("donate", { userLoggedIn: false });
-  }
+app.post("/donoractive", async (req, res) => {
+  const { selectedHospitals, sublocality, town } = req.body;
+  await Donor.deleteOne({ email: req.session.email });
+  const currentUser = await LocalUser.findOne({ email: req.session.email });
+  const newDonor = await new Donor({
+    name: currentUser.name,
+    username: currentUser.username,
+    email: currentUser.email,
+    bloodGroup: currentUser.bloodgroup,
+    hospitals: selectedHospitals,
+    location: {
+      sublocality,
+      town,
+    },
+  });
+
+  await newDonor.save();
+  res.status(200).send("Saved");
+  // 100ms delay
+});
+
+app.post("/donorinactive", async (req, res) => {
+  const curr = await Donor.deleteOne({ email: req.session.email });
+  res.status(200).send("Deleted");
 });
 
 app.post("/signup", async (req, res) => {
@@ -161,8 +224,8 @@ app.post("/signup", async (req, res) => {
       });
 
       await newOtpUser.save();
-      req.session.email = await newOtpUser.email; 
-    
+      req.session.email = await newOtpUser.email;
+
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log(error);
@@ -250,6 +313,16 @@ app.get("/logout", (req, res) => {
     if (err) throw err;
     res.redirect("/");
   });
+});
+
+app.post("/fetchUserData", async (req, res) => {
+  const { email } = req.session.email;
+  const userData = await LocalUser.findOne({ email });
+  if (userData) {
+    res.status(200).json({ userData });
+  } else {
+    res.status(400).json({ status: 400 });
+  }
 });
 
 app.listen(PORT, () => {

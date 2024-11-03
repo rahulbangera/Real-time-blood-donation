@@ -23,7 +23,11 @@
     <%- include('components/navbar') %>
     <div class="popupContainer">
         <div class="popupContent" id="popupContent">
-            <h1>Select your location</h1>
+            <div class="popupHead">
+                <h1>Select your Preferred Locations</h1>
+                <button id="turnOffVisibility" class="visibility-btn" <% if(!active) {%> style = "display:none" <% } %>>Turn Off Visibility</button>
+                
+            </div>
             <hr>
             <div class="buttonContainer">
                 <p>Mark your location on the map</p>
@@ -38,9 +42,28 @@
         </div>
 
     </div>
-    <script src="js/mapping.js"></script>
-    <script>
 
-    </script>
+<div class="statusPopup" id="statusPopup">
+    <div class="statusContent">
+        <div class="tickMark">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <p>Donation Status has been set to <b>ACTIVE</b></p>
+        <p style="margin-top: 4px; font-size: small;">Redirecting Back...</p>
+    </div>
+</div>
+
+<div class="visibilityPopup" id="visibilityPopup">
+    <div class="statusContent"> 
+        <div class="tickMark">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <p>Donation Status has been set to <b>INACTIVE</b></p>
+        <p style="margin-top: 4px; font-size: small;">Redirecting Back...</p>
+    </div>
+</div>
+
+    <script src="js/donors.js"></script>
+
 </body>
 </html>
