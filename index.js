@@ -74,13 +74,9 @@ app.use(e.urlencoded({ extended: true }));
 //     pass: "vzhykowzuabnjscw ",
 //   }
 
-
-
-  // req.session.email = "testing";
-
+// req.session.email = "testing";
 
 app.get("/", async (req, res) => {
-
   console.log(req.session.email);
   console.log(req.session.name);
   console.log(req.session.username);
@@ -109,24 +105,74 @@ app.get("/signin", (req, res) => {
 
 app.post("/nearbysearch", async (req, res) => {
   const { nearbyHospitals, bdGroup } = req.body;
+  let donorexist = [];
   let selectedHospitals = [];
-  for (const hospital of nearbyHospitals) {
-    const donorexist = await Donor.find({
-      hospitals: {
-        $elemMatch: { placeId: hospital.place_id },
-      },
-      bloodGroup: bdGroup,
-    });
-    if (donorexist.length > 0) {
-      for (let i = 0; i < donorexist.length; i++) {
-        // if(donorexist[i].email === req.session.email) {
-        //   continue;
-        // }
-        let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
-        let hospital1 = { name: hospital.name, donorName: donorexist[i].name, donorUserName: donorexist[i].username, donorPlace: loc };
-        selectedHospitals.push(hospital1);
+  if (bdGroup === "ANY") {
+    for (const hospital of nearbyHospitals) {
+     donorexist = await Donor.find({
+        hospitals: {
+          $elemMatch: { placeId: hospital.place_id },
+        },
+      });
+      if (donorexist.length > 0) {
+        for (let i = 0; i < donorexist.length; i++) {
+          // if(donorexist[i].email === req.session.email) {
+          //   continue;
+          // }
+          let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
+          let hospital1 = {
+            name: hospital.name,
+            donorName: donorexist[i].name,
+            donorUserName: donorexist[i].username,
+            donorPlace: loc,
+            bloodGroup: donorexist[i].bloodGroup,
+          };
+          selectedHospitals.push(hospital1);
+        }
       }
     }
+  } else {
+    for (const hospital of nearbyHospitals) {
+      donorexist = await Donor.find({
+        hospitals: {
+          $elemMatch: { placeId: hospital.place_id },
+        },
+        bloodGroup: bdGroup,
+      });
+      if (donorexist.length > 0) {
+        for (let i = 0; i < donorexist.length; i++) {
+          // if(donorexist[i].email === req.session.email) {
+          //   continue;
+          // }
+          let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
+          let hospital1 = {
+            name: hospital.name,
+            donorName: donorexist[i].name,
+            donorUserName: donorexist[i].username,
+            donorPlace: loc,
+            bloodGroup: donorexist[i].bloodGroup,
+          };
+          selectedHospitals.push(hospital1);
+        }
+      }
+    }
+
+    // if (donorexist.length > 0) {
+    //   for (let i = 0; i < donorexist.length; i++) {
+    //     // if(donorexist[i].email === req.session.email) {
+    //     //   continue;
+    //     // }
+    //     let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
+    //     let hospital1 = {
+    //       name: hospital.name,
+    //       donorName: donorexist[i].name,
+    //       donorUserName: donorexist[i].username,
+    //       donorPlace: loc,
+    //       bloodGroup: bdGroup,
+    //     };
+    //     selectedHospitals.push(hospital1);
+    //   }
+    // }
   }
   res.status(200).json({ selectedHospitals });
 });

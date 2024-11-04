@@ -28,6 +28,44 @@ function showPopup() {
   }, 3000);
 }
 
+function updateDonorCards(selectedHospitals) {
+  const donorColumn = document.getElementById("donorColumn");
+  donorColumn.innerHTML = "";
+  selectedHospitals.forEach((donorInfo) => {
+    const donorCard = document.createElement("div");
+    donorCard.className = "donor-card";
+    donorCard.innerHTML = `
+      <h3>Donor Name: ${donorInfo.donorName}</h3>
+      <p>Blood Group: ${donorInfo.bloodGroup}</p>
+      <p>Donor Location: ${donorInfo.donorPlace}</p>
+      <p>Hospital: ${donorInfo.name}</p>
+    `;
+    donorColumn.appendChild(donorCard);
+  });
+  addEffectToDonorCards();
+}
+
+function addEffectToDonorCards() {
+  document.querySelectorAll(".donor-card").forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * 10; 
+      const rotateY = ((centerX - x) / centerX) * 10; 
+
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+    });
+
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = "rotateX(0) rotateY(0) scale(1)"; 
+    });
+  });
+}
+
 function openMapPopup() {
   document.getElementById("popupContainer").style.display = "flex";
   document.querySelector(".popupContent").style.display = "block";
@@ -151,34 +189,6 @@ window.onload = () => {
       updateNearbyHospitals(bdGroup);
     };
 
-    function findNearbyDonors(nearbyHospitals, bdGroup) {
-      fetch("/nearbysearch", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nearbyHospitals, bdGroup }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          selectedHospitals = selectedHospitals.concat(data.selectedHospitals);
-          if (!done) {
-            console.log("Arranging data again");
-            arrangeData();
-            return;
-          }
-          console.log("Selected Hospitals:", selectedHospitals);
-          document.querySelector(".popupContent").style.animation =
-            "popup-disappear 0.6s forwards";
-
-          setTimeout(() => {
-            document.getElementById("popupContainer").style.display = "none";
-            document.querySelector(".popupContent").style.display = "none";
-          }, 600);
-          showPopup();
-        });
-    }
-
     function updateNearbyHospitals(bdGroup) {
       selectedHospitals = [];
       allHospitals = [];
@@ -240,6 +250,36 @@ window.onload = () => {
           }
         }
       );
+    }
+
+    function findNearbyDonors(nearbyHospitals, bdGroup) {
+      fetch("/nearbysearch", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nearbyHospitals, bdGroup }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          selectedHospitals = selectedHospitals.concat(data.selectedHospitals);
+          if (!done) {
+            console.log("Arranging data again");
+            arrangeData();
+            return;
+          }
+          console.log("Selected Hospitals:", selectedHospitals);
+          document.querySelector(".popupContent").style.animation =
+            "popup-disappear 0.6s forwards";
+
+          updateDonorCards(selectedHospitals);
+
+          setTimeout(() => {
+            document.getElementById("popupContainer").style.display = "none";
+            document.querySelector(".popupContent").style.display = "none";
+          }, 600);
+          showPopup();
+        });
     }
 
     function arrangeData() {

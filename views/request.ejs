@@ -28,6 +28,7 @@
             <label for="bloodGroup">Blood Group</label>
             <select name="bloodGroup" id="bloodGroup" required>
                 <option value="" disabled selected>Select your blood group</option>
+                <option value="ANY">ANY BLOOD GROUP</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
                 <option value="B+">B+</option>
@@ -58,7 +59,7 @@
 
         </div>
 
-        <div class="donors-column">
+        <div class="donors-column" id="donorColumn">
            
           
             <div class="donor-card">
@@ -100,25 +101,7 @@
     <script src="js/request.js"></script>
     <script>
         // Apply 3D tilt based on cursor position
-        document.querySelectorAll('.donor-card').forEach(card => {
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left; // Mouse position relative to card
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
 
-    // Adjust rotation degree for a smoother effect
-    const rotateX = ((y - centerY) / centerY) * 10; // Positive for downward tilt
-    const rotateY = ((centerX - x) / centerX) * 10; // Positive for rightward tilt
-    
-    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
-  });
-
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = 'rotateX(0) rotateY(0) scale(1)'; // Reset on leave
-  });
-});
 
     </script>
 </body>
