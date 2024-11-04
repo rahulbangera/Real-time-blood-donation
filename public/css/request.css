@@ -17,10 +17,9 @@
     position: relative;
 }
 
-.sticky{
-    position: fixed;
+.left-nav{
+    padding: 0px;
 }
-
 body{
     margin: 0;
     padding: 0;
@@ -37,7 +36,7 @@ body{
 }
 .main-container {
     display: flex;
-    width: 100%;
+    width: 90%;
     max-width: 1600px;
     margin-top: 20px;
     margin: 0 auto;
@@ -46,13 +45,15 @@ body{
 .filters-column {
     width: 25%;
     padding: 10px;
-    background-color: #f1f1f1;
+    border-radius: 10px;
+    background-color:rgb(179, 214, 210);
     position: sticky;
     top: 0;
     height: 100vh;
     overflow: hidden; 
 }
 .donors-column {
+    border-radius: 10px;
     width: 75%;
     padding: 10px;
     display: flex;
@@ -62,10 +63,17 @@ body{
     height: 100%;
 }
 .donor-card {
-    padding: 15px;
-    background-color: #ffffff;
+    padding: 26px;
+    background-color: rgb(177 216 255);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.donor-card:hover{
+    background-color: rgb(149, 179, 209);
 }
 
 .popup-overlay {
@@ -108,10 +116,10 @@ body{
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.9);
-    display: flex;
+    display: flex; /* Testing guyssss */
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 10000;
     transition: 1s ease-in-out;
 }
 
@@ -208,3 +216,76 @@ body{
     transition: opacity 0.5s, top 0.5s;
   }
   
+
+::-webkit-scrollbar{
+    width: 13px;
+}
+
+::-webkit-scrollbar-track{
+    background-color: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgb(200,45,45);
+background: linear-gradient(81deg, rgba(200,45,45,1) 0%, rgba(200,59,59,1) 23%, rgba(182,37,37,1) 62%, rgba(94,23,23,1) 89%);
+    border-radius: 40px;
+}
+
+
+.showpopup{
+    padding: 8px 12px;
+    font-family: inconsolata;
+    background-color: var(--bloodColor);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.showpopup:hover{
+    background-color: var(--lightBloodColor);
+}
+.donor-card {
+    z-index: 10;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease-in-out;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    margin: 3px;
+}
+
+.donor-card:hover {
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+}
+
+  .donor-card:hover {
+    transform: rotateY(15deg) rotateX(10deg);
+  }
+  
+  .donor-card h3, .donor-card p {
+    margin: 5px 0;
+    color: #333;
+  }
+  
+
+
+  @media (width<800px){
+    .main-container{
+        flex-direction: column;
+    }
+    .filters-column{
+        height: 8vh;
+        width: 90%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .filters-column .showpopup{
+        padding: 6px 8px;
+    }
+
+    .donors-column{
+        width: 90%;
+    }
+  }

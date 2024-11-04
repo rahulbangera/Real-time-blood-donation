@@ -45,14 +45,20 @@ function findNearbyDonors(nearbyHospitals, bdGroup) {
     });
 }
 
-window.onload = () => {
-  async function initMap() {
-    const searchPopup = document.getElementById("popupContainer");
-    searchPopup.style.display = "flex";
+function openMapPopup() {
+  document.getElementById("popupContainer").style.display = "flex";
+  document.querySelector(".popupContent").style.display = "block";
+  document.querySelector(".popupContent").style.animation =
+    "popup-appear 0.6s forwards";
+}
 
+window.onload = () => {
+  async function initMap(mapId) {
     const radiusSlider = document.getElementById("radiusSlider");
     const radiusValue = document.getElementById("radiusValue");
     const bloodGroup = document.getElementById("bloodGroup");
+
+    openMapPopup();
 
     bloodGroup.onchange = () => {
       bdGroup = bloodGroup.value;
@@ -67,7 +73,7 @@ window.onload = () => {
     const { Map } = await google.maps.importLibrary("maps");
     await google.maps.importLibrary("places");
 
-    map = new Map(document.getElementById("map"), {
+    map = new Map(document.getElementById(mapId), {
       zoom: 6,
       center: initialPosition,
       mapId: "DEMO_MAP_ID",
@@ -196,5 +202,5 @@ window.onload = () => {
     }
   }
 
-  initMap();
+  initMap("map");
 };

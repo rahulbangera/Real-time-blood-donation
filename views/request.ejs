@@ -53,22 +53,9 @@
     <div class="main-container">
         <div class="filters-column">
             <h2>Filter Donors</h2>
-            <button onclick="openMapPopup()">Select Location Radius</button>
-            <br>                
-            <label>
-                Blood Group:
-                <select>
-                    <option>Any</option>
-                    <option>A+</option>
-                    <option>A-</option>
-                    <option>B+</option>
-                    <option>B-</option>
-                    <option>AB+</option>
-                    <option>AB-</option>
-                    <option>O+</option>
-                    <option>O-</option>
-                </select>
-            </label>
+            <button class="showpopup" onclick="openMapPopup()">Select Location Radius</button>
+           
+
         </div>
 
         <div class="donors-column">
@@ -111,6 +98,28 @@
     </div> -->
 
     <script src="js/request.js"></script>
+    <script>
+        // Apply 3D tilt based on cursor position
+        document.querySelectorAll('.donor-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left; // Mouse position relative to card
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
 
+    // Adjust rotation degree for a smoother effect
+    const rotateX = ((y - centerY) / centerY) * 10; // Positive for downward tilt
+    const rotateY = ((centerX - x) / centerX) * 10; // Positive for rightward tilt
+    
+    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+  });
+
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'rotateX(0) rotateY(0) scale(1)'; // Reset on leave
+  });
+});
+
+    </script>
 </body>
 </html>
