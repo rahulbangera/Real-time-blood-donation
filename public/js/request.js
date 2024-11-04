@@ -5,6 +5,11 @@ let circle;
 let nearbyHospitals = [];
 let placesService;
 let bdGroup;
+let more = true;
+let pagination;
+let moreRequired = false;
+let again = false;
+let count = 0;
 
 function showPopup() {
   const popup = document.getElementById("popupSuccess");
@@ -19,30 +24,6 @@ function showPopup() {
       popup.style.display = "none";
     }, 500);
   }, 3000);
-}
-
-function findNearbyDonors(nearbyHospitals, bdGroup) {
-  let selectedHospitals = [];
-  fetch("/nearbysearch", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ nearbyHospitals, bdGroup }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      selectedHospitals = data.selectedHospitals;
-      console.log("Selected Hospitals:", selectedHospitals);
-      document.querySelector(".popupContent").style.animation =
-        "popup-disappear 0.6s forwards";
-
-      setTimeout(() => {
-        document.getElementById("popupContainer").style.display = "none";
-        document.querySelector(".popupContent").style.display = "none";
-      }, 600);
-      showPopup();
-    });
 }
 
 function openMapPopup() {
@@ -175,23 +156,43 @@ window.onload = () => {
           rankBy: google.maps.places.RankBy.DISTANCE,
           type: "hospital",
         },
-        (results, status) => {
+        (results, status, page) => {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
-            const maxDistanceMeters = circle.getRadius();
-            nearbyHospitals = results.filter((hospital) => {
-              const hospitalLatLng = new google.maps.LatLng(
-                hospital.geometry.location.lat(),
-                hospital.geometry.location.lng()
-              );
-              const distance =
-                google.maps.geometry.spherical.computeDistanceBetween(
-                  circle.getCenter(),
-                  hospitalLatLng
-                );
-              return distance <= maxDistanceMeters;
-            });
+            if (!pagination) {
+              pagination = page;
+            }
 
-            console.log("Filtered nearby hospitals:", nearbyHospitals);
+            // const maxDistanceMeters = circle.getRadius();
+            nearbyHospitals = results;
+            if (moreRequired === true && again === false && count < 3) {
+              if (pagination.hasNextPage) {
+                console.log(count);
+                console.log("Next page");
+                count++;
+                again = true;
+                pagination.nextPage();
+              }
+            } else if(moreRequired === true){
+                console.log("No more pages");
+                more = false;
+                findNearbyDonors(nearbyHospitals, bdGroup);
+                return;
+              }
+            
+            //   nearbyHospitals = results.filter((hospital) => {
+            //     const hospitalLatLng = new google.maps.LatLng(
+            //       hospital.geometry.location.lat(),
+            //       hospital.geometry.location.lng()
+            //     );
+            //     const distance =
+            //       google.maps.geometry.spherical.computeDistanceBetween(
+            //         circle.getCenter(),
+            //         hospitalLatLng
+            //       );
+            //     return distance <= maxDistanceMeters;
+            //   });
+            again = false;
+            console.log(count + "Filtered nearby hospitals:", nearbyHospitals);
 
             findNearbyDonors(nearbyHospitals, bdGroup);
           } else {
@@ -199,6 +200,35 @@ window.onload = () => {
           }
         }
       );
+    }
+
+    function findNearbyDonors(nearbyHospitals, bdGroup) {
+      let selectedHospitals = [];
+      fetch("/nearbysearch", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nearbyHospitals, bdGroup }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          selectedHospitals = data.selectedHospitals;
+          if (selectedHospitals.length === 0 && more === true) {
+            moreRequired = true;
+            updateNearbyHospitals();
+            return;
+          }
+          console.log("Selected Hospitals:", selectedHospitals);
+          document.querySelector(".popupContent").style.animation =
+            "popup-disappear 0.6s forwards";
+
+          setTimeout(() => {
+            document.getElementById("popupContainer").style.display = "none";
+            document.querySelector(".popupContent").style.display = "none";
+          }, 600);
+          showPopup();
+        });
     }
   }
 
