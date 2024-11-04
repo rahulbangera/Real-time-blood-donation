@@ -11,6 +11,7 @@ let initialValue = 0;
 let incrementValue = 20;
 let finalValue = 0;
 let done = false;
+let selectedHospitals = [];
 
 function showPopup() {
   const popup = document.getElementById("popupSuccess");
@@ -151,7 +152,6 @@ window.onload = () => {
     };
 
     function findNearbyDonors(nearbyHospitals, bdGroup) {
-      let selectedHospitals = [];
       fetch("/nearbysearch", {
         method: "POST",
         headers: {
@@ -161,8 +161,8 @@ window.onload = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          selectedHospitals = data.selectedHospitals;
-          if (selectedHospitals.length === 0 && !done) {
+          selectedHospitals = selectedHospitals.concat(data.selectedHospitals);
+          if (!done) {
             console.log("Arranging data again");
             arrangeData();
             return;
@@ -180,13 +180,16 @@ window.onload = () => {
     }
 
     function updateNearbyHospitals(bdGroup) {
+      selectedHospitals = [];
       allHospitals = [];
       initialValue = 0;
       finalValue = 0;
+      done = false;
+      console.log("Circle Radius:", circle.getRadius());
       placesService.nearbySearch(
         {
           location: circle.getCenter(),
-          rankBy: google.maps.places.RankBy.DISTANCE,
+          radius: circle.getRadius(),
           type: "hospital",
         },
         (results, status, pagination) => {
@@ -210,7 +213,26 @@ window.onload = () => {
                   );
                 return distance <= maxDistanceMeters;
               });
+              const center2 = circle.getCenter();
+              const hospitalWithDistance = allHospitals.map((hospital) => {
+                const hospitalLocation = new google.maps.LatLng(
+                  hospital.geometry.location.lat(),
+                  hospital.geometry.location.lng()
+                );
+                const distance =
+                  google.maps.geometry.spherical.computeDistanceBetween(
+                    center2,
+                    hospitalLocation
+                  );
+                return {
+                  ...hospital,
+                  distance,
+                };
+              });
+              hospitalWithDistance.sort((a, b) => a.distance - b.distance);
               console.log("Nearby Hospitals:", allHospitals);
+              allHospitals = hospitalWithDistance;
+              console.log("Hospitals with Distance:", hospitalWithDistance);
               arrangeData();
             }
           } else {
@@ -226,7 +248,7 @@ window.onload = () => {
         finalValue = allHospitals.length;
         done = true;
       }
-      slicedHospitals = allHospitals.slice(initialValue, 20);
+      slicedHospitals = allHospitals.slice(initialValue, finalValue);
       initialValue = finalValue;
       console.log("Sliced Hospitals:", slicedHospitals);
       nearbyHospitals = slicedHospitals;
