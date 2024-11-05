@@ -34,11 +34,13 @@ function updateDonorCards(selectedHospitals) {
   selectedHospitals.forEach((donorInfo) => {
     const donorCard = document.createElement("div");
     donorCard.className = "donor-card";
+    donorCard.id = donorInfo.hospitalPlaceId;
     donorCard.innerHTML = `
-      <h3>Donor Name: ${donorInfo.donorName}</h3>
-      <p>Blood Group: ${donorInfo.bloodGroup}</p>
-      <p>Donor Location: ${donorInfo.donorPlace}</p>
-      <p>Hospital: ${donorInfo.name}</p>
+      <h3>Hospital Name: ${donorInfo.hospitalName}</h3>
+      <p>Blood Group: ${donorInfo.bdGroup}</p>
+      <p>Donors Count: ${donorInfo.count}</p>
+      <p>Distance: ${donorInfo.distance} km</p>
+      <button class="donor-button">Send Request</button>
     `;
     donorColumn.appendChild(donorCard);
   });
@@ -54,14 +56,14 @@ function addEffectToDonorCards() {
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
-      const rotateX = ((y - centerY) / centerY) * 10; 
-      const rotateY = ((centerX - x) / centerX) * 10; 
+      const rotateX = ((y - centerY) / centerY) * 10;
+      const rotateY = ((centerX - x) / centerX) * 10;
 
       card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
     });
 
     card.addEventListener("mouseleave", () => {
-      card.style.transform = "rotateX(0) rotateY(0) scale(1)"; 
+      card.style.transform = "rotateX(0) rotateY(0) scale(1)";
     });
   });
 }
