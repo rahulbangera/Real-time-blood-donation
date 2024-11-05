@@ -5,6 +5,13 @@ let circle;
 let nearbyHospitals = [];
 let placesService;
 let bdGroup;
+let slicedHospitals = [];
+let allHospitals = [];
+let initialValue = 0;
+let incrementValue = 20;
+let finalValue = 0;
+let done = false;
+let selectedHospitals = [];
 
 function showPopup() {
   const popup = document.getElementById("popupSuccess");
@@ -21,28 +28,42 @@ function showPopup() {
   }, 3000);
 }
 
-function findNearbyDonors(nearbyHospitals, bdGroup) {
-  let selectedHospitals = [];
-  fetch("/nearbysearch", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ nearbyHospitals, bdGroup }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      selectedHospitals = data.selectedHospitals;
-      console.log("Selected Hospitals:", selectedHospitals);
-      document.querySelector(".popupContent").style.animation =
-        "popup-disappear 0.6s forwards";
+function updateDonorCards(selectedHospitals) {
+  const donorColumn = document.getElementById("donorColumn");
+  donorColumn.innerHTML = "";
+  selectedHospitals.forEach((donorInfo) => {
+    const donorCard = document.createElement("div");
+    donorCard.className = "donor-card";
+    donorCard.innerHTML = `
+      <h3>Donor Name: ${donorInfo.donorName}</h3>
+      <p>Blood Group: ${donorInfo.bloodGroup}</p>
+      <p>Donor Location: ${donorInfo.donorPlace}</p>
+      <p>Hospital: ${donorInfo.name}</p>
+    `;
+    donorColumn.appendChild(donorCard);
+  });
+  addEffectToDonorCards();
+}
 
-      setTimeout(() => {
-        document.getElementById("popupContainer").style.display = "none";
-        document.querySelector(".popupContent").style.display = "none";
-      }, 600);
-      showPopup();
+function addEffectToDonorCards() {
+  document.querySelectorAll(".donor-card").forEach((card) => {
+    card.addEventListener("mousemove", (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * 10; 
+      const rotateY = ((centerX - x) / centerX) * 10; 
+
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
     });
+
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = "rotateX(0) rotateY(0) scale(1)"; 
+    });
+  });
 }
 
 function openMapPopup() {
@@ -169,36 +190,109 @@ window.onload = () => {
     };
 
     function updateNearbyHospitals(bdGroup) {
+      selectedHospitals = [];
+      allHospitals = [];
+      initialValue = 0;
+      finalValue = 0;
+      done = false;
+      console.log("Circle Radius:", circle.getRadius());
       placesService.nearbySearch(
         {
           location: circle.getCenter(),
-          rankBy: google.maps.places.RankBy.DISTANCE,
+          radius: circle.getRadius(),
           type: "hospital",
         },
-        (results, status) => {
+        (results, status, pagination) => {
           if (status === google.maps.places.PlacesServiceStatus.OK) {
-            const maxDistanceMeters = circle.getRadius();
-            nearbyHospitals = results.filter((hospital) => {
-              const hospitalLatLng = new google.maps.LatLng(
-                hospital.geometry.location.lat(),
-                hospital.geometry.location.lng()
-              );
-              const distance =
-                google.maps.geometry.spherical.computeDistanceBetween(
-                  circle.getCenter(),
-                  hospitalLatLng
+            allHospitals = allHospitals.concat(results);
+            if (pagination.hasNextPage) {
+              console.log("Next Page:", pagination.hasNextPage);
+              pagination.nextPage();
+            } else {
+              console.log("All Hospitals:", allHospitals);
+              const maxDistanceMeters = circle.getRadius();
+              allHospitals = allHospitals.filter((hospital) => {
+                const hospitalLatLng = new google.maps.LatLng(
+                  hospital.geometry.location.lat(),
+                  hospital.geometry.location.lng()
                 );
-              return distance <= maxDistanceMeters;
-            });
-
-            console.log("Filtered nearby hospitals:", nearbyHospitals);
-
-            findNearbyDonors(nearbyHospitals, bdGroup);
+                const distance =
+                  google.maps.geometry.spherical.computeDistanceBetween(
+                    circle.getCenter(),
+                    hospitalLatLng
+                  );
+                return distance <= maxDistanceMeters;
+              });
+              const center2 = circle.getCenter();
+              const hospitalWithDistance = allHospitals.map((hospital) => {
+                const hospitalLocation = new google.maps.LatLng(
+                  hospital.geometry.location.lat(),
+                  hospital.geometry.location.lng()
+                );
+                const distance =
+                  google.maps.geometry.spherical.computeDistanceBetween(
+                    center2,
+                    hospitalLocation
+                  );
+                return {
+                  ...hospital,
+                  distance,
+                };
+              });
+              hospitalWithDistance.sort((a, b) => a.distance - b.distance);
+              console.log("Nearby Hospitals:", allHospitals);
+              allHospitals = hospitalWithDistance;
+              console.log("Hospitals with Distance:", hospitalWithDistance);
+              arrangeData();
+            }
           } else {
             console.error("Nearby search failed due to:", status);
           }
         }
       );
+    }
+
+    function findNearbyDonors(nearbyHospitals, bdGroup) {
+      fetch("/nearbysearch", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nearbyHospitals, bdGroup }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          selectedHospitals = selectedHospitals.concat(data.selectedHospitals);
+          if (!done) {
+            console.log("Arranging data again");
+            arrangeData();
+            return;
+          }
+          console.log("Selected Hospitals:", selectedHospitals);
+          document.querySelector(".popupContent").style.animation =
+            "popup-disappear 0.6s forwards";
+
+          updateDonorCards(selectedHospitals);
+
+          setTimeout(() => {
+            document.getElementById("popupContainer").style.display = "none";
+            document.querySelector(".popupContent").style.display = "none";
+          }, 600);
+          showPopup();
+        });
+    }
+
+    function arrangeData() {
+      finalValue += incrementValue;
+      if (allHospitals.length < finalValue) {
+        finalValue = allHospitals.length;
+        done = true;
+      }
+      slicedHospitals = allHospitals.slice(initialValue, finalValue);
+      initialValue = finalValue;
+      console.log("Sliced Hospitals:", slicedHospitals);
+      nearbyHospitals = slicedHospitals;
+      findNearbyDonors(nearbyHospitals, bdGroup);
     }
   }
 
