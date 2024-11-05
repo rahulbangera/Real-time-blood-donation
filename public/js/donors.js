@@ -256,7 +256,6 @@ window.onload = function () {
                 `select-btn-${place.place_id}`
               );
 
-              // Check if the listener has already been added
               if (!selectBtn.dataset.listenerAdded) {
                 selectBtn.addEventListener("click", () => {
                   toggleHospitalSelection(

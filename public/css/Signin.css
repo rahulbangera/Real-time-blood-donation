@@ -27,7 +27,7 @@ body {
 }
 
 .container {
-    width: 400px; /* Increased width for a larger layout */
+    width: 400px; 
     max-width: 90%;
     padding: 30px;
     text-align: center;
@@ -55,7 +55,6 @@ h1 {
     font-family: var(--specialFont);
 }
 
-/* Subheading and link for sign-in */
 h6 {
     font-size: 16px;
     margin-bottom: 25px;
@@ -96,7 +95,7 @@ input[type="email"],
 input[type="password"] {
     width: 100%;
     padding: 12px; 
-    font-size: 16px; /* Larger text size */
+    font-size: 16px; 
     margin-bottom: 18px;
     border-radius: 6px;
     border: 1px solid #ccc;
@@ -106,7 +105,7 @@ input[type="password"] {
     display: inline-block;
     background-color: var(--lightBloodColor);
     color: var(--oppBlood);
-    padding: 12px 24px; /* Larger padding for bigger button */
+    padding: 12px 24px; 
     border: none;
     border-radius: 8px;
     font-size: 18px;

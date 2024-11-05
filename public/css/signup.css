@@ -62,7 +62,7 @@ body {
 }
 
 .formContainer {
-    width: 60%; /* Increased width for a larger layout */
+    width: 60%; 
     max-width: 600px;
     max-height: 500px;
     padding: 30px;
@@ -102,7 +102,6 @@ body {
     font-family: var(--specialFont);
 }
 
-/* Subheading and link for sign-in */
 .formContainer h6 {
     font-size: 16px;
     margin-bottom: 25px;
@@ -137,7 +136,7 @@ body {
 .formContainer input[type="password"] {
     width: 100%;
     padding: 12px; 
-    font-size: 16px; /* Larger text size */
+    font-size: 16px;
     margin-bottom: 18px;
     border-radius: 6px;
     border: 1px solid #ccc;
@@ -146,7 +145,7 @@ body {
 .popupContainer input{
     width: 100%;
     padding: 12px; 
-    font-size: 16px; /* Larger text size */
+    font-size: 16px; 
     margin-bottom: 18px;
     border-radius: 6px;
     border: 1px solid #ccc;
@@ -156,7 +155,7 @@ body {
     display: inline-block;
     background-color: var(--lightBloodColor);
     color: var(--oppBlood);
-    padding: 12px 24px; /* Larger padding for bigger button */
+    padding: 12px 24px;
     border: none;
     border-radius: 8px;
     font-size: 18px;

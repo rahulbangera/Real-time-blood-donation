@@ -1,11 +1,10 @@
 $w-size: 200px;
 $w-margin: calc(-1 * #{$w-size} / 2);
-$b-size: 70%; //This is % based on $w-size. Use any value you want (that makes sense) and any unit that you would like (test it)
+$b-size: 70%; 
 $box-wrapper-width: $b-size;
 $box-wrapper-height: $b-size;
 $box-wrapper-margin: calc((100% - #{$box-wrapper-height})/2) calc((100% - #{$box-wrapper-width})/2);
 
-//clip-path: inset() doesn't work on firefox and IE, if anyone feels like making it work with SVG clipping, please drop me a link in comments, would like to see it. :) 
 
 *,
 *:before,

@@ -85,15 +85,13 @@ window.addEventListener('load', function() {
     const loader = document.getElementById('loader');
     const content = document.getElementById('content');
     
-    // Set a minimum load time of 1 second
-    const minLoadTime = 2000; // in milliseconds
+    const minLoadTime = 2000; 
     const startTime = performance.now();
 
-    // Function to hide loader and show content
+    
     function hideLoader() {
         const elapsedTime = performance.now() - startTime;
 
-        // If the page loads too fast, wait for the minimum load time
         const delay = Math.max(0, minLoadTime - elapsedTime);
         
         setTimeout(() => {
@@ -102,20 +100,15 @@ window.addEventListener('load', function() {
         }, delay);
     }
 
-    // Call hideLoader function
     hideLoader();
 });
 
 
-        // Get the navbar element
 const navbar = document.querySelector('.navbar');
 const leftSticky = document.querySelector('.left-nav');
 
-// Get the offset position of the navbar
 const sticky = navbar.offsetTop;
 
-// Add the sticky class to the navbar when you reach its scroll position
-// Remove "sticky" when you leave the scroll position
 function stickyNavbar() {
   if (window.pageYOffset > sticky) {
     leftSticky.classList.add('left-sticky');
@@ -126,7 +119,6 @@ function stickyNavbar() {
   }
 }
 
-// When the user scrolls the page, execute stickyNavbar
 window.onscroll = function() {
     stickyNavbar();
 };
