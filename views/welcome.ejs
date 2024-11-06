@@ -97,21 +97,20 @@
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
 
-    console.log(process.cwd());
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "373b674b-3f20-4483-89cc-a00b78d93e75",
-      safari_web_id: "web.onesignal.auto.474f3eff-1334-4c1b-9726-cf22982ee91f",
       notifyButton: {
         enable: true,
       },
       serviceWorkerParam: { scope: "/" },
       serviceWorkerPath: "/OneSignalSDKWorker.js",
-    });
-
-    OneSignal.showSlidedownPrompt();
+    }).then(()=>{
+        OneSignal.showSlidedownPrompt();
+    }).catch(console.error);
   });
+  
 </script>
     
 
