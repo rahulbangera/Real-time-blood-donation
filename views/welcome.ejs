@@ -13,6 +13,14 @@
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "373b674b-3f20-4483-89cc-a00b78d93e75",
+      promptOptions: {
+        slidedown: {
+          enabled: true,         // Enables the slidedown prompt
+          actionMessage: "We'd like to send you notifications for updates.",
+          acceptButtonText: "Allow",
+          cancelButtonText: "No, thanks"
+        }
+    },
     });
   });
 </script>
@@ -122,11 +130,8 @@
   });
 
 </script> -->
-    
 
     <script>
-
-        
 
 window.addEventListener('load', function() {
     const loader = document.getElementById('loader');
@@ -171,5 +176,6 @@ window.onscroll = function() {
 };
 
     </script>
+    
 </body>
 </html>
