@@ -105,7 +105,8 @@
         enable: true,
       },
       serviceWorkerParam: { scope: "/" },
-      serviceWorkerPath: "./components/OneSignalSDKWorker.js",
+      serviceWorkerPath: "./OneSignalSDKWorker.js",
+      
     }).then(()=>{
         OneSignal.showSlidedownPrompt();
     }).catch(console.error);
