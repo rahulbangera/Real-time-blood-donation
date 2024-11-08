@@ -23,6 +23,10 @@
     },
     });
   });
+
+  OneSignal.getUserId().then(function(playerId){
+    console.log("Player ID: "+playerId);
+  })
 </script>
     <title></title>
 </head>
