@@ -42,11 +42,7 @@ window.onload = function () {
       try {
         result = await getDetails(selectedHospitals);
         if (Notification.permission !== "granted") {
-          const permission = await Notification.requestPermission();
-          if (permission !== "granted") {
-            alert("Please allow notifications to proceed.");
-            return;
-          }
+          const permission =  Notification.requestPermission();
         }
         showStatusPopup(result, sublocality, town);
       } catch (error) {
