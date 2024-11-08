@@ -45,7 +45,15 @@
         </div>
     </div>
     <script>
-        
+        document.querySelector('.button').addEventListener('click', async()=>{
+            if (Notification.permission !== "granted") {
+          const permission = await Notification.requestPermission();
+          if (permission !== "granted") {
+            alert("Please allow notifications to proceed.");
+            return;
+          }
+        }
+        })      
     </script>
 </body>
 </html>
