@@ -12,6 +12,7 @@ let incrementValue = 20;
 let finalValue = 0;
 let done = false;
 let selectedHospitals = [];
+let selectedDonors = [];
 
 function showPopup() {
   const popup = document.getElementById("popupSuccess");
@@ -34,17 +35,37 @@ function updateDonorCards(selectedHospitals) {
   selectedHospitals.forEach((donorInfo) => {
     const donorCard = document.createElement("div");
     donorCard.className = "donor-card";
-    donorCard.id = donorInfo.hospitalPlaceId;
     donorCard.innerHTML = `
       <h3>Hospital Name: ${donorInfo.hospitalName}</h3>
       <p>Blood Group: ${donorInfo.bdGroup}</p>
       <p>Donors Count: ${donorInfo.count}</p>
       <p>Distance: ${donorInfo.distance} km</p>
-      <button class="donor-button">Send Request</button>
+      <button class="donor-button" id=${donorInfo.hospitalPlaceId}>Send Request</button>
     `;
     donorColumn.appendChild(donorCard);
+
+    const sendRequestButtons = document.querySelectorAll(".donor-button");
+    sendRequestButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        executeRequest(button.id);
+      });
+    });
   });
   addEffectToDonorCards();
+}
+
+function executeRequest(hospitalPlaceId) {
+  fetch("/searchDonors", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ hospitalPlaceId }),
+  }).then((res) => res.json())
+  .then((data)=>{
+    selectedDonors = data.selectedDonors;
+    console.log("Successfully fetched donors:", selectedDonors);
+  });
 }
 
 function addEffectToDonorCards() {

@@ -15,8 +15,9 @@ import MongoStore from "connect-mongo";
 import Donor from "./Models/donorModel.js";
 import admin from "firebase-admin";
 // import serviceAccount from "./Models/real-time-blood-donation-c0c32-firebase-adminsdk-2q376-f788502794.json" assert { type: "json" };
-import { assert } from "console";
+import { assert, info } from "console";
 import TokenUser from "./Models/tokenUser.js";
+import RequestsForDonor from "./Models/requestsForDonors.js";
 
 const app = e();
 const PORT = process.env.PORT || 5000;
@@ -465,6 +466,80 @@ app.post("/sendNotification", async (req, res) => {
     res.status(400).send("User not found");
   }
 });
+
+app.post("/searchDonors", async (req, res) => {
+  const username = req.session.username;
+  const email = req.session.email;
+  const { hospitalPlaceId } = req.body;
+  const donors = await Donor.find({
+    hospitals: { $elemMatch: { placeId: hospitalPlaceId } },
+  });
+  if (donors.length > 0) {
+    const dup = await RequestsForDonor.find({ requestorUsername: username });
+    const donors = donors.filter((donor) => donor.requestorUsername !== username);
+    if(donors.length > 0) {
+    donors.forEach(async (donor) => {
+      addRequestToDonorRecords(
+        donor.username,
+        donor.email,
+        donor.bloodGroup,
+        username,
+        hospitalPlaceId
+      );
+      const donorTokenId = await TokenUser.findOne({ email: donor.email });
+      sendNotification(
+        donorTokenId.tokenId,
+        "Donation Request",
+        "Blood donation request from a user"
+      );
+      sendMail(
+        donor.email,
+        donor.name,
+        "Donation Request",
+        "Blood donation request from a user"
+      );
+    });
+  }
+});
+
+async function addRequestToDonorRecords(
+  username,
+  email,
+  bdGroup,
+  requestorUsername,
+  hospitalPlaceId
+) {
+  const newRequest = new RequestsForDonor({
+    username,
+    email,
+    bdGroup,
+    requestorUsername,
+    hospitalPlaceId,
+  });
+
+  await newRequest.save();
+}
+
+function sendMail(to, name, subject, text) {
+  const mailOptions = {
+    from: "coderangersverify@gmail.com",
+    to: to,
+    subject: subject,
+    text: `Hi ${name},
+    
+    ${text}
+    
+    Visit the website to respond: https://real-time-blood-donation.onrender.com/`,
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      return res.send("Failed to send mail");
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
