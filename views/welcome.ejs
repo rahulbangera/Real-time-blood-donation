@@ -15,13 +15,16 @@
       appId: "373b674b-3f20-4483-89cc-a00b78d93e75",
       promptOptions: {
         slidedown: {
-          enabled: true,         // Enables the slidedown prompt
+          enabled: true,        
           actionMessage: "We'd like to send you notifications for updates.",
           acceptButtonText: "Allow",
           cancelButtonText: "No, thanks"
         }
     },
     });
+    OneSignal.getUserId().then((playerId)=>{
+        console.log(playerId);
+    })
   });
 
   OneSignalDeferred.getUserId().then(function(playerId){

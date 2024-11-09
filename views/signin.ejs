@@ -45,14 +45,28 @@
         </div>
     </div>
     <script>
+            window.OneSignal = window.OneSignal || [];
         document.querySelector('.button').addEventListener('click', async()=>{
-            if (Notification.permission !== "granted") {
-          const permission = await Notification.requestPermission();
-          if (permission !== "granted") {
-            alert("Please allow notifications to proceed.");
-            return;
-          }
-        }
+OneSignal.push(function() {
+  OneSignal.init({
+    appId: "373b674b-3f20-4483-89cc-a00b78d93e75",
+  });
+
+  function checkAndRequestNotificationPermission() {
+    OneSignal.getNotificationPermission().then((permission) => {
+      if (permission !== "granted") {
+        requestNotificationPermission();
+      }
+    });
+  }
+
+  function requestNotificationPermission() {
+    OneSignal.showSlidedownPrompt();
+  }
+
+  checkAndRequestNotificationPermission();
+});
+
         })      
     </script>
 </body>
