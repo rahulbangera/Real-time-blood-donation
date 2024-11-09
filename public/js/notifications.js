@@ -51,6 +51,19 @@ getToken(messaging, {
 }).then((currentToken) => {
   if (currentToken) {
     console.log("Token: ", currentToken);
+    fetch('checkFCMToken', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: currentToken }),
+    }).then((res) => {
+      if (res.status === 200) {
+        console.log('Token exists');
+      } else {
+        console.log('Token does not exist');
+      }
+    })
   } else {
     console.log(
       "No registration token available. Request permission to generate one."

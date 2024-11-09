@@ -6,7 +6,7 @@ import ejs from "ejs";
 import mongoose from "mongoose";
 import mongo from "mongodb";
 import nodemailer from "nodemailer";
-import LocalUser from "./Models/localuser";
+import LocalUser from "./Models/localuser.js";
 import session from "express-session";
 import Otps from "./Models/otpverifications.js";
 import bodyParser from "body-parser";
@@ -15,6 +15,7 @@ import Donor from "./Models/donorModel.js";
 import admin from "firebase-admin";
 import serviceAccount from "./Models/real-time-blood-donation-c0c32-firebase-adminsdk-2q376-f788502794.json" assert { type: "json" };
 import { assert } from "console";
+import TokenUser from "./Models/tokenUser.js";
 
 const app = e();
 const PORT = process.env.PORT || 5000;
@@ -90,6 +91,10 @@ function sendNotification(userToken, title, body) {
     notification: {
       title,
       body,
+      icon: "https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png",
+    },
+    data: {
+      click_action: "https://real-time-blood-donation.onrender.com/",
     },
   };
   admin
@@ -416,6 +421,35 @@ app.post("/fetchUserData", async (req, res) => {
     res.status(200).json({ userData });
   } else {
     res.status(400).json({ status: 400 });
+  }
+});
+
+app.post("/checkFCMToken", async (req, res) => {
+  const { token } = req.body;
+  const username = req.session.username;
+  const email = req.session.email;
+  const tokenUser = await TokenUser.findOne({ tokenId: token });
+  if (tokenUser) {
+    res.status(200).send("Token exists");
+  } else {
+    const tokenUser = new TokenUser({
+      username,
+      email,
+      tokenId: token,
+    });
+    await tokenUser.save();
+    res.status(200).send("Token saved");
+  }
+});
+
+app.post("/sendNotification", async (req, res) => {
+  const { title, body, username } = req.body;
+  const user = await TokenUser.findOne({ username });
+  if (user) {
+    sendNotification(user.tokenId, title, body);
+    res.status(200).send("Notification sent");
+  } else {
+    res.status(400).send("User not found");
   }
 });
 
