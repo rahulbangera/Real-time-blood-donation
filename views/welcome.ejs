@@ -20,31 +20,9 @@
               acceptButtonText: "Allow",
               cancelButtonText: "No, thanks"
             }
-        },
-        }).then(()=>{
-            
-            OneSignal.getDeviceState().then((deviceState) => {
-      if (deviceState && deviceState.userId) {
-        console.log("Player ID:", deviceState.userId); // This is the Player ID
-      }
-                else{
-                    console.log("Usrt not subscribed yet");
-                }
-
-            }).catch((e)=>{
-                console.log("BRUH IM STILL");
-                OneSignal.getExternalUserId().then((play)=>{
-                console.log("Jo")
-            });
-                console.log("Some error: "+e);
-            });
-        }).catch((e)=>{
-            OneSignal.getExternalUserId().then((play)=>{
-                console.log("Jo")
-            });
-            console.log("Some error: "+e);
-        });
-      });
+        }
+    });
+});
       </script>
     <title></title>
 </head>
