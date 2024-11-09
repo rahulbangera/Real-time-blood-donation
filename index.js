@@ -431,7 +431,7 @@ app.post("/checkFCMToken", async (req, res) => {
   const tokenUser = await TokenUser.findOne({ tokenId: token });
   if (tokenUser) {
     res.status(200).send("Token exists");
-  } else {
+  } else if (email && username) {
     const tokenUser = new TokenUser({
       username,
       email,
@@ -439,6 +439,8 @@ app.post("/checkFCMToken", async (req, res) => {
     });
     await tokenUser.save();
     res.status(200).send("Token saved");
+  } else {
+    res.status(400).send("Token not saved");
   }
 });
 
