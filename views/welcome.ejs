@@ -22,9 +22,13 @@
             }
         }
     });
+
+    await OneSignal.getUserId((player)=>{
+        console.log("Player ID: " +player);
+    });
 });
       </script>
-    <title></title>
+    <title>Home</title>
 </head>
 <body>
     <div class="wrapper" id="loader">
