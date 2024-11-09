@@ -57,7 +57,7 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
       sameSite: "lax",
-      secure: false, // true if HTTPS
+      secure: false,
     },
   })
 );
@@ -106,29 +106,42 @@ app.get("/signin", (req, res) => {
 app.post("/nearbysearch", async (req, res) => {
   const { nearbyHospitals, bdGroup } = req.body;
   let donorexist = [];
+  let currHospital;
+  let hospital1;
   let selectedHospitals = [];
   if (bdGroup === "ANY") {
     for (const hospital of nearbyHospitals) {
-     donorexist = await Donor.find({
+      donorexist = await Donor.find({
         hospitals: {
           $elemMatch: { placeId: hospital.place_id },
         },
       });
       if (donorexist.length > 0) {
-        for (let i = 0; i < donorexist.length; i++) {
-          // if(donorexist[i].email === req.session.email) {
-          //   continue;
-          // }
-          let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
-          let hospital1 = {
-            name: hospital.name,
-            donorName: donorexist[i].name,
-            donorUserName: donorexist[i].username,
-            donorPlace: loc,
-            bloodGroup: donorexist[i].bloodGroup,
-          };
-          selectedHospitals.push(hospital1);
-        }
+        // for (let i = 0; i < donorexist.length; i++) {
+        //   // if(donorexist[i].email === req.session.email) {
+        //   //   continue;
+        //   // }
+        //   let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
+        //   let hospital1 = {
+        //     name: hospital.name,
+        //     // donorName: donorexist[i].name,
+        //     // donorUserName: donorexist[i].username,
+        //     distance: hospital.distance,
+        //     bloodGroup: donorexist[i].bloodGroup,
+        //     count: donorexist.length,
+        //   };
+        //   selectedHospitals.add(hospital1);
+        // }
+
+        hospital1 = {
+          hospitalName: hospital.name,
+          hospitalPlaceId: hospital.place_id,
+          bdGroup: bdGroup,
+          distance: Math.round(hospital.distance) / 1000,
+          count: donorexist.length,
+        };
+
+        selectedHospitals.push(hospital1);
       }
     }
   } else {
@@ -140,20 +153,29 @@ app.post("/nearbysearch", async (req, res) => {
         bloodGroup: bdGroup,
       });
       if (donorexist.length > 0) {
-        for (let i = 0; i < donorexist.length; i++) {
-          // if(donorexist[i].email === req.session.email) {
-          //   continue;
-          // }
-          let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
-          let hospital1 = {
-            name: hospital.name,
-            donorName: donorexist[i].name,
-            donorUserName: donorexist[i].username,
-            donorPlace: loc,
-            bloodGroup: donorexist[i].bloodGroup,
-          };
-          selectedHospitals.push(hospital1);
-        }
+        //   for (let i = 0; i < donorexist.length; i++) {
+        //     // if(donorexist[i].email === req.session.email) {
+        //     //   continue;
+        //     // }
+        //     let loc = `${donorexist[i].location.sublocality}, ${donorexist[i].location.town}`;
+        //     let hospital1 = {
+        //       name: hospital.name,
+        //       donorName: donorexist[i].name,
+        //       donorUserName: donorexist[i].username,
+        //       donorPlace: loc,
+        //       bloodGroup: donorexist[i].bloodGroup,
+        //     };
+        //     selectedHospitals.push(hospital1);
+        //   }
+        // }
+        hospital1 = {
+          hospitalName: hospital.name,
+          hospitalPlaceId: hospital.place_id,
+          bdGroup: bdGroup,
+          distance: Math.round(hospital.distance) / 1000,
+          count: donorexist.length,
+        };
+        selectedHospitals.push(hospital1);
       }
     }
 
