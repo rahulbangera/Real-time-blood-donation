@@ -21,10 +21,21 @@
               cancelButtonText: "No, thanks"
             }
         },
+        }).then(()=>{
+            OneSignal.getSubscriptionId().then((playerId)=>{
+                if(playerId){
+                    console.log("Player ID: "+playerId);
+                }
+                else{
+                    console.log("Usrt not subscribed yet");
+                }
+
+            }).catch((e)=>{
+                console.log("Some error: "+e);
+            });
+        }).catch((e)=>{
+            console.log("Some error: "+e);
         });
-        OneSignal.getUserId().then((playerId)=>{
-            console.log(playerId);
-        })
       });
       </script>
     <title></title>
