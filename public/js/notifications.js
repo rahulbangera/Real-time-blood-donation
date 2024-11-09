@@ -71,6 +71,21 @@ getToken(messaging, {
   }
 });
 
+fetch('/sendNotification', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ title: 'Donation Request', body: 'Blood donation request from a user', username: 'King1233' }),
+}).then((res) => {
+  if (res.status === 200) {
+    console.log('Notification sent');
+  } else {
+    console.log('Notification not sent');
+  }
+});
+
+
 onMessage(messaging, (payload) => {
   console.log("Message received. ", payload);
 });

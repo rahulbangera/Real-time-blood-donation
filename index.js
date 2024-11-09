@@ -1,4 +1,5 @@
 import e from "express";
+import fs from "fs";
 import http, { createServer } from "http";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -13,7 +14,7 @@ import bodyParser from "body-parser";
 import MongoStore from "connect-mongo";
 import Donor from "./Models/donorModel.js";
 import admin from "firebase-admin";
-import serviceAccount from "./Models/real-time-blood-donation-c0c32-firebase-adminsdk-2q376-f788502794.json" assert { type: "json" };
+// import serviceAccount from "./Models/real-time-blood-donation-c0c32-firebase-adminsdk-2q376-f788502794.json" assert { type: "json" };
 import { assert } from "console";
 import TokenUser from "./Models/tokenUser.js";
 
@@ -30,15 +31,23 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 app.set("view engine", "ejs");
 
 app.set("views", path.join(__dirname, "views"));
+
+const serviceAccountPath = path.join(
+  __dirname,
+  "./Models/real-time-blood-donation-c0c32-firebase-adminsdk-2q376-f788502794.json"
+);
+
+// Read the JSON file synchronously
+const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 // app.use(
 //   session({
@@ -91,7 +100,7 @@ function sendNotification(userToken, title, body) {
     notification: {
       title,
       body,
-      icon: "https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png",
+      // icon: "https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png",
     },
     data: {
       click_action: "https://real-time-blood-donation.onrender.com/",
@@ -446,9 +455,11 @@ app.post("/checkFCMToken", async (req, res) => {
 
 app.post("/sendNotification", async (req, res) => {
   const { title, body, username } = req.body;
-  const user = await TokenUser.findOne({ username });
+  const user = await TokenUser.find({ username });
   if (user) {
-    sendNotification(user.tokenId, title, body);
+    for (let i = 0; i < user.length; i++) {
+      sendNotification(user[i].tokenId, title, body);
+    }
     res.status(200).send("Notification sent");
   } else {
     res.status(400).send("User not found");
