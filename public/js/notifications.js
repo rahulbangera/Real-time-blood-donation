@@ -1,3 +1,10 @@
+// import { initializeApp } from "firebase/app";
+// import { getMessaging, getToken, onMessage } from "firebase/messaging";
+// import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js'
+import { getMessaging, getToken, onMessage } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-messaging.js'
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js'
+
 const firebaseConfig = {
   apiKey: "AIzaSyDvw9xC6byg4DkNpWzzB4466BidJCJRggU",
   authDomain: "real-time-blood-donation-c0c32.firebaseapp.com",
@@ -11,6 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 const analytics = getAnalytics(app);
+
 
 async function requestNotificationPermission() {
   const permission = await Notification.requestPermission();
