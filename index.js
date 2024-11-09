@@ -12,6 +12,9 @@ import Otps from "./Models/otpverifications.js";
 import bodyParser from "body-parser";
 import MongoStore from "connect-mongo";
 import Donor from "./Models/donorModel.js";
+import admin from "firebase-admin";
+import serviceAccount from "./Models/real-time-blood-donation-c0c32-firebase-adminsdk-2q376-f788502794.json" assert { type: "json" };
+import { assert } from "console";
 
 const app = e();
 const PORT = process.env.PORT || 5000;
@@ -24,6 +27,10 @@ const transporter = nodemailer.createTransport({
     user: "coderangersverify@gmail.com",
     pass: "vzhykowzuabnjscw ",
   },
+});
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
 });
 
 const __filename = fileURLToPath(import.meta.url);
@@ -75,6 +82,25 @@ app.use(e.urlencoded({ extended: true }));
 //   }
 
 // req.session.email = "testing";
+
+function sendNotification(userToken, title, body) {
+  const message = {
+    token: userToken,
+    notification: {
+      title,
+      body,
+    },
+  };
+  admin
+    .messaging()
+    .send(message)
+    .then((response) => {
+      console.log("Notification sent successfully", response);
+    })
+    .catch((error) => {
+      console.log("Error sending notification", error);
+    });
+}
 
 app.get("/", async (req, res) => {
   console.log(req.session.email);
