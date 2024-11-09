@@ -292,9 +292,6 @@ background: linear-gradient(81deg, rgba(200,45,45,1) 0%, rgba(200,59,59,1) 23%, 
     background-color: var(--bloodColor);
   }
 
-
-
-
   @media (width<800px){
     .main-container{
         flex-direction: column;

@@ -41,6 +41,9 @@ window.onload = function () {
     if (selectedHospitals.size > 0) {
       try {
         result = await getDetails(selectedHospitals);
+        if (Notification.permission !== "granted") {
+          const permission =  Notification.requestPermission();
+        }
         showStatusPopup(result, sublocality, town);
       } catch (error) {
         console.error(error);
@@ -180,10 +183,10 @@ window.onload = function () {
 
     geocoder.geocode({ location: pos }, (results, status) => {
       if (status === "OK" && results[0]) {
-         sublocality = results[0].address_components[1].short_name;
-         locality = results[0].address_components[2].long_name;
-         town = results[0].address_components[3].long_name;
-         city = results[0].address_components[4].long_name;
+        sublocality = results[0].address_components[1].short_name;
+        locality = results[0].address_components[2].long_name;
+        town = results[0].address_components[3].long_name;
+        city = results[0].address_components[4].long_name;
 
         const address = `${sublocality}, ${locality}, ${town} - ${city}`;
         console.log("City:", address);
