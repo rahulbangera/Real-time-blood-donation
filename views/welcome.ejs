@@ -22,7 +22,7 @@
             }
         },
         }).then(()=>{
-            OneSignal.getSubscriptionId().then((playerId)=>{
+            OneSignal.getUserId().then((playerId)=>{
                 if(playerId){
                     console.log("Player ID: "+playerId);
                 }
@@ -31,9 +31,15 @@
                 }
 
             }).catch((e)=>{
+                OneSignal.getExternalUserId().then((play)=>{
+                console.log("Jo")
+            });
                 console.log("Some error: "+e);
             });
         }).catch((e)=>{
+            OneSignal.getExternalUserId().then((play)=>{
+                console.log("Jo")
+            });
             console.log("Some error: "+e);
         });
       });
