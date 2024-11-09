@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="/css/welcome.css">
     <script src="https://kit.fontawesome.com/1b792d3ec8.js" crossorigin="anonymous"></script>
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"></script>
     <script>
       window.OneSignalDeferred = window.OneSignalDeferred || [];
+      window.OneSignal = window.OneSignal || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "373b674b-3f20-4483-89cc-a00b78d93e75",
+          allowLocalhostAsSecureOrigin: true,
           promptOptions: {
             slidedown: {
               enabled: true,        
@@ -23,7 +26,11 @@
         }
     });
 
-    try{
+    
+});
+
+    OneSignal.push(async()=>{
+        try{
         await OneSignal.getExternalUserId('2800');
     }
     catch(e) {
@@ -34,7 +41,7 @@
     await OneSignal.getUserId((player)=>{
         console.log("Player ID: " +player);
     });
-});
+    })
       </script>
     <title>Home</title>
 </head>
