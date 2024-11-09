@@ -25,23 +25,10 @@
             }
         }
     });
-
-    
 });
-
     OneSignal.push(async()=>{
-        try{
-        await OneSignal.getExternalUserId('2800');
-    }
-    catch(e) {
-        await OneSignal.setExternalUserId('2800');
-    };
-
-
-    await OneSignal.getUserId((player)=>{
-        console.log("Player ID: " +player);
+    OneSignal.getUserId().then((res)=>console.log("GOT: "+res));
     });
-    })
       </script>
     <title>Home</title>
 </head>
