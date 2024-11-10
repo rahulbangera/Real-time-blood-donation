@@ -147,6 +147,7 @@ app.get("/signin", (req, res) => {
 
 app.post("/nearbysearch", async (req, res) => {
   const { nearbyHospitals, bdGroup } = req.body;
+  let currUsername = req.session.username;
   let donorexist = [];
   let currHospital;
   let hospital1;
@@ -157,6 +158,7 @@ app.post("/nearbysearch", async (req, res) => {
         hospitals: {
           $elemMatch: { placeId: hospital.place_id },
         },
+        username: { $ne: currUsername },
       });
       if (donorexist.length > 0) {
         // for (let i = 0; i < donorexist.length; i++) {
@@ -193,6 +195,7 @@ app.post("/nearbysearch", async (req, res) => {
           $elemMatch: { placeId: hospital.place_id },
         },
         bloodGroup: bdGroup,
+        username: { $ne: currUsername },
       });
       if (donorexist.length > 0) {
         //   for (let i = 0; i < donorexist.length; i++) {

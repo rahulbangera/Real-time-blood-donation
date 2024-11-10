@@ -14,6 +14,7 @@ let done = false;
 let selectedHospitals = [];
 let selectedDonors = [];
 const loadingOverlay = document.getElementById("loadingOverlay");
+const noDonorsFound = document.querySelector(".noDonorsFound");
 
 function showPopup() {
   const popup = document.getElementById("popupSuccess");
@@ -32,12 +33,13 @@ function showPopup() {
 
 function updateDonorCards(selectedHospitals) {
   loadingOverlay.style.display = "none";
-  const donorColumn = document.getElementById("donorColumn");
-  donorColumn.innerHTML = "";
-  selectedHospitals.forEach((donorInfo) => {
-    const donorCard = document.createElement("div");
-    donorCard.className = "donor-card";
-    donorCard.innerHTML = `
+  if (selectedHospitals.length > 0) {
+    const donorColumn = document.getElementById("donorColumn");
+    donorColumn.innerHTML = "";
+    selectedHospitals.forEach((donorInfo) => {
+      const donorCard = document.createElement("div");
+      donorCard.className = "donor-card";
+      donorCard.innerHTML = `
       <h3>Hospital Name: ${donorInfo.hospitalName}</h3>
       <p>Blood Group: ${donorInfo.bdGroup}</p>
       <p>Donors Count: ${donorInfo.count}</p>
@@ -51,40 +53,44 @@ function updateDonorCards(selectedHospitals) {
   </span>
       </button>
     `;
-    donorColumn.appendChild(donorCard);
+      donorColumn.appendChild(donorCard);
 
-    const sendRequestButton = donorCard.querySelector(".donor-button");
-    sendRequestButton.addEventListener("click", async (e) => {
-      const clickedButton = e.currentTarget;
-      console.log("Clicked Button:", clickedButton);
-      const buttonText = clickedButton.querySelector(".button-text");
-      const loadingAnimation =
-        clickedButton.querySelector(".loading-animation");
-      console.log("Button Text:", buttonText);
-      console.log("Loading Animation:", loadingAnimation);
-      buttonText.style.opacity = "0";
-      console.log(buttonText.style.opacity);
-      loadingAnimation.style.display = "inline-block";
-      console.log(loadingAnimation.style.display);
-      clickedButton.disabled = true;
-      try {
-        console.log(123);
-        await executeRequest(clickedButton.id);
-      } catch (err) {
-        console.error("Error sending request:", err);
-      } finally {
-        setTimeout(() => {
-          buttonText.innerHTML =
-            "Request Sent <i class='fa-solid fa-check'></i>";
-          clickedButton.style.backgroundColor = "#4CAF50";
-          clickedButton.style.cursor = "default";
-          buttonText.style.opacity = "1";
-          loadingAnimation.style.display = "none";
-        }, 2000);
-      }
+      const sendRequestButton = donorCard.querySelector(".donor-button");
+      sendRequestButton.addEventListener("click", async (e) => {
+        const clickedButton = e.currentTarget;
+        console.log("Clicked Button:", clickedButton);
+        const buttonText = clickedButton.querySelector(".button-text");
+        const loadingAnimation =
+          clickedButton.querySelector(".loading-animation");
+        console.log("Button Text:", buttonText);
+        console.log("Loading Animation:", loadingAnimation);
+        buttonText.style.opacity = "0";
+        console.log(buttonText.style.opacity);
+        loadingAnimation.style.display = "inline-block";
+        console.log(loadingAnimation.style.display);
+        clickedButton.disabled = true;
+        try {
+          console.log(123);
+          await executeRequest(clickedButton.id);
+        } catch (err) {
+          console.error("Error sending request:", err);
+        } finally {
+          setTimeout(() => {
+            buttonText.innerHTML =
+              "Request Sent <i class='fa-solid fa-check'></i>";
+            clickedButton.style.backgroundColor = "#4CAF50";
+            clickedButton.style.cursor = "default";
+            buttonText.style.opacity = "1";
+            loadingAnimation.style.display = "none";
+          }, 2000);
+        }
+      });
     });
-  });
-  addEffectToDonorCards();
+    addEffectToDonorCards();
+  } else {
+    donorColumn.innerHTML =
+      "<div class='noDonorsFound'> No Donors Found   </div>";
+  }
 }
 
 function executeRequest(hospitalPlaceId) {
@@ -252,6 +258,7 @@ window.onload = () => {
     };
 
     function updateNearbyHospitals(bdGroup) {
+      noDonorsFound.style.display = "block";
       selectedHospitals = [];
       allHospitals = [];
       initialValue = 0;

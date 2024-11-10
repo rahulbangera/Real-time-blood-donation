@@ -431,3 +431,15 @@ background: linear-gradient(81deg, rgba(200,45,45,1) 0%, rgba(200,59,59,1) 23%, 
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
+
+.donors-column .donor-card:last-child{
+    margin-bottom: 240px;
+}
+
+.noDonorsFound{
+    margin-top: 40px;
+    text-align: center;
+    font-size: 2rem;
+    font-family: inconsolata;
+    color: white;
+}
