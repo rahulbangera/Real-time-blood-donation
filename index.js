@@ -493,7 +493,7 @@ app.post("/searchDonors", async (req, res) => {
         const donorTokenId = await TokenUser.find({ email: donor.email });
         donorTokenId.forEach((donor) => {
           sendNotification(
-            donorTokenId.tokenId,
+            donor.tokenId,
             "Donation Request",
             "Blood donation request from a user"
           );
