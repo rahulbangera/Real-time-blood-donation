@@ -18,6 +18,11 @@ import admin from "firebase-admin";
 import { assert, info } from "console";
 import TokenUser from "./Models/tokenUser.js";
 import RequestsForDonor from "./Models/requestsForDonors.js";
+import twilio from "twilio";
+
+const accountSid = "AC3ec82eb9b05651f92c1a8b69346e1ae9";
+const authToken = "2c04ee1ad1843d61a2fb7aaf45a1372d";
+const client = twilio(accountSid, authToken);
 
 const app = e();
 const PORT = process.env.PORT || 5000;
@@ -96,6 +101,7 @@ app.use(e.urlencoded({ extended: true }));
 // req.session.email = "testing";
 
 function sendNotification(userToken, title, body) {
+  console.log(userToken);
   const message = {
     token: userToken,
     notification: {
@@ -116,6 +122,16 @@ function sendNotification(userToken, title, body) {
     .catch((error) => {
       console.log("Error sending notification", error);
     });
+}
+
+function sendWhatsappMessage(to, body) {
+  client.messages
+    .create({
+      from: "whatsapp:+14155238886",
+      body: body,
+      to: `whatsapp:${to}`,
+    })
+    .then((message) => console.log(message.sid));
 }
 
 app.get("/", async (req, res) => {
@@ -507,6 +523,20 @@ app.post("/searchDonors", async (req, res) => {
           "Donation Request",
           "Blood donation request from a user"
         );
+        console.log(donor.email);
+        const Local = await LocalUser.findOne({ email: donor.email });
+        const mobile = `+91${Local.mobile}`;
+        console.log(mobile);
+        console.log(typeof mobile);
+        const message = `
+        Hi ${donor.name},
+
+        You have a Blood Donation request from a user at a nearby hospital. Please visit the website to respond.
+        Visit the website: https://real-time-blood-donation.onrender.com/
+
+        Thank you for your support.
+        `;
+        sendWhatsappMessage(mobile, message);
       });
       res.status(200).send("Donors found");
     } else {

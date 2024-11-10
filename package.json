@@ -20,7 +20,8 @@
     "mongodb": "^6.10.0",
     "mongoose": "^8.8.0",
     "node-fetch": "^3.3.2",
-    "nodemailer": "^6.9.16"
+    "nodemailer": "^6.9.16",
+    "twilio": "^5.3.5"
   },
   "devDependencies": {
     "parcel": "^2.12.0",
