@@ -476,29 +476,32 @@ app.post("/searchDonors", async (req, res) => {
   });
   if (donors.length > 0) {
     const dup = await RequestsForDonor.find({ requestorUsername: username });
-    const donors = donors.filter((donor) => donor.requestorUsername !== username);
-    if(donors.length > 0) {
-    donors.forEach(async (donor) => {
-      addRequestToDonorRecords(
-        donor.username,
-        donor.email,
-        donor.bloodGroup,
-        username,
-        hospitalPlaceId
-      );
-      const donorTokenId = await TokenUser.findOne({ email: donor.email });
-      sendNotification(
-        donorTokenId.tokenId,
-        "Donation Request",
-        "Blood donation request from a user"
-      );
-      sendMail(
-        donor.email,
-        donor.name,
-        "Donation Request",
-        "Blood donation request from a user"
-      );
-    });
+    const donors = donors.filter(
+      (donor) => donor.requestorUsername !== username
+    );
+    if (donors.length > 0) {
+      donors.forEach(async (donor) => {
+        addRequestToDonorRecords(
+          donor.username,
+          donor.email,
+          donor.bloodGroup,
+          username,
+          hospitalPlaceId
+        );
+        const donorTokenId = await TokenUser.findOne({ email: donor.email });
+        sendNotification(
+          donorTokenId.tokenId,
+          "Donation Request",
+          "Blood donation request from a user"
+        );
+        sendMail(
+          donor.email,
+          donor.name,
+          "Donation Request",
+          "Blood donation request from a user"
+        );
+      });
+    }
   }
 });
 
