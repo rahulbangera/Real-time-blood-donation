@@ -490,18 +490,18 @@ app.post("/searchDonors", async (req, res) => {
           hospitalPlaceId
         );
 
-        const donorTokenId = await TokenUser.findOne({ email: donor.email });
+        const donorTokenId = await TokenUser.find({ email: donor.email });
         sendNotification(
           donorTokenId.tokenId,
           "Donation Request",
           "Blood donation request from a user"
         );
-        // sendMail(
-        //   donor.email,
-        //   donor.name,
-        //   "Donation Request",
-        //   "Blood donation request from a user"
-        // );
+        sendMail(
+          donor.email,
+          donor.name,
+          "Donation Request",
+          "Blood donation request from a user"
+        );
       });
       res.status(200).send("Donors found");
     } else {
