@@ -468,40 +468,48 @@ app.post("/sendNotification", async (req, res) => {
 });
 
 app.post("/searchDonors", async (req, res) => {
-  const username = req.session.username;
-  const email = req.session.email;
+  console.log("------------------------------------------");
+  const requestorUsername = req.session.username;
+  const requestorEmail = req.session.email;
   const { hospitalPlaceId } = req.body;
-  const donors = await Donor.find({
-    hospitals: { $elemMatch: { placeId: hospitalPlaceId } },
-  });
-  if (donors.length > 0) {
-    const dup = await RequestsForDonor.find({ requestorUsername: username });
-    const donors = donors.filter(
-      (donor) => donor.requestorUsername !== username
-    );
+
+  try {
+    let donors = await Donor.find({
+      hospitals: { $elemMatch: { placeId: hospitalPlaceId } },
+    });
+
+    donors = donors.filter((donor) => donor.username !== requestorUsername);
+
     if (donors.length > 0) {
       donors.forEach(async (donor) => {
         addRequestToDonorRecords(
           donor.username,
           donor.email,
           donor.bloodGroup,
-          username,
+          requestorUsername,
           hospitalPlaceId
         );
+
         const donorTokenId = await TokenUser.findOne({ email: donor.email });
         sendNotification(
           donorTokenId.tokenId,
           "Donation Request",
           "Blood donation request from a user"
         );
-        sendMail(
-          donor.email,
-          donor.name,
-          "Donation Request",
-          "Blood donation request from a user"
-        );
+        // sendMail(
+        //   donor.email,
+        //   donor.name,
+        //   "Donation Request",
+        //   "Blood donation request from a user"
+        // );
       });
+      res.status(200).send("Donors found");
+    } else {
+      res.status(500).send("No donors found");
     }
+  } catch (error) {
+    console.error("Error during search for donors:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -512,10 +520,17 @@ async function addRequestToDonorRecords(
   requestorUsername,
   hospitalPlaceId
 ) {
+  const duplicate = await RequestsForDonor.findOne({
+    requestorUsername,
+    hospitalPlaceId,
+  });
+  if (duplicate) {
+    return;
+  }
   const newRequest = new RequestsForDonor({
     username,
     email,
-    bdGroup,
+    bloodGroup: bdGroup,
     requestorUsername,
     hospitalPlaceId,
   });

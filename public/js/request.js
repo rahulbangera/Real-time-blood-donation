@@ -13,6 +13,7 @@ let finalValue = 0;
 let done = false;
 let selectedHospitals = [];
 let selectedDonors = [];
+const loadingOverlay = document.getElementById("loadingOverlay");
 
 function showPopup() {
   const popup = document.getElementById("popupSuccess");
@@ -30,6 +31,7 @@ function showPopup() {
 }
 
 function updateDonorCards(selectedHospitals) {
+  loadingOverlay.style.display = "none";
   const donorColumn = document.getElementById("donorColumn");
   donorColumn.innerHTML = "";
   selectedHospitals.forEach((donorInfo) => {
@@ -40,15 +42,46 @@ function updateDonorCards(selectedHospitals) {
       <p>Blood Group: ${donorInfo.bdGroup}</p>
       <p>Donors Count: ${donorInfo.count}</p>
       <p>Distance: ${donorInfo.distance} km</p>
-      <button class="donor-button" id=${donorInfo.hospitalPlaceId}>Send Request</button>
+      <button class="donor-button" id=${donorInfo.hospitalPlaceId}>
+      <span class="button-text">Send Request</span>
+  <span class="loading-animation">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </span>
+      </button>
     `;
     donorColumn.appendChild(donorCard);
 
-    const sendRequestButtons = document.querySelectorAll(".donor-button");
-    sendRequestButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        executeRequest(button.id);
-      });
+    const sendRequestButton = donorCard.querySelector(".donor-button");
+    sendRequestButton.addEventListener("click", async (e) => {
+      const clickedButton = e.currentTarget;
+      console.log("Clicked Button:", clickedButton);
+      const buttonText = clickedButton.querySelector(".button-text");
+      const loadingAnimation =
+        clickedButton.querySelector(".loading-animation");
+      console.log("Button Text:", buttonText);
+      console.log("Loading Animation:", loadingAnimation);
+      buttonText.style.opacity = "0";
+      console.log(buttonText.style.opacity);
+      loadingAnimation.style.display = "inline-block";
+      console.log(loadingAnimation.style.display);
+      clickedButton.disabled = true;
+      try {
+        console.log(123);
+        await executeRequest(clickedButton.id);
+      } catch (err) {
+        console.error("Error sending request:", err);
+      } finally {
+        setTimeout(() => {
+          buttonText.innerHTML =
+            "Request Sent <i class='fa-solid fa-check'></i>";
+          clickedButton.style.backgroundColor = "#4CAF50";
+          clickedButton.style.cursor = "default";
+          buttonText.style.opacity = "1";
+          loadingAnimation.style.display = "none";
+        }, 2000);
+      }
     });
   });
   addEffectToDonorCards();
@@ -61,11 +94,12 @@ function executeRequest(hospitalPlaceId) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ hospitalPlaceId }),
-  }).then((res) => res.json())
-  .then((data)=>{
-    selectedDonors = data.selectedDonors;
-    console.log("Successfully fetched donors:", selectedDonors);
-  });
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      selectedDonors = data.selectedDonors;
+      console.log("Successfully fetched donors:", selectedDonors);
+    });
 }
 
 function addEffectToDonorCards() {
@@ -204,12 +238,17 @@ window.onload = () => {
 
     const searchButton = document.getElementById("searchButton");
 
-    searchButton.onclick = () => {
+    searchButton.onclick = async () => {
       if (!bdGroup) {
         alert("Please select blood group");
         return;
       }
-      updateNearbyHospitals(bdGroup);
+      loadingOverlay.style.display = "flex";
+      try {
+        await updateNearbyHospitals(bdGroup);
+      } catch (err) {
+        console.error("Error updating nearby hospitals:", err);
+      }
     };
 
     function updateNearbyHospitals(bdGroup) {
