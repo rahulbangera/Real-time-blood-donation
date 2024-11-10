@@ -316,6 +316,12 @@ a{
     .container-two > .col1{
         border-right: none;
     }
+    .heroButtons{
+        flex-direction: column;
+    gap: 20px;
+    height: 16vh;
+    width: 100%;
+    }
 }
 
 .donateStatus{

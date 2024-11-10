@@ -134,6 +134,10 @@ function sendWhatsappMessage(to, body) {
     .then((message) => console.log(message.sid));
 }
 
+app.get("/favicon.ico", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "favicon.ico"));
+});
+
 app.get("/", async (req, res) => {
   console.log(req.session.email);
   console.log(req.session.name);
