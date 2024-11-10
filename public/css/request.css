@@ -320,6 +320,27 @@ background: linear-gradient(81deg, rgba(200,45,45,1) 0%, rgba(200,59,59,1) 23%, 
         grid-column: span 2;
         width: 90%;
     }
+    ::-webkit-scrollbar{
+      display: none;
+    }
+
+    .donor-button{
+      align-self: center;
+      padding: 10px;
+      justify-self: center;
+    }
+
+    .popupContent{
+      width: 80%;
+    }
+
+    .right-nav{
+      font-size: 1rem;
+    }
+
+    .left-nav{
+      font-size: 1.2rem;
+    }
   }
 
 .send-request-button {
