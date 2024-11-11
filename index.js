@@ -154,7 +154,11 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/profile", (req, res) => {
-  res.render("components/mapping");
+  if (req.session.email) {
+    res.render("profile", { userLoggedIn: true });
+  } else {
+    res.render("welcome", { userLoggedIn: false, active: false });
+  }
 });
 
 app.get("/signup", (req, res) => {
