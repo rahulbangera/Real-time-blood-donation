@@ -1,14 +1,41 @@
 <nav class="navbar">
     <div class="left-nav">
-        <a href="/" class="logo" style="display: flex;gap: 10px;align-items: center;"><img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="" width="50px">Blood Daani</a>
+        <a href="/" class="logo" style="display: flex;gap: 10px;align-items: center;">
+            <img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="" width="50px">Blood Daani
+        </a>
     </div>
+
     <div class="right-nav">
         <% if(!userLoggedIn) {%>
         <a href="/signup">Register</a>
         <a href="/signin">Login</a>
-        <% } else{ %>
+        <% } else { %>
+            <a href="/dashboard">Dashboard</a>
         <a href="/profile">Profile</a>
         <a href="/logout">Log Out <i class="fa-solid fa-right-from-bracket"></i></a>
         <% } %>
     </div>
+
+    <!-- Menu button for mobile -->
+    <div class="menu-btn">
+        <i class="fa fa-bars"></i>
+    </div>
+
+    <!-- Sidebar for mobile -->
+    <div class="sidebar">
+        <div class="menu-btn">
+            <i class="fa fa-bars"></i>
+        </div>
+        <% if(!userLoggedIn) {%>
+        <a href="/signup">Register</a>
+        <a href="/signin">Login</a>
+        <% } else { %>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout">Log Out <i class="fa-solid fa-right-from-bracket"></i></a>
+        <% } %>
+    </div>
+
 </nav>
+
+<script src="js/navbar.js"></script>

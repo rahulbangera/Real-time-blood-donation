@@ -79,6 +79,71 @@
 
 @media (max-width: 768px) {
     .left-nav {
-        flex-basis: 45%; 
+        flex-basis: 60%; 
+    }
+}
+
+.sidebar{
+    display: none;
+}
+
+.menu-btn {
+    display: none;
+}
+
+/* Media query for mobile screens */
+@media (max-width: 768px) {
+    /* Hide the right-nav links on small screens */
+    .menu-btn {
+        display: block;
+        transform: translateY(20%);
+    }
+
+    .right-nav {
+        display: none;
+    }
+
+    /* Sidebar styling */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: -100%; /* Hidden by default */
+        width: 250px;
+        height: 100vh;
+        background-color: var(--lightBloodColor);
+        box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        padding-top: 60px;
+        gap: 15px;
+        transition: right 0.3s ease; /* Smooth transition for the sidebar */
+    }
+
+    .sidebar a {
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        font-size: 1.2em;
+    }
+
+    .sidebar a:hover {
+        text-decoration: underline;
+    }
+
+    /* Show the sidebar when it's active */
+    .sidebar.active {
+        right: 0;
+    }
+
+    /* Menu button for toggling sidebar */
+    .menu-btn {
+        font-size: 1.8em;
+        color: white;
+        cursor: pointer;
+        display: block;
+        position: absolute;
+        top: 15px;
+        right: 15px;
     }
 }
