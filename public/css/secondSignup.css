@@ -33,3 +33,9 @@ body{
         max-height: 700px;
     }
 }
+
+.signupForm{
+    height: 70%;
+    display: flex;
+    justify-content: space-around;
+}

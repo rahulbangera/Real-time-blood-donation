@@ -3,71 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign in</title>
+    <title>Sign In</title>
     <link rel="stylesheet" href="css/signup.css">
 </head>
 <body>
-
     <div class="headerContent">
         <div class="headingItem">
             <h1>SIGN IN PAGE</h1>
         </div>
-      
         <div class="quote">
-        <p>Your blood donation is a gift straight from the heart &#9829;</p>
+            <p>Your blood donation is a gift straight from the heart &#9829;</p>
         </div>
     </div>
+
     <div class="mainContent">
-        <div class="formContainer">
-            <div class="logo">
-                <img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="Blood Drop" class="logo-img">        </div>
-            <h1>Sign in</h1>
-            <form action="/login" method="post">
-                <div class="inputDiv">
-                    <label for="Email">Email</label>
+        <div class="mainForm">
+            <div class="formContainer signinFormContainer">
+                <div class="logo">
+                    <img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="Blood Drop" class="logo-img">
+                </div>
+                <h1>Sign in</h1>
+                <form action="/login" method="post">
+                    <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="me@example.com" required>
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="********" required>
+                    <button type="submit" class="button">Sign in</button>
+                </form>
+                <div class="formLinks">
+                    <p>Don't have an account? <a href="/signup">Create One</a></p>
+                    <button class="button" onclick="flipForm()">Forgot Password?</button>
                 </div>
-               
-               <div class="inputDiv">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="e.g., ********" required>
-               </div>
-               <div class="formOthers">
-                <div class="splitDiv2 signinDiv2">
-                    <div class=""><p>Don't have an account? <a href="/signup">Create One</a></p></div>
-                    <div class=""><h6><a href="forgotpassword.html"> Forgot password?</a></h6></div>
-                </div>
-               
-                <button type="submit" class="button">Signin</button>
-               </div>
+            </div>
 
-            </form>
+            <div class="formContainer resetFormContainer">
+                <div class="logo">
+                    <img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="Blood Drop" class="logo-img">
+                </div>
+                <h1>Reset Password</h1>
+                <form action="/forgotpass" method="post">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="me@example.com" required>
+                    <button type="submit" class="button">Reset Password</button>
+                </form>
+                <button class="button" onclick="flipForm()">Back to Sign In</button>
+            </div>
         </div>
     </div>
+
     <script>
-            window.OneSignal = window.OneSignal || [];
-        document.querySelector('.button').addEventListener('click', async()=>{
-OneSignal.push(function() {
-  OneSignal.init({
-    appId: "373b674b-3f20-4483-89cc-a00b78d93e75",
-  });
+        function flipForm() {
+            document.querySelector('.mainForm').classList.toggle('flipped');
+        }
 
-  function checkAndRequestNotificationPermission() {
-    OneSignal.getNotificationPermission().then((permission) => {
-      if (permission !== "granted") {
-        requestNotificationPermission();
-      }
-    });
-  }
-
-  function requestNotificationPermission() {
-    OneSignal.showSlidedownPrompt();
-  }
-
-  checkAndRequestNotificationPermission();
-});
-
-        })      
+        const div1 = document.querySelector('.signinFormContainer');
+        const div2 = document.querySelector('.resetFormContainer');
+        const resizeObserver = new ResizeObserver(() => {
+            div2.style.height = div1.offsetHeight + 'px';
+        });
+        resizeObserver.observe(div1);
     </script>
 </body>
 </html>

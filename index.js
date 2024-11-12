@@ -153,9 +153,15 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/profile", (req, res) => {
+app.get("/profile", async(req, res) => {
   if (req.session.email) {
-    res.render("profile", { userLoggedIn: true });
+    const currentUser = await LocalUser.findOne({ email: req.session.email });
+    let username = currentUser.username;
+    let email = currentUser.email;
+    let name = currentUser.name;
+    let mobile = currentUser.mobile;
+    let bloodgroup = currentUser.bloodgroup;
+    res.render("profile", { userLoggedIn: true, username, email, name, mobile, bloodgroup });
   } else {
     res.render("welcome", { userLoggedIn: false, active: false });
   }
@@ -432,8 +438,9 @@ app.post("/login", async (req, res) => {
   const currentUser = await LocalUser.findOne({ email });
   if (currentUser) {
     if (currentUser.password === password) {
-      req.session.name = currentUser.name;
-      req.session.username = currentUser.username;
+      req.session.name = await currentUser.name;
+      req.session.username = await currentUser.username;
+      await req.session.save();
       res.redirect("/");
     } else {
       res.send("Incorrect password");

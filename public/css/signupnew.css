@@ -3,11 +3,13 @@
 :root {
     --lightBloodColor: rgb(218, 69, 69);
     --bgColor: rgb(229, 160, 160);
+
     --bloodColor: rgb(218, 57, 57);
     --oppBlood: white;
     --specialFont: 'Joti One', cursive;
     --normalFont: 'Inconsolata', monospace;
     --darkBloodColor: rgb(77, 0, 0);
+
 }
 
 * {
@@ -19,89 +21,57 @@
 body {
     background-color: var(--bgColor);
     text-align: center;
-    height: 100vh;
+    border:2px solid black;
+    border-width: 1vh;
+    height:100vh;
     font-family: var(--normalFont);
+    justify-content: center;
+    align-items: center;
     color: var(--oppBlood);
     overflow: hidden;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: column;
 }
 
-.headerContent .quote {
+
+
+.headerContent .quote{
     background-color: black;
-    color: var(--lightBloodColor);
+    color:var(--lightBloodColor);
     padding: 12px;
     font-size: large;
     font-family: var(--specialFont);
 }
 
-.headerContent{
-    width: 100%;
-}
-
-.headingItem {
+.headingItem{
     padding: 5px;
     background-color: rgb(209, 132, 102);
 }
 
-.headingItem h1 {
+.headingItem h1{
     font-family: var(--specialFont);
+}
+
+.headerContent{
+    height: 10vh;
 }
 
 .mainContent {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 80vh;
-}
-
-.mainForm {
-    width: 100%;
-    max-width: 500px;
-    height: 100%;
-    max-height: 550px;
-    perspective: 1000px;
-    position: relative;
-    display: flex;
-    align-items: center;
+    height: calc(100vh - 6vh);
 }
 
 .formContainer {
-    width: 100%;
-    height: 100%;
+    width: 60%; 
+    max-width: 600px;
+    max-height: 500px;
     padding: 30px;
     text-align: center;
     background-color: var(--oppBlood);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     border-radius: 12px;
     color: #333;
-    position: absolute;
-    backface-visibility: hidden;
-    transition: transform 0.6s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
 }
-
-.signinFormContainer {
-    transform: rotateY(0deg);
-}
-
-.resetFormContainer {
-    transform: rotateY(180deg);
-}
-
-.mainForm.flipped .signinFormContainer {
-    transform: rotateY(-180deg);
-}
-
-.mainForm.flipped .resetFormContainer {
-    transform: rotateY(0deg);
-}
-
 .logo {
     display: flex;
     justify-content: center;
@@ -124,11 +94,34 @@ body {
     }
 }
 
+
 .formContainer h1 {
-    font-size: 28px;
+    font-size: 28px; 
     margin-bottom: 20px;
     color: var(--bloodColor);
     font-family: var(--specialFont);
+}
+
+.formContainer h6 {
+    font-size: 16px;
+    margin-bottom: 25px;
+    font-family: var(--normalFont);
+}
+
+.formContainer h6 a {
+    color: var(--lightBloodColor);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.formContainer h6 a:hover {
+    text-decoration: underline;
+}
+
+.formContainer form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .formContainer label {
@@ -136,13 +129,23 @@ body {
     color: #333;
     margin-bottom: 8px;
     align-self: flex-start;
+    font-family: var(--normalFont);
 }
 
 .formContainer input[type="email"],
 .formContainer input[type="password"] {
     width: 100%;
-    padding: 12px;
+    padding: 12px; 
     font-size: 16px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.popupContainer input{
+    width: 100%;
+    padding: 12px; 
+    font-size: 16px; 
     margin-bottom: 18px;
     border-radius: 6px;
     border: 1px solid #ccc;
@@ -156,6 +159,7 @@ body {
     border: none;
     border-radius: 8px;
     font-size: 18px;
+    font-family: var(--normalFont);
     font-weight: 700;
     cursor: pointer;
     width: 100%;
@@ -165,39 +169,90 @@ body {
     background-color: darkred;
 }
 
-.formLinks {
+@media (max-width: 768px) {
+    .formContainer h1 {
+        font-size: 24px;
+    }
+
+    .formContainer .button {
+        font-size: 16px;
+        padding: 10px;
+    }
+}
+
+.splitDiv2{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 15px;
 }
 
-.formLinks p {
+.splitDiv2 h6{
     margin: 0;
-    color: #333;
-    font-family: var(--normalFont);
 }
 
-.formLinks a {
-    color: var(--lightBloodColor);
-    text-decoration: none;
-    font-weight: bold;
+.signinDiv2{
+    margin-bottom: 14px;
 }
 
-.formLinks a:hover {
-    text-decoration: underline;
+@media (width<1000px){
+   .formContainer{
+       width: 90%;
+   }
 }
 
-.formLinks .button {
+
+
+.popupContainer{
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+}
+
+.popupContainer{
+    display: none;
+}
+
+.popupContent{
+    background-color: white;
+    width: 50%;
+    height: 50%;
+    padding: 20px;
+    border-radius: 10px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+
+.popupContainer .button{
+    width: 100%;
+    padding: 12px;
     background-color: var(--lightBloodColor);
     color: var(--oppBlood);
     border: none;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 14px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-family: var(--normalFont);
+    font-weight: 700;
     cursor: pointer;
 }
 
-.formLinks .button:hover {
-    background-color: darkred;
+.popupContainer h1{
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: var(--bloodColor);
+    font-family: var(--specialFont);
+}
+
+.popupContainer p{
+    font-size: 18px;
+    margin-bottom: 25px;
+    color: #555;
+    text-align: left;
+}
+
+.popupContent{
+    height: auto;
 }
