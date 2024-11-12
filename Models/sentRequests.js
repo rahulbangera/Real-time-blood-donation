@@ -8,7 +8,7 @@ try {
   console.error("Error connecting to MongoDB:", error);
 }
 
-const requestsForDonorsSchema = new mongoose.Schema({
+const sentrequestschema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
@@ -21,11 +21,21 @@ const requestsForDonorsSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  requestorUsername: {
+  donorCount: {
+    type: Number,
+    required: true,
+  },
+  hospitalName: {
     type: String,
+    required: true,
   },
   hospitalPlaceId: {
     type: String,
+    required: true,
+  },
+  satisfied:{
+    type: Boolean,
+    default: false,
   },
   DateRequested: {
     type: Date,
@@ -33,9 +43,9 @@ const requestsForDonorsSchema = new mongoose.Schema({
   },
 });
 
-const RequestsForDonor = mongoose.model(
-  "RequestsForDonor",
-  requestsForDonorsSchema
+const sentRequest = mongoose.model(
+  "sentRequest",
+  sentrequestschema
 );
 
-export default RequestsForDonor;
+export default sentRequest;

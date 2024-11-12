@@ -71,7 +71,7 @@ function updateDonorCards(selectedHospitals) {
         clickedButton.disabled = true;
         try {
           console.log(123);
-          await executeRequest(clickedButton.id);
+          await executeRequest(clickedButton.id, bdGroup);
         } catch (err) {
           console.error("Error sending request:", err);
         } finally {
@@ -93,13 +93,13 @@ function updateDonorCards(selectedHospitals) {
   }
 }
 
-function executeRequest(hospitalPlaceId) {
+function executeRequest(hospitalPlaceId, bdGroup) {
   fetch("/searchDonors", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ hospitalPlaceId }),
+    body: JSON.stringify({ hospitalPlaceId, bdGroup }),
   })
     .then((res) => res.json())
     .then((data) => {

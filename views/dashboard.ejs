@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blood Donation Dashboard</title>
+  <script src="https://kit.fontawesome.com/1b792d3ec8.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+<body>
+
+    <%- include('components/navbar') %>
+  <!-- Header with Tabs -->
+  <header class="tab-header">
+    <div class="tab" id="donor-tab" onclick="switchTab('donor')">Donor</div>
+    <div class="tab" id="requestor-tab" onclick="switchTab('requestor')">Requestor</div>
+    <div class="tab-underline" id="tab-underline"></div>
+  </header>
+
+  <!-- Tab Content -->
+  <main class="tab-content">
+    <!-- Donor Requests Content -->
+    <section class="content-section" id="donor-content">
+        <h2>Requests You Received</h2>
+        <!-- <div class="request-card">
+            <div class="request-details">
+                <h3>Requestor Name: Jane Smith</h3>
+                <p>Blood Group: O-</p>
+                <p>Location: HealthCare Center, Bengaluru</p>
+                <p>Request Date: 10th Nov 2024</p>
+            </div>
+            <div class="request-actions">
+                <button class="accept-btn">Accept</button>
+                <button class="decline-btn">Decline</button>
+            </div>
+        </div> -->
+    </section>
+
+    <!-- Requestor Sent Content -->
+    <section class="content-section" id="requestor-content">
+        <h2>Requests You Sent</h2>
+        <!-- <div class="request-card">
+            <div class="request-details">
+                <h3>Donor Name: Alice Johnson</h3>
+                <p>Blood Group: AB+</p>
+                <p>Location: City Hospital, Bengaluru</p>
+                <p>Request Date: 8th Nov 2024</p>
+                <p>Status: Pending</p>
+            </div>
+            <div class="request-actions">
+                <button class="cancel-btn">Cancel Request</button>
+            </div>
+        </div> -->
+    </section>
+</main>
+
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

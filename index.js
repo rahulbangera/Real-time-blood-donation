@@ -19,6 +19,8 @@ import { assert, info } from "console";
 import TokenUser from "./Models/tokenUser.js";
 import RequestsForDonor from "./Models/requestsForDonors.js";
 import twilio from "twilio";
+import sentRequest from "./Models/sentRequests.js";
+import bcrypt from "bcrypt";
 
 const accountSid = "AC3ec82eb9b05651f92c1a8b69346e1ae9";
 const authToken = "2c04ee1ad1843d61a2fb7aaf45a1372d";
@@ -153,7 +155,7 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/profile", async(req, res) => {
+app.get("/profile", async (req, res) => {
   if (req.session.email) {
     const currentUser = await LocalUser.findOne({ email: req.session.email });
     let username = currentUser.username;
@@ -161,9 +163,16 @@ app.get("/profile", async(req, res) => {
     let name = currentUser.name;
     let mobile = currentUser.mobile;
     let bloodgroup = currentUser.bloodgroup;
-    res.render("profile", { userLoggedIn: true, username, email, name, mobile, bloodgroup });
+    res.render("profile", {
+      userLoggedIn: true,
+      username,
+      email,
+      name,
+      mobile,
+      bloodgroup,
+    });
   } else {
-    res.render("welcome", { userLoggedIn: false, active: false });
+    res.redirect("/signin");
   }
 });
 
@@ -323,6 +332,8 @@ app.post("/donorinactive", async (req, res) => {
 app.post("/signup", async (req, res) => {
   const data = req.body;
   const { name, userName, email, password, mbNumber, bdGroup } = data;
+  let saltrounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltrounds);
   const verified = false;
 
   console.log("in");
@@ -340,14 +351,14 @@ app.post("/signup", async (req, res) => {
         name,
         username: userName,
         email,
-        password,
+        password: hashedPassword,
         mobile: mbNumber,
         bloodgroup: bdGroup,
         verified,
       });
 
-      req.session.email = email;
-      req.session.name = userName;
+      // req.session.email = email;
+      // req.session.name = userName;
 
       const savedUser = await newUser.save();
 
@@ -366,7 +377,7 @@ app.post("/signup", async (req, res) => {
       });
 
       await newOtpUser.save();
-      req.session.email = await newOtpUser.email;
+      // req.session.email = await newOtpUser.email;
 
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -433,11 +444,13 @@ app.post("/otpVerify", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  req.session.email = email;
+  // req.session.email = email;
   console.log(email);
   const currentUser = await LocalUser.findOne({ email });
   if (currentUser) {
-    if (currentUser.password === password) {
+    const checkPass = await bcrypt.compare(password, currentUser.password);
+    if (checkPass) {
+      req.session.email = email;
       req.session.name = await currentUser.name;
       req.session.username = await currentUser.username;
       await req.session.save();
@@ -505,7 +518,7 @@ app.post("/searchDonors", async (req, res) => {
   console.log("------------------------------------------");
   const requestorUsername = req.session.username;
   const requestorEmail = req.session.email;
-  const { hospitalPlaceId } = req.body;
+  const { hospitalPlaceId, bdGroup } = req.body;
 
   try {
     let donors = await Donor.find({
@@ -515,42 +528,40 @@ app.post("/searchDonors", async (req, res) => {
     donors = donors.filter((donor) => donor.username !== requestorUsername);
 
     if (donors.length > 0) {
+      const hospitalName = donors[0].hospitals.find(
+        (place) => place.placeId === hospitalPlaceId
+      ).name;
+      addRequestToSelfRecords(
+        requestorUsername,
+        requestorEmail,
+        bdGroup,
+        hospitalName,
+        hospitalPlaceId,
+        donors.length
+      );
+
       donors.forEach(async (donor) => {
         addRequestToDonorRecords(
+          donor.name,
           donor.username,
           donor.email,
-          donor.bloodGroup,
+          bdGroup,
           requestorUsername,
           hospitalPlaceId
         );
 
-        const donorTokenId = await TokenUser.find({ email: donor.email });
-        donorTokenId.forEach((donor) => {
-          sendNotification(
-            donor.tokenId,
-            "Donation Request",
-            "Blood donation request from a user"
-          );
-        });
-        sendMail(
-          donor.email,
-          donor.name,
-          "Donation Request",
-          "Blood donation request from a user"
-        );
-        console.log(donor.email);
         const Local = await LocalUser.findOne({ email: donor.email });
         const mobile = `+91${Local.mobile}`;
         console.log(mobile);
         console.log(typeof mobile);
         const message = `
-        Hi ${donor.name},
-
-        You have a Blood Donation request from a user at a nearby hospital. Please visit the website to respond.
-        Visit the website: https://real-time-blood-donation.onrender.com/
-
-        Thank you for your support.
-        `;
+              Hi ${donor.name},
+      
+              You have a Blood Donation request from a user at a nearby hospital. Please visit the website to respond.
+              Visit the website: https://real-time-blood-donation.onrender.com/dashboard
+      
+              Thank you for your support.
+              `;
         sendWhatsappMessage(mobile, message);
       });
       res.status(200).send("Donors found");
@@ -564,6 +575,7 @@ app.post("/searchDonors", async (req, res) => {
 });
 
 async function addRequestToDonorRecords(
+  name,
   username,
   email,
   bdGroup,
@@ -571,6 +583,7 @@ async function addRequestToDonorRecords(
   hospitalPlaceId
 ) {
   const duplicate = await RequestsForDonor.findOne({
+    username,
     requestorUsername,
     hospitalPlaceId,
   });
@@ -584,8 +597,40 @@ async function addRequestToDonorRecords(
     requestorUsername,
     hospitalPlaceId,
   });
-
   await newRequest.save();
+
+  notifyUser(
+    name,
+    username,
+    email,
+    bdGroup,
+    requestorUsername,
+    hospitalPlaceId
+  );
+}
+
+async function notifyUser(
+  name,
+  username,
+  email,
+  bdGroup,
+  requestorUsername,
+  hospitalPlaceId
+) {
+  const donorTokenId = await TokenUser.find({ email: email });
+  donorTokenId.forEach((donor) => {
+    sendNotification(
+      donor.tokenId,
+      "Donation Request",
+      "Blood donation request from a user"
+    );
+  });
+  sendMail(
+    email,
+    name,
+    "Donation Request",
+    "Blood donation request from a user"
+  );
 }
 
 function sendMail(to, name, subject, text) {
@@ -608,6 +653,122 @@ function sendMail(to, name, subject, text) {
     }
   });
 }
+
+app.get("/dashboard", (req, res) => {
+  if (req.session.email) {
+    res.render("dashboard", { userLoggedIn: true });
+  } else {
+    res.redirect("/signin");
+  }
+});
+
+async function addRequestToSelfRecords(
+  username,
+  email,
+  bdGroup,
+  hospitalName,
+  hospitalPlaceId,
+  hospitalCount
+) {
+  const dup = await sentRequest.findOne({ username, hospitalPlaceId });
+  if (dup) {
+    return;
+  }
+  const newRequest = new sentRequest({
+    username,
+    email,
+    bloodGroup: bdGroup,
+    hospitalName: hospitalName,
+    donorCount: hospitalCount,
+    hospitalPlaceId,
+  });
+
+  await newRequest.save();
+}
+
+app.post("/api/donationrequests", async (req, res) => {
+  const username = req.session.username;
+  const myDonorRequests = await RequestsForDonor.find({ username });
+  const donorHospitals = await Donor.findOne({ username });
+  let finalizedData = [];
+  let requiredHospitals = [];
+
+  if (myDonorRequests.length > 0) {
+    let requiredHospitalsIds = myDonorRequests.map(
+      (request) => request.hospitalPlaceId
+    );
+    myDonorRequests.forEach(async (request) => {
+      let ob1 = {
+        username: request.requestorUsername,
+        bloodGroup: request.bloodGroup,
+        hospitalPlaceId: request.hospitalPlaceId,
+        dateRequested: request.DateRequested,
+      };
+      requiredHospitals.push(ob1);
+    });
+
+    donorHospitals.hospitals.forEach((hospital) => {
+      requiredHospitals.forEach((request) => {
+        if (hospital.placeId === request.hospitalPlaceId) {
+          let date = new Date(request.dateRequested);
+          let ob2 = {
+            requestorUsername: request.username,
+            bloodGroup: request.bloodGroup,
+            hospitalName: hospital.name,
+            dateRequested: date.toLocaleDateString(),
+          };
+          finalizedData.push(ob2);
+        }
+      });
+    });
+  }
+  res.status(200).send(finalizedData);
+});
+
+app.post("/api/sentrequests", async (req, res) => {
+  const username = req.session.username;
+  const myRequests = await sentRequest.find({
+    username,
+  });
+  let requiredHospitals = [];
+  const donorHospitals = await Donor.findOne({ username });
+  let sentHospitals = [];
+
+  let finalizedData = [];
+
+  if (myRequests.length > 0) {
+    myRequests.forEach(async (request) => {
+      let date = new Date(request.DateRequested);
+      let ob1 = {
+        bloodGroup: request.bloodGroup,
+        hospitalName: request.hospitalName,
+        hospitalPlaceId: request.hospitalPlaceId,
+        donorCount: request.donorCount,
+        dateRequested: date.toLocaleDateString(),
+        satisfied: request.satisfied,
+      };
+      requiredHospitals.push(ob1);
+    });
+
+    // donorHospitals.hospitals.forEach((hospital) => {
+    //   requiredHospitals.forEach((request) => {
+    //     if (hospital.placeId === request.hospitalPlaceId) {
+    //       let date = new Date(request.dateRequested);
+    //       let ob2 = {
+    //         bloodGroup: request.bloodGroup,
+    //         hospitalName: hospital.name,
+    //         donorCount: request.donorCount,
+    //         satisfied: request.satisfied,
+    //         dateRequested: date.toLocaleDateString(),
+    //       };
+    //       finalizedData.push(ob2);
+    //     }
+    //   });
+    // });
+    finalizedData = requiredHospitals;
+  }
+  res.status(200).send(finalizedData);
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
