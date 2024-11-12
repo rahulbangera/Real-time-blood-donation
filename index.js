@@ -649,7 +649,7 @@ function sendMail(to, name, subject, text) {
     
     ${text}
     
-    Visit the website to respond: https://real-time-blood-donation.onrender.com/`,
+   `,
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -679,7 +679,14 @@ async function addRequestToSelfRecords(
 ) {
   const dup = await sentRequest.findOne({ username, hospitalPlaceId });
   if (dup) {
-    return;
+    if (dup.donorCount === hospitalCount) {
+      return;
+    } else {
+      await sentRequest.updateOne(
+        { username, hospitalPlaceId },
+        { donorCount: hospitalCount }
+      );
+    }
   }
   const newRequest = new sentRequest({
     username,
