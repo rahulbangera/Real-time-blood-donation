@@ -31,6 +31,20 @@ function showPopup() {
   }, 3000);
 }
 
+const qod = document.getElementById("qod");
+fetch("https://quotes15.p.rapidapi.com/quotes/random/?language_code=en", {
+  method: "GET",
+  headers: {
+    "x-rapidapi-key": "4ac9ec1c4amshab4f6e114e58fbap16427fjsnce70965b6370",
+    "x-rapidapi-host": "quotes15.p.rapidapi.com",
+  },
+})
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data.content);
+    qod.innerHTML = `"${data.content}"`;
+  });
+
 function updateDonorCards(selectedHospitals) {
   loadingOverlay.style.display = "none";
   if (selectedHospitals.length > 0) {

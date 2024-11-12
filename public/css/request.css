@@ -426,10 +426,10 @@ background: linear-gradient(81deg, rgba(200,45,45,1) 0%, rgba(200,59,59,1) 23%, 
 
 
 .loadContainer{
-    width: 300px;
+    width: 380px;
     border-radius: 20px;
     background-color: #fff;
-    height: 250px;
+    height: 300px;
     color: black;
     font-weight: bold;
     text-align: center;
@@ -438,6 +438,7 @@ background: linear-gradient(81deg, rgba(200,45,45,1) 0%, rgba(200,59,59,1) 23%, 
     justify-content: space-around;
     flex-direction: column;
     align-items: center;
+    padding: 6px;
 }
 
 .spinner::before {

@@ -28,6 +28,9 @@ const client = twilio(accountSid, authToken);
 
 const app = e();
 const PORT = process.env.PORT || 5000;
+const url =
+  process.env.BASE_URL ||
+  "https://real-time-blood-donation-production.up.railway.app";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -112,7 +115,7 @@ function sendNotification(userToken, title, body) {
       // icon: "https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png",
     },
     data: {
-      click_action: "https://real-time-blood-donation.onrender.com/",
+      click_action: `${url}/dashboard`,
     },
   };
   admin
@@ -130,7 +133,7 @@ function sendWhatsappMessage(to, body) {
   client.messages
     .create({
       from: "whatsapp:+14155238886",
-      body: body,
+      body: "Hi you have a request",
       to: `whatsapp:${to}`,
     })
     .then((message) => console.log(message.sid));
@@ -558,11 +561,14 @@ app.post("/searchDonors", async (req, res) => {
             "Blood donation request from a user"
           );
         });
+
         sendMail(
           donor.email,
           donor.name,
           "Donation Request",
-          "Blood donation request from a user"
+          `Blood donation request from a user at a nearby hospital
+          To respond, visit the website: ${url}/dashboard
+          `
         );
 
         const Local = await LocalUser.findOne({ email: donor.email });

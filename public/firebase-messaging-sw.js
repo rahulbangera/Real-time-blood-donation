@@ -33,7 +33,29 @@ messaging.onBackgroundMessage((payload) => {
   const notificationOptions = {
     body: payload.notification.body,
     icon: "https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png",
+    data: {
+      url: "payload.notification.click_action",
+    },
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close(); // Close the notification
+
+  const url = event.notification.data.url; // Retrieve the URL from notification data
+  event.waitUntil(
+    clients.matchAll({ type: "window" }).then((clientList) => {
+      // If the URL is already open, focus it; otherwise, open a new window
+      for (const client of clientList) {
+        if (client.url === url && "focus" in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(url);
+      }
+    })
+  );
 });
