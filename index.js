@@ -550,6 +550,21 @@ app.post("/searchDonors", async (req, res) => {
           hospitalPlaceId
         );
 
+        const donorTokenId = await TokenUser.find({ email: donor.email });
+        donorTokenId.forEach((donor) => {
+          sendNotification(
+            donor.tokenId,
+            "Donation Request",
+            "Blood donation request from a user"
+          );
+        });
+        sendMail(
+          donor.email,
+          donor.name,
+          "Donation Request",
+          "Blood donation request from a user"
+        );
+
         const Local = await LocalUser.findOne({ email: donor.email });
         const mobile = `+91${Local.mobile}`;
         console.log(mobile);
@@ -599,39 +614,25 @@ async function addRequestToDonorRecords(
   });
   await newRequest.save();
 
-  notifyUser(
-    name,
-    username,
-    email,
-    bdGroup,
-    requestorUsername,
-    hospitalPlaceId
-  );
+  // notifyUser(
+  //   name,
+  //   username,
+  //   email,
+  //   bdGroup,
+  //   requestorUsername,
+  //   hospitalPlaceId
+  // );
 }
 
-async function notifyUser(
-  name,
-  username,
-  email,
-  bdGroup,
-  requestorUsername,
-  hospitalPlaceId
-) {
-  const donorTokenId = await TokenUser.find({ email: email });
-  donorTokenId.forEach((donor) => {
-    sendNotification(
-      donor.tokenId,
-      "Donation Request",
-      "Blood donation request from a user"
-    );
-  });
-  sendMail(
-    email,
-    name,
-    "Donation Request",
-    "Blood donation request from a user"
-  );
-}
+// async function notifyUser(
+//   name,
+//   username,
+//   email,
+//   bdGroup,
+//   requestorUsername,
+//   hospitalPlaceId
+// ) {
+// }
 
 function sendMail(to, name, subject, text) {
   const mailOptions = {
