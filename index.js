@@ -22,6 +22,9 @@ import twilio from "twilio";
 import sentRequest from "./Models/sentRequests.js";
 import bcrypt from "bcrypt";
 import AcceptedRequests from "./Models/acceptedRequests.js";
+import { Vonage } from "@vonage/server-sdk";
+import { type } from "os";
+import https from "https";
 
 const accountSid = "AC3ec82eb9b05651f92c1a8b69346e1ae9";
 const authToken = "2c04ee1ad1843d61a2fb7aaf45a1372d";
@@ -42,6 +45,58 @@ const transporter = nodemailer.createTransport({
     pass: "vzhykowzuabnjscw ",
   },
 });
+
+const vonage = new Vonage({
+  apiKey: "960bb5c8",
+  apiSecret: "mED9PsA8nSqxlzY2",
+});
+
+const vonageUser = "960bb5c8";
+const vonagePass = "mED9PsA8nSqxlzY2";
+const from = "14157386102";
+
+function sendVonageMessage(to, body) {
+  const data = JSON.stringify({
+    from: { type: "whatsapp", number: from },
+    to: { type: "whatsapp", number: to },
+    message: {
+      content: {
+        type: "text",
+        text: body,
+      },
+    },
+  });
+
+  const options = {
+    hostname: "messages-sandbox.nexmo.com",
+    port: 443,
+    path: "/v0.1/messages",
+    method: "POST",
+    authorization: {
+      username: vonageUser,
+      password: vonagePass,
+    },
+    headers: {
+      Authorization: "Basic " + btoa(vonageUser + ":" + vonagePass),
+      "Content-Type": "application/json",
+    },
+  };
+
+  const req = https.request(options, (res) => {
+    console.log(`statusCode: ${res.statusCode}`);
+
+    res.on("data", (d) => {
+      process.stdout.write(d);
+    });
+  });
+
+  req.on("error", (error) => {
+    console.error(error);
+  });
+
+  req.write(data);
+  req.end();
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -587,6 +642,8 @@ app.post("/searchDonors", async (req, res) => {
               Thank you for your support.
               `;
         sendWhatsappMessage(mobile, message);
+        const mobile2 = `91${Local.mobile}`;
+        sendVonageMessage(mobile2, message);
       });
       res.status(200).send("Donors found");
     } else {
