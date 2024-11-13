@@ -1,10 +1,12 @@
 let donationRequestData;
 let sentRequestData;
+let acceptorDetails = [];
 
 document.getElementById("donor-tab").classList.add("active");
 document.getElementById("donor-content").classList.add("active");
 document.getElementById("tab-underline").style.left = "0%";
 const accept = document.getElementsByClassName("accept-btn");
+let requestorMobile;
 
 document.querySelector(".close-button").onclick = closeModal;
 const modal = document.getElementById("customModal");
@@ -36,6 +38,10 @@ function confirmationPopup(oneline, secondline) {
         <button id="cancelButton">Cancel</button>
       </div>
   `;
+    document
+      .querySelector(".close-button")
+      .addEventListener("click", closeModal);
+
     const confirm = document.getElementById("confirmButton");
     const cancel = document.getElementById("cancelButton");
     confirm.addEventListener("click", () => {
@@ -47,6 +53,28 @@ function confirmationPopup(oneline, secondline) {
       modal.style.display = "none";
       resolve(false);
     });
+  });
+}
+
+function showPopup(title, oneline, secondline) {
+  modal.style.display = "block";
+  const modalContent = document.querySelector(".modal-content");
+  modalContent.innerHTML = `
+<div class="modal-header">
+      <h2 id="modalTitle">${title}</h2>
+      <span class="close-button">&times;</span>
+    </div>
+    <div class="modal-body">
+      <p id="modalMessage" style="font-weight:600;">${oneline}</p>
+      <p id="modalMessage"></p>
+      <p id="modalMessage">${secondline}</p>
+    </div>
+    <div id="modalButtons" class="modal-buttons">
+        <button id="confirmButton" class="close-button">OK</button>
+    </div>
+`;
+  document.querySelectorAll(".close-button").forEach((button) => {
+    button.addEventListener("click", closeModal);
   });
 }
 
@@ -107,7 +135,8 @@ function fetchDonationRequests() {
         updateDonationRequests(donationRequestData);
       } else if (status === 300) {
         console.log(data);
-        updateAcceptedData(data.data);
+        const { isReserved, acceptedData } = data.data;
+        updateAcceptedData(isReserved, acceptedData);
       } else {
         // Handle other status codes
         throw new Error(`Unexpected status code: ${status}`);
@@ -118,7 +147,9 @@ function fetchDonationRequests() {
     });
 }
 
-function updateAcceptedData(request) {
+function updateAcceptedData(request, request1) {
+  console.log(request);
+  requestorMobile = request1.requestorMobile;
   let date = new Date(request.DateRequested);
   console.log("in");
   let acceptedContent = document.getElementById("donor-content");
@@ -131,10 +162,16 @@ function updateAcceptedData(request) {
                 <p>Request Date: ${date.toLocaleDateString()}</p>
             </div>
                <div class = "request-actions" id=${request.requestorUsername}>
-                  <button class="contact-btn" onclick ="contact(this)">Contact</button>
+                  <button class="contact-btn" onclick ="contact()">Contact</button>
                </div> 
             </div>
   `;
+}
+
+function contact() {
+  let oneline = "Contact Details";
+  let secondline = `Mobile: ${requestorMobile}`;
+  showPopup("Contact Details", oneline, secondline);
 }
 
 function updateDonationRequests(data) {
@@ -223,22 +260,26 @@ async function declined(button) {
   }
 }
 
-fetch("/api/sentrequests", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-})
-  .then((response) => response.json())
-  .then((data) => {
-    sentRequestData = data;
-    updateSentRequests(sentRequestData);
-  });
+function fetchSentRequests() {
+  fetch("/api/sentrequests", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      sentRequestData = data;
+      console.log(sentRequestData);
+      updateSentRequests(sentRequestData);
+    });
+}
 
 function updateSentRequests(data) {
+  console.log(data);
   let requestorContent = document.getElementById("requestor-content");
   requestorContent.innerHTML = "<h2>Requests You Sent</h2>";
-  if (data.length === 0) {
+  if (!data) {
     requestorContent.innerHTML += "<p>No requests sent yet.</p>";
   } else {
     data.forEach((request) => {
@@ -251,15 +292,107 @@ function updateSentRequests(data) {
                 <p>Count of Donors: ${request.donorCount}</p>
                 <p>Status: ${request.satisfied ? "Satisfied" : "Pending"}</p>
             </div>
-               <div class = "request-actions" id=${request._id}>
+               <div class = "request-actions" id=${request.hospitalPlaceId}>
                  <button class=${
                    request.satisfied ? "contact-btn" : "cancel-btn"
-                 } onclick = "performButtonAction(this)">Cancel</button>
+                 } onclick = "performButtonAction(this)">${
+        request.satisfied ? "Contact" : "Cancel"
+      }</button>
                </div> 
             </div>
             `;
     });
   }
+  fetch("/api/satisfiedrequests", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ data }),
+  })
+    .then((response) => {
+      console.log(response);
+      if (response.status === 200) {
+        return response.json();
+        // console.log(data1);
+        // acceptorDetails = data1;
+        // console.log(acceptorDetails);
+      } else if (response.status === 300) {
+        console.log("No Satisfied requests");
+      }
+    })
+    .then((data) => {
+      if (data) {
+        acceptorDetails = data;
+        console.log(acceptorDetails);
+      } else {
+        console.log("No satisfied requests again");
+      }
+    })
+    .catch((e) => {
+      console.log("Error in updating satisfied requests: " + e);
+    });
+}
+
+function contactDonor(button) {
+  let requestPlaceId = button.parentElement.id;
+  acceptorDetails.forEach((detail) => {
+    if (detail.hospitalPlaceId === requestPlaceId) {
+      let oneline = "Contact Details";
+      let secondline = `Mobile: ${detail.acceptorMobile}`;
+      showPopup("Contact Details", oneline, secondline);
+    }
+  });
+}
+
+function contactRequestor(button) {
+  let requestPlaceId = button.parentElement.id;
+  acceptorDetails.forEach((detail) => {
+    if (detail.hospitalPlaceId === requestPlaceId) {
+      let oneline = "Contact Details";
+      let secondline = `Mobile: ${detail.requestorMobile}`;
+      showPopup("Contact Details", oneline, secondline);
+    }
+  });
+}
+
+async function cancelRequest(button) {
+  let requestPlaceId = button.parentElement.id;
+  console.log(requestPlaceId);
+  let oneline = "Are you sure you want to cancel this request?";
+  let secondline = "Please note this action cannot be undone.";
+  let confirm = await confirmationPopup(oneline, secondline);
+  if (!confirm) {
+    return;
+  }
+  fetch("/api/cancelrequests", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ requestPlaceId }),
+  })
+    .then((response) => {
+      if (response.status === 200) {
+        console.log("Request Cancelled");
+        fetchSentRequests();
+        fetchDonationRequests();
+      } else {
+        console.log("Error in cancelling request");
+      }
+    })
+    .catch((e) => {
+      console.log("Error in cancelling request: " + e);
+    });
+}
+
+function performButtonAction(button) {
+  if (button.classList.contains("contact-btn")) {
+    contactRequestor(button);
+  } else {
+    cancelRequest(button);
+  }
 }
 
 window.init = fetchDonationRequests();
+window.init = fetchSentRequests();

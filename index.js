@@ -817,12 +817,19 @@ app.post("/api/donationrequests", async (req, res) => {
   let finalizedData = [];
   let requiredHospitals = [];
 
-  const isReserved = await RequestsForDonor.findOne({ accepted: true });
+  const isReserved = await RequestsForDonor.findOne({
+    username: username,
+    accepted: true,
+  });
+  const acceptedData = await AcceptedRequests.findOne({
+    acceptorUsername: username,
+  });
 
   if (isReserved) {
-    res
-      .status(300)
-      .json({ message: "Request already accepted", data: isReserved });
+    res.status(300).json({
+      message: "Request already accepted",
+      data: { isReserved, acceptedData },
+    });
   } else {
     if (myDonorRequests.length > 0) {
       let requiredHospitalsIds = myDonorRequests.map(
@@ -917,24 +924,26 @@ app.post("/api/acceptrequest", async (req, res) => {
     hospitalPlaceId,
   });
   const donorDetails = await LocalUser.findOne({ username: username });
-
+  const requestorDetails = await LocalUser.findOne({
+    username: requestorUsername,
+  });
   const acceptedRequests = await new AcceptedRequests({
     requestorUsername,
+    requestorMobile: requestorDetails.mobile,
     acceptorUsername: username,
+    hospitalPlaceId,
+    hospitalName: requestorRequests.hospitalName,
     acceptorMobile: donorDetails.mobile,
     acceptorBloodGroup: donorDetails.bloodgroup,
   });
 
   await acceptedRequests.save();
-  console.log(donorRequests);
   if (donorRequests) {
     donorRequests.accepted = true;
     await donorRequests.save();
   } else {
     res.status(400).send("Request not found");
   }
-
-  console.log(requestorRequests);
 
   if (requestorRequests) {
     requestorRequests.satisfied = true;
@@ -958,6 +967,51 @@ app.post("/api/declinerequest", async (req, res) => {
     res.status(200).send("Request declined");
   } else {
     res.status(400).send("Request not found");
+  }
+});
+
+app.post("/api/satisfiedrequests", async (req, res) => {
+  const { data } = req.body;
+  var finalizedData = [];
+  for (const request of data) {
+    const username = req.session.username;
+    const hospitalPlaceId = request.hospitalPlaceId;
+    const hospitalName = request.hospitalName;
+
+    const acceptorDetails = await AcceptedRequests.findOne({
+      requestorUsername: username,
+      hospitalPlaceId,
+    });
+
+    if (acceptorDetails !== null) {
+      finalizedData.push(acceptorDetails);
+    }
+  }
+  if (finalizedData.length > 0) {
+    res.status(200).send(finalizedData);
+  } else {
+    res.status(300).send("No satisfied requests found");
+  }
+});
+
+app.post("/api/cancelrequests", async (req, res) => {
+  const { requestPlaceId } = req.body;
+  const username = req.session.username;
+
+  const donorRequests = await RequestsForDonor.deleteMany({
+    requestorUsername: username,
+    hospitalPlaceId: requestPlaceId,
+  });
+  console.log(donorRequests);
+  const sentRequests = await sentRequest.deleteOne({
+    username,
+    hospitalPlaceId: requestPlaceId,
+  });
+  console.log(donorRequests);
+  if (donorRequests && sentRequests) {
+    res.status(200).send("Requests cancelled");
+  } else {
+    res.status(400).send("Requests not found");
   }
 });
 
