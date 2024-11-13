@@ -1,149 +1,148 @@
-:root{
-    --lightBloodColor: rgb(218, 69, 69);
-    --bloodColor: rgb(218, 57, 57);
-    --oppBlood: white;
-    --specialFont: Joti One, cursive;
-    --normalFont: 'Inconsolata', monospace;
+:root {
+  --lightBloodColor: rgb(218, 69, 69);
+  --bloodColor: rgb(218, 57, 57);
+  --oppBlood: white;
+  --specialFont: Joti One, cursive;
+  --normalFont: "Inconsolata", monospace;
 }
 
 .navbar {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 10vh;
-    background-color: var(--lightBloodColor);
-    position: relative;
-    transition: all 0.3s ease; 
-    top: 0;
-    font-family: inconsolata;
-    font-weight: 900;
-    font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 10vh;
+  background-color: var(--lightBloodColor);
+  position: relative;
+  transition: all 0.3s ease;
+  top: 0;
+  font-family: inconsolata;
+  font-weight: 900;
+  font-size: 1.2rem;
 }
 
 /* Sticky Effect */
 .sticky {
-    scale: 0.92;
-    margin-top: 10px;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    border-bottom-left-radius: 30px; 
-    border-bottom-right-radius: 30px; 
-    border-radius: 40px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  scale: 0.92;
+  margin-top: 10px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border-radius: 40px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.left-sticky{
-    border-radius: 40px;
+.left-sticky {
+  border-radius: 40px;
 }
-
 
 .left-nav {
-    background-color: white;
-    height: 100%;
-    flex-basis: 35%; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    padding: 20px;
-    font-family: joti one;
-    clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+  background-color: white;
+  height: 100%;
+  flex-basis: 35%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 20px;
+  font-family: joti one;
+  clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
 }
 
 .right-nav {
-    padding: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-grow: 1;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 1;
 }
 
 .left-nav .logo {
-    
-    color: var(--bloodColor);
-    font-size: 1.5em;
-    font-weight: bold;
+  color: var(--bloodColor);
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 .right-nav a {
-    color: white;
-    text-decoration: none;
-    padding: 0 15px;
-    font-size: 1.1em;
+  color: white;
+  text-decoration: none;
+  padding: 0 15px;
+  font-size: 1.1em;
 }
 
 .right-nav a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {
-    .left-nav {
-        flex-basis: 60%; 
-    }
+  .left-nav {
+    flex-basis: 60%;
+  }
 }
 
-.sidebar{
-    display: none;
+.sidebar {
+  display: none;
 }
 
 .menu-btn {
-    display: none;
+  display: none;
 }
 
 /* Media query for mobile screens */
 @media (max-width: 768px) {
-    /* Hide the right-nav links on small screens */
-    .menu-btn {
-        display: block;
-        transform: translateY(20%);
-    }
+  /* Hide the right-nav links on small screens */
+  .menu-btn {
+    display: block;
+    transform: translateY(20%);
+  }
 
-    .right-nav {
-        display: none;
-    }
+  .right-nav {
+    display: none;
+  }
 
-    /* Sidebar styling */
-    .sidebar {
-        position: fixed;
-        top: 0;
-        right: -100%; /* Hidden by default */
-        width: 250px;
-        height: 100vh;
-        background-color: var(--lightBloodColor);
-        box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        padding-top: 60px;
-        gap: 15px;
-        transition: right 0.3s ease; /* Smooth transition for the sidebar */
-    }
+  /* Sidebar styling */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Hidden by default */
+    width: 250px;
+    height: 100vh;
+    background-color: var(--lightBloodColor);
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    padding-top: 60px;
+    gap: 15px;
+    z-index: 9999;
+    transition: right 0.3s ease; /* Smooth transition for the sidebar */
+  }
 
-    .sidebar a {
-        color: white;
-        text-decoration: none;
-        padding: 10px 20px;
-        font-size: 1.2em;
-    }
+  .sidebar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+  }
 
-    .sidebar a:hover {
-        text-decoration: underline;
-    }
+  .sidebar a:hover {
+    text-decoration: underline;
+  }
 
-    /* Show the sidebar when it's active */
-    .sidebar.active {
-        right: 0;
-    }
+  /* Show the sidebar when it's active */
+  .sidebar.active {
+    right: 0;
+  }
 
-    /* Menu button for toggling sidebar */
-    .menu-btn {
-        font-size: 1.8em;
-        color: white;
-        cursor: pointer;
-        display: block;
-        position: absolute;
-        top: 15px;
-        right: 15px;
-    }
+  /* Menu button for toggling sidebar */
+  .menu-btn {
+    font-size: 1.8em;
+    color: white;
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
 }
