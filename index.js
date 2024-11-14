@@ -586,18 +586,6 @@ app.post("/checkFCMToken", async (req, res) => {
   }
 });
 
-app.post("/getUsername", async (req, res) => {
-  const { email } = req.body;
-  const user = await LocalUser.findOne({ email });
-  console.log("MEEEEEE");
-  console.log(user.username);
-  if (user) {
-    res.status(200).send(user.username);
-  } else {
-    res.status(400).send("User not found");
-  }
-});
-
 app.post("/sendNotification", async (req, res) => {
   const { title, body, username } = req.body;
   const user = await TokenUser.find({ username });
@@ -1049,6 +1037,19 @@ app.post("/api/cancelrequests", async (req, res) => {
     res.status(200).send("Requests cancelled");
   } else {
     res.status(400).send("Requests not found");
+  }
+});
+
+app.post("/getUsername", async (req, res) => {
+  const { email } = req.body;
+  console.log("MEEEEEE");
+  console.log(email);
+  const user = await LocalUser.findOne({ email: email });
+  console.log(user);
+  if (user) {
+    res.status(200).json({ username: user.username });
+  } else {
+    res.status(400).send("User not found");
   }
 });
 

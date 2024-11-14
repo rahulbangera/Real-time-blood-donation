@@ -25,9 +25,9 @@
                 <h1>Sign in</h1>
                 <form action="/login" method="post" id="logFormer">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="me@example.com" required>
+                    <input type="email" id="emailID" name="email" placeholder="me@example.com" required>
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="********" required>
+                    <input type="password" id="passwordID" name="password" placeholder="********" required>
                     <button type="submit" class="button">Sign in</button>
                 </form>
                 <div class="formLinks">
@@ -52,34 +52,60 @@
     </div>
 
     <script>
-        function flipForm() {
-            document.querySelector('.mainForm').classList.toggle('flipped');
-        }
-
-        document.getElementById('logFormer').addEventListener('submit', ()=>{
-            const email = document.getElementById('email');
+        document.getElementById('logFormer').addEventListener('submit', (event) => {
+            // Prevent default form submission
+            event.preventDefault();
+            
+            // Get email and password values
+            const email = document.getElementById('emailID').value;
+            const pass = document.getElementById('passwordID').value;
+    
+            // Send the email to the backend to fetch the username
             fetch('/getUsername', {
                 method: 'POST',
-                body: JSON.stringify({ email: email.value })
-            }).then((res)=>res)
-            .then((data)=>{
-                const username = data;
-                console.log(username);
-saveSessionInAndroid(username, email.value);
-
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
             })
+            .then((res) => res.json())  // Assuming you send JSON from the server
+            .then((data) => {
+                const username = data.username; // assuming server responds with the username
+                console.log(username);
+    
+                // Save session if available in Android
+                saveSessionInAndroid(username, email);
+    
+                // Now send the login request with email and password
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, password: pass })
+            })
+            .then((res) => {
+                if (res.redirected) {
+                    window.location.href = res.url; // Redirect to the specified URL
+                } else {
+                    // Handle unsuccessful login
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         });
-
+    });
+    
         function saveSessionInAndroid(username, email) {
-    if (window.Android) {
-        window.Android.saveUserSession(username, email);
-    } else {
-        console.log("Android interface not available.");
-    }
-}
-
-
-
+            if (window.Android) {
+                window.Android.saveUserSession(username, email);
+            } else {
+                console.log("Android interface not available.");
+            }
+        }
+    
+        // Adjusting form height dynamically
         const div1 = document.querySelector('.signinFormContainer');
         const div2 = document.querySelector('.resetFormContainer');
         const resizeObserver = new ResizeObserver(() => {
@@ -87,5 +113,6 @@ saveSessionInAndroid(username, email.value);
         });
         resizeObserver.observe(div1);
     </script>
+    
 </body>
 </html>
