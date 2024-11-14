@@ -23,7 +23,7 @@
                     <img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="Blood Drop" class="logo-img">
                 </div>
                 <h1>Sign in</h1>
-                <form action="/login" method="post">
+                <form action="/login" method="post" id="logFormer">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" placeholder="me@example.com" required>
                     <label for="password">Password</label>
@@ -55,6 +55,30 @@
         function flipForm() {
             document.querySelector('.mainForm').classList.toggle('flipped');
         }
+
+        document.getElementById('logFormer').addEventListener('submit', ()=>{
+            const email = document.getElementById('email');
+            fetch('/getUsername', {
+                method: 'POST',
+                body: JSON.stringify({ email: email.value })
+            }).then((res)=>res.json())
+            .then((data)=>{
+                const username = data;
+                console.log(username);
+saveSessionInAndroid(username, email.value);
+
+            })
+        });
+
+        function saveSessionInAndroid(username, email) {
+    if (window.Android) {
+        window.Android.saveUserSession(username, email);
+    } else {
+        console.log("Android interface not available.");
+    }
+}
+
+
 
         const div1 = document.querySelector('.signinFormContainer');
         const div2 = document.querySelector('.resetFormContainer');

@@ -586,6 +586,15 @@ app.post("/checkFCMToken", async (req, res) => {
   }
 });
 
+app.post('/getUsername', async (req, res) => {
+  const { email } = req.body;
+  const user = await LocalUser.findOne({ email });
+  if (user) {
+    res.status(200).send(user.username);
+  } else {
+    res.status(400).send("User not found");
+  }});
+
 app.post("/sendNotification", async (req, res) => {
   const { title, body, username } = req.body;
   const user = await TokenUser.find({ username });
