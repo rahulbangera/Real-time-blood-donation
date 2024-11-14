@@ -544,12 +544,17 @@ app.post("/fetchUserData", async (req, res) => {
 });
 
 app.post("/checkFCMToken", async (req, res) => {
-  console.log('Request body:', req.body); // Log the request body
-  console.log('Session:', req.session); // Log session data
+  console.log("Request body:", req.body); // Log the request body
+  console.log("Session:", req.session); // Log session data
 
+  console.log("cc");
   const { token } = req.body;
+  console.log("bb");
+  console.log(token);
   const username = req.session.username;
   const email = req.session.email;
+
+  console.log("ITs fine 0");
 
   if (!token) {
     return res.status(400).send("Token is missing");
@@ -558,20 +563,19 @@ app.post("/checkFCMToken", async (req, res) => {
   if (!username || !email) {
     return res.status(400).send("Session is missing username or email");
   }
-  console.log("ITs fine 1")
+  console.log("ITs fine 1");
   const tokenUser = await TokenUser.findOne({ tokenId: token });
   if (tokenUser) {
-    
     res.status(200).send("Token exists");
   } else if (email && username) {
-    console.log("ITs fine 2")
+    console.log("ITs fine 2");
 
     const tokenUser = new TokenUser({
       username,
       email,
       tokenId: token,
     });
-    console.log("ITs fine 3")
+    console.log("ITs fine 3");
 
     await tokenUser.save();
     res.status(200).send("Token saved");
