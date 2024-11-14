@@ -203,11 +203,11 @@ app.get("/favicon.ico", (req, res) => {
 });
 
 app.get("/", async (req, res) => {
-  console.log(req.session.email);
-  console.log(req.session.name);
-  console.log(req.session.username);
+  // console.log(req.session.email);
+  // console.log(req.session.name);
+  // console.log(req.session.username);
   const foundUser = await Donor.findOne({ email: req.session.email }).lean();
-  console.log(foundUser);
+  // console.log(foundUser);
   if (foundUser) {
     res.render("welcome", { userLoggedIn: true, active: true });
   } else if (req.session.email) {
