@@ -544,10 +544,20 @@ app.post("/fetchUserData", async (req, res) => {
 });
 
 app.post("/checkFCMToken", async (req, res) => {
+  console.log('Request body:', req.body); // Log the request body
+  console.log('Session:', req.session); // Log session data
+
   const { token } = req.body;
-  console.log(token);
   const username = req.session.username;
   const email = req.session.email;
+
+  if (!token) {
+    return res.status(400).send("Token is missing");
+  }
+
+  if (!username || !email) {
+    return res.status(400).send("Session is missing username or email");
+  }
   const tokenUser = await TokenUser.findOne({ tokenId: token });
   if (tokenUser) {
     res.status(200).send("Token exists");
