@@ -589,6 +589,8 @@ app.post("/checkFCMToken", async (req, res) => {
 app.post('/getUsername', async (req, res) => {
   const { email } = req.body;
   const user = await LocalUser.findOne({ email });
+  console.log("MEEEEEE");
+  console.log(user);
   if (user) {
     res.status(200).send(user.username);
   } else {
