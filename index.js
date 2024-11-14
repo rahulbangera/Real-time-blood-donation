@@ -544,6 +544,7 @@ app.post("/fetchUserData", async (req, res) => {
 });
 
 app.post("/checkFCMToken", async (req, res) => {
+  console.log("------------------------------------------------------------");
   console.log("Request body:", req.body); // Log the request body
   console.log("Session:", req.session); // Log session data
 
