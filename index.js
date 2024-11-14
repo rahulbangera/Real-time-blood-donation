@@ -543,6 +543,7 @@ app.post("/fetchUserData", async (req, res) => {
 
 app.post("/checkFCMToken", async (req, res) => {
   const { token } = req.body;
+  console.log(token);
   const username = req.session.username;
   const email = req.session.email;
   const tokenUser = await TokenUser.findOne({ tokenId: token });
