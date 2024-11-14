@@ -41,9 +41,9 @@ window.onload = function () {
     if (selectedHospitals.size > 0) {
       try {
         result = await getDetails(selectedHospitals);
-        if (Notification.permission !== "granted") {
-          const permission =  Notification.requestPermission();
-        }
+        // if (Notification.permission !== "granted") {
+        //   const permission =  Notification.requestPermission();
+        // }
         showStatusPopup(result, sublocality, town);
       } catch (error) {
         console.error(error);
