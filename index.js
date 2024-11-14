@@ -25,6 +25,7 @@ import AcceptedRequests from "./Models/acceptedRequests.js";
 import { Vonage } from "@vonage/server-sdk";
 import { type } from "os";
 import https from "https";
+import cors from "cors";
 
 const accountSid = "AC3ec82eb9b05651f92c1a8b69346e1ae9";
 const authToken = "2c04ee1ad1843d61a2fb7aaf45a1372d";
@@ -147,6 +148,7 @@ app.use(
   })
 );
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 // app.use(e.static("public"));
