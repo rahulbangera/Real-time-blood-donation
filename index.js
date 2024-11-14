@@ -549,10 +549,8 @@ app.post("/checkFCMToken", async (req, res) => {
   console.log("Session:", req.session); // Log session data
 
   console.log("cc");
-  const { token } = req.body;
+  const { token, username, email } = req.body;
   console.log(token);
-  const username = req.session.username;
-  const email = req.session.email;
 
   console.log(username);
   console.log(email);
