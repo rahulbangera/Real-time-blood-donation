@@ -549,17 +549,19 @@ app.post("/checkFCMToken", async (req, res) => {
 
   console.log("cc");
   const { token } = req.body;
-  console.log("bb");
   console.log(token);
   const username = req.session.username;
   const email = req.session.email;
+
+  console.log(username);
+  console.log(email);
 
   console.log("ITs fine 0");
 
   if (!token) {
     return res.status(400).send("Token is missing");
   }
-
+  console.log("ITs fine 11");
   if (!username || !email) {
     return res.status(400).send("Session is missing username or email");
   }
