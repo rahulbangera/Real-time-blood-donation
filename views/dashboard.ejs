@@ -85,18 +85,14 @@
     <span id="chat-close">&times;</span>
   </div>
   <div id="chat-body">
-    <!-- Sidebar -->
     <div id="chat-sidebar">
       <div class="requestors" id="requestorsDiv"><h4>Requestors</h4>
-        <div class="user">Ramesh</div>
-        <div class="user">Mohan</div>
-        <div class="user">Narayan</div>
+
       </div>
       <div class="donors" id="donorsDiv"><h4>Donors</h4>
-        <div class="user">Ajay</div>
       </div>
     </div>
-    <!-- Chat Messages Area -->
+
     <div id="chat-main">
       <div id="chat-messages">
         <p class="bot-message">Select a user to start chatting!</p>
@@ -109,10 +105,59 @@
   </div>
 </div>
   
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+  import { getFirestore, collection, addDoc, query, where, orderBy, onSnapshot, Timestamp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDvw9xC6byg4DkNpWzzB4466BidJCJRggU",
+    authDomain: "real-time-blood-donation-c0c32.firebaseapp.com",
+    projectId: "real-time-blood-donation-c0c32",
+    storageBucket: "real-time-blood-donation-c0c32.firebasestorage.app",
+    messagingSenderId: "99078731654",
+    appId: "1:99078731654:web:9724de214ab7b8cb2f5e07",
+    measurementId: "G-BX25M7M35P",
+    vapidKey:
+      "BAdlA-8wJBL7nixKyuIyTFy6_M7iUpACPCd9b49nT3KDWrUXMtIfW6QshVsL5w_9I1NfqR14bmyzRKgPkkskIEQ",
+  };
   
 
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  window.sendMessage = async function sendMessage(from, to, message) {
+    const roomId = [from, to].sort().join(":");
+    const timestamp = new Date();
+    const expiry = Timestamp.fromDate(new Date(Date.now() + 10 * 24 * 60 * 60 * 1000)); // 10 days from now
+
+    try {
+      await addDoc(collection(db, "messages"), {
+        from,
+        to,
+        roomId,
+        message,
+        timestamp,
+        ttl:expiry,
+      });
+      console.log("Message sent");
+    } catch (err) {
+      console.error("Error sending message:", err);
+    }
+  }
+
+  window.getMessages = (roomId, callback) => {
+    const q = query(collection(db, "messages"), where("roomId", "==", roomId), orderBy("timestamp", "asc"));
+
+    onSnapshot(q, (snapshot)=>{
+      const messages = snapshot.docs.map((doc)=>doc.data());
+      callback(messages);
+    });
+  };
+
+</script>
+
 <script src="js/dashboard.js"></script>
-<script src="js/chatting.js"></script>
+<script src="js/chatting.js" type="module"></script>
 
 </body>
 </html>

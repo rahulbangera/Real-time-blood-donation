@@ -30,7 +30,7 @@
   position: fixed;
   bottom: 30px;
   right: 40px;
-  width: 400px;
+  width: 500px;
   height: 70%;
   background: white;
   border: 2px solid #ccc;
@@ -40,6 +40,15 @@
   flex-direction: column;
   overflow: hidden;
   z-index: 1000;
+  opacity: 0; /* Fully transparent */
+  transform: translateY(50px); /* Start slightly below */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+
+#chat-window.open {
+  display: flex; /* Display the chat window */
+  opacity: 1; /* Fully visible */
+  transform: translateY(0); /* Move to its original position */
 }
 
 /* Chat Header */
@@ -95,10 +104,12 @@
 }
 
 #chat-messages {
-  flex: 1;
-  padding: 10px;
-  overflow-y: auto;
-  background: #f9f9f9;
+    flex: 1;
+    flex-direction: column;
+    display: flex;
+    padding: 10px;
+    overflow-y: auto;
+    background: #f9f9f9;
 }
 
 .bot-message,
@@ -161,4 +172,40 @@
 
 .requestors{
   border-bottom: 2px solid grey;
+}
+
+.sent {
+  align-self: flex-end;
+  color: white;
+  width: 60%;
+  padding: 3px 12px;
+  border-radius: 7px;
+}
+
+.received {
+  align-self: flex-start;
+  color: white;
+  width: 60%;
+  padding: 3px 12px;
+  border-radius: 7px;
+}
+
+.sent{
+  background: #27396d;
+}
+
+.received{
+  background-color: #3d3a3a;
+}
+
+.message{
+  margin: 4px;
+}
+
+@media (width<500px){
+  #chat-window{
+    bottom: 4px;
+    right: 0px;
+    width: 100%;
+  }
 }
