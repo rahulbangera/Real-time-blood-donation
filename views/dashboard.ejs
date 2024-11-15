@@ -8,6 +8,7 @@
 
   <link rel="stylesheet" href="css/navbar.css">
   <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/chatting.css">
 
 </head>
 <body>
@@ -72,10 +73,46 @@
       </div>
     </div>
   </div>
+
+  <div id="chat-icon">
+    <i class="fas fa-comments"></i>
+  </div>
+  
+ 
+<div id="chat-window">
+  <div id="chat-header">
+    Chat with Us!
+    <span id="chat-close">&times;</span>
+  </div>
+  <div id="chat-body">
+    <!-- Sidebar -->
+    <div id="chat-sidebar">
+      <div class="requestors" id="requestorsDiv"><h4>Requestors</h4>
+        <div class="user">Ramesh</div>
+        <div class="user">Mohan</div>
+        <div class="user">Narayan</div>
+      </div>
+      <div class="donors" id="donorsDiv"><h4>Donors</h4>
+        <div class="user">Ajay</div>
+      </div>
+    </div>
+    <!-- Chat Messages Area -->
+    <div id="chat-main">
+      <div id="chat-messages">
+        <p class="bot-message">Select a user to start chatting!</p>
+      </div>
+      <div id="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Type your message here..." />
+        <button id="chat-send">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
   
   
 
 <script src="js/dashboard.js"></script>
+<script src="js/chatting.js"></script>
 
 </body>
 </html>

@@ -1015,6 +1015,19 @@ app.post("/api/cancelrequests", async (req, res) => {
   }
 });
 
+app.post("/api/chatUsers", async (req, res) => {
+  console.log("In chat users");
+  const username = req.session.username;
+  console.log(username);
+  const requestors = await AcceptedRequests.find({
+    acceptorUsername: username,
+  });
+  console.log(requestors);
+  const donors = await AcceptedRequests.find({ requestorUsername: username });
+  console.log(donors);
+  res.status(200).json({ requestors, donors });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

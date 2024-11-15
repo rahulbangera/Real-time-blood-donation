@@ -162,13 +162,13 @@ function updateAcceptedData(request, request1) {
                 <p>Request Date: ${date.toLocaleDateString()}</p>
             </div>
                <div class = "request-actions" id=${request.requestorUsername}>
-                  <button class="contact-btn" onclick ="contact()">Contact</button>
+                  <button class="contact-btn" onclick ="contactRequestor()">Contact</button>
                </div> 
             </div>
   `;
 }
 
-function contact() {
+function contactRequestor() {
   let oneline = "Contact Details";
   let secondline = `Mobile: ${requestorMobile}`;
   showPopup("Contact Details", oneline, secondline);
@@ -345,16 +345,16 @@ function contactDonor(button) {
   });
 }
 
-function contactRequestor(button) {
-  let requestPlaceId = button.parentElement.id;
-  acceptorDetails.forEach((detail) => {
-    if (detail.hospitalPlaceId === requestPlaceId) {
-      let oneline = "Contact Details";
-      let secondline = `Mobile: ${detail.requestorMobile}`;
-      showPopup("Contact Details", oneline, secondline);
-    }
-  });
-}
+// function contactRequestor(button) {
+//   let requestPlaceId = button.parentElement.id;
+//   acceptorDetails.forEach((detail) => {
+//     if (detail.hospitalPlaceId === requestPlaceId) {
+//       let oneline = "Contact Details";
+//       let secondline = `Mobile: ${detail.requestorMobile}`;
+//       showPopup("Contact Details", oneline, secondline);
+//     }
+//   });
+// }
 
 async function cancelRequest(button) {
   let requestPlaceId = button.parentElement.id;
@@ -388,7 +388,7 @@ async function cancelRequest(button) {
 
 function performButtonAction(button) {
   if (button.classList.contains("contact-btn")) {
-    contactRequestor(button);
+    contactDonor(button);
   } else {
     cancelRequest(button);
   }
