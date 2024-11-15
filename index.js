@@ -945,6 +945,9 @@ app.post("/api/acceptrequest", async (req, res) => {
     res.status(400).send("Request not found");
   }
 
+  const deleteOtherRequests = await RequestsForDonor.deleteMany({ requestorUsername, hospitalPlaceId, username: { $ne: username } });
+  console.log(deleteOtherRequests);
+
   if (requestorRequests) {
     requestorRequests.satisfied = true;
     await requestorRequests.save();
