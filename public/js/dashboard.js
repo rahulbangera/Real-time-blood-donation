@@ -276,10 +276,11 @@ function fetchSentRequests() {
 }
 
 function updateSentRequests(data) {
+  console.log("seeeeeeee");
   console.log(data);
   let requestorContent = document.getElementById("requestor-content");
   requestorContent.innerHTML = "<h2>Requests You Sent</h2>";
-  if (!data) {
+  if (data.length === 0) {
     requestorContent.innerHTML += "<p>No requests sent yet.</p>";
   } else {
     data.forEach((request) => {

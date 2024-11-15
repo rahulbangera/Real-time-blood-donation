@@ -1015,6 +1015,31 @@ app.post("/api/cancelrequests", async (req, res) => {
   }
 });
 
+app.post("/api/chatUsers", async (req, res) => {
+  console.log("In chat users");
+  const username = req.session.username;
+  console.log(username);
+  const requestors = await AcceptedRequests.find({
+    acceptorUsername: username,
+  });
+  console.log(requestors);
+  const donors = await AcceptedRequests.find({ requestorUsername: username });
+  console.log(donors);
+  res.status(200).json({ requestors, donors });
+});
+
+// app.post("/api/chatMessages/:to", async (req, res) => {
+//   const { to } = req.params;
+//   const from = req.session.username;
+// });
+
+app.post("/api/myUserName", async (req, res) => {
+  console.log(req.session.username);
+  const username = await req.session.username;
+  console.log(username);
+  res.status(200).json({username});
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
