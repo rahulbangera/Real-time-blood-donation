@@ -12,7 +12,6 @@ const acceptedRequestsSchema = new mongoose.Schema({
   requestorUsername: {
     type: String,
     required: true,
-    unique: true,
   },
   requestorMobile: {
     type: Number,
