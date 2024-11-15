@@ -1,0 +1,211 @@
+/* Floating Chat Icon */
+#chat-icon {
+  position: fixed;
+  bottom: 30px; /* Distance from the bottom */
+  right: 40px; /* Distance from the right */
+  width: 60px; /* Width of the circle */
+  height: 60px; /* Height of the circle */
+  background-color: rgb(37, 37, 37); /* Background color of the circle */
+  color: white; /* Icon color */
+  border-radius: 50%; /* Make it a perfect circle */
+  display: flex; /* Flexbox for centering */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  font-size: 24px; /* Icon size */
+  line-height: 1; /* Ensure no extra spacing */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  z-index: 1000; /* Ensure it's above other elements */
+  overflow: hidden; /* Prevent content from overflowing */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect */
+#chat-icon:hover {
+  transform: scale(1.1); /* Slightly enlarge on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Intensify shadow on hover */
+}
+/* Chat Window */
+#chat-window {
+  position: fixed;
+  bottom: 30px;
+  right: 40px;
+  width: 500px;
+  height: 70%;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+  opacity: 0; /* Fully transparent */
+  transform: translateY(50px); /* Start slightly below */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth transition */
+}
+
+#chat-window.open {
+  display: flex; /* Display the chat window */
+  opacity: 1; /* Fully visible */
+  transform: translateY(0); /* Move to its original position */
+}
+
+/* Chat Header */
+#chat-header {
+  background: red;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#chat-close {
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* Chat Body */
+#chat-body {
+  display: flex;
+  height: 100%;
+}
+
+/* Sidebar */
+#chat-sidebar {
+  width: 30%; /* Sidebar width */
+  background: #f4f4f4;
+  border-right: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.user {
+  padding: 10px;
+  background: #e0e0e0;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.2s ease;
+}
+
+.user:hover :not(.active-user) {
+  background: #d1d1d1;
+}
+
+/* Main Chat Area */
+#chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-messages {
+    flex: 1;
+    flex-direction: column;
+    display: flex;
+    padding: 10px;
+    overflow-y: auto;
+    background: #f9f9f9;
+}
+
+.bot-message,
+.user-message {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 80%;
+}
+
+.bot-message {
+  background: #e0e0e0;
+  align-self: flex-start;
+}
+
+.user-message {
+  background: #d1e7ff;
+  align-self: flex-end;
+  text-align: right;
+}
+
+/* Chat Input Area */
+#chat-input-area {
+  display: flex;
+  padding: 10px;
+  background: #fff;
+  border-top: 1px solid #ccc;
+}
+
+#chat-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#chat-send {
+  background: red;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-left: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#chat-send:hover {
+  background: darkred;
+}
+
+.active-user{
+    background: #3d0d0d;
+    color: white;
+}
+
+#chat-sidebar h4{
+  padding: 4px;
+  margin-top: 4px;
+} 
+
+.requestors{
+  border-bottom: 2px solid grey;
+}
+
+.sent {
+  align-self: flex-end;
+  color: white;
+  width: 60%;
+  padding: 3px 12px;
+  border-radius: 7px;
+}
+
+.received {
+  align-self: flex-start;
+  color: white;
+  width: 60%;
+  padding: 3px 12px;
+  border-radius: 7px;
+}
+
+.sent{
+  background: #27396d;
+}
+
+.received{
+  background-color: #3d3a3a;
+}
+
+.message{
+  margin: 4px;
+}
+
+@media (width<500px){
+  #chat-window{
+    bottom: 4px;
+    right: 0px;
+    width: 100%;
+  }
+}
