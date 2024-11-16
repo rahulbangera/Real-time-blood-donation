@@ -104,12 +104,12 @@
 }
 
 #chat-messages {
-    flex: 1;
-    flex-direction: column;
-    display: flex;
-    padding: 10px;
-    overflow-y: auto;
-    background: #f9f9f9;
+  flex: 1;
+  flex-direction: column;
+  display: flex;
+  padding: 10px;
+  overflow-y: auto;
+  background: #f9f9f9;
 }
 
 .bot-message,
@@ -160,17 +160,17 @@
   background: darkred;
 }
 
-.active-user{
-    background: #3d0d0d;
-    color: white;
+.active-user {
+  background: #3d0d0d;
+  color: white;
 }
 
-#chat-sidebar h4{
+#chat-sidebar h4 {
   padding: 4px;
   margin-top: 4px;
-} 
+}
 
-.requestors{
+.requestors {
   border-bottom: 2px solid grey;
 }
 
@@ -190,22 +190,76 @@
   border-radius: 7px;
 }
 
-.sent{
+.sent {
   background: #27396d;
 }
 
-.received{
+.received {
   background-color: #3d3a3a;
 }
 
-.message{
+.message {
   margin: 4px;
 }
 
-@media (width<500px){
-  #chat-window{
+@media (width<500px) {
+  #chat-window {
     bottom: 4px;
     right: 0px;
     width: 100%;
   }
+}
+
+#chat-messages {
+  flex: 1; /* Take up all remaining space */
+  overflow-y: auto; /* Add scroll if content overflows */
+}
+
+#chat-input-area {
+  flex-shrink: 0; /* Prevent this section from shrinking */
+  height: auto; /* Adjust height based on content */
+}
+
+#chat-main {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Make it take exactly the height of the window */
+  box-sizing: border-box; /* Include padding/borders in the height calculation */
+}
+
+#chat-messages {
+  flex: 1; /* Take all available space remaining after #chat-input-area */
+  overflow-y: auto; /* Add vertical scrolling if content overflows */
+  padding: 10px; /* Optional padding for better design */
+  box-sizing: border-box; /* Prevent padding from expanding height */
+}
+
+#chat-input-area {
+  flex-shrink: 0; /* Ensure the input doesn't shrink */
+  height: auto; /* Adjust to the content inside */
+  padding: 10px; /* Optional padding */
+  box-sizing: border-box;
+  background-color: #f1f1f1; /* Example background for input area */
+}
+
+/* FIXES ADDED */
+
+#chat-window {
+  height: calc(100vh - 60px); /* Adjust to stay within the viewport */
+  max-height: 70vh; /* Limit the height */
+}
+
+@media (max-width: 500px) {
+  #chat-window {
+    max-height: calc(100vh - 10px); /* Responsive height for mobile */
+  }
+}
+
+#chat-body {
+  flex: 1;
+  overflow: hidden;
+}
+
+#chat-messages {
+  max-height: 100%; /* Prevent overflow within the messages */
 }
