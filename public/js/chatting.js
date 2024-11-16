@@ -152,6 +152,17 @@ chatSend.addEventListener("click", () => {
   window.sendMessage(myUsername, toUsername, val);
 });
 
+chatInput.addEventListener("keypress", (event) => {
+  if (event.key === "Enter") {
+    let val = chatInput.value;
+    if (val === "") {
+      return;
+    }
+    chatInput.value = "";
+    window.sendMessage(myUsername, toUsername, val);
+  }
+});
+
 function changeChatWindow() {
   chatMessages.innerHTML = "";
   let roomId = [myUsername, toUsername].sort().join(":");
