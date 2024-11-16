@@ -259,6 +259,7 @@ app.post("/nearbysearch", async (req, res) => {
         },
         username: { $ne: currUsername },
       });
+      console.log(donorexist);
       if (donorexist.length > 0) {
         // for (let i = 0; i < donorexist.length; i++) {
         //   // if(donorexist[i].email === req.session.email) {
@@ -294,8 +295,14 @@ app.post("/nearbysearch", async (req, res) => {
           $elemMatch: { placeId: hospital.place_id },
         },
         bloodGroup: bdGroup,
-        username: { $ne: currUsername },
       });
+      if (hospital.place_id === "ChIJYZTdbJiyvDsREeCa-AmBcI0") {
+        console.log(donorexist);
+      }
+
+      const test = await Donor.find({ username: "krithika123" });
+      console.log(test);
+
       if (donorexist.length > 0) {
         //   for (let i = 0; i < donorexist.length; i++) {
         //     // if(donorexist[i].email === req.session.email) {
@@ -945,7 +952,11 @@ app.post("/api/acceptrequest", async (req, res) => {
     res.status(400).send("Request not found");
   }
 
-  const deleteOtherRequests = await RequestsForDonor.deleteMany({ requestorUsername, hospitalPlaceId, username: { $ne: username } });
+  const deleteOtherRequests = await RequestsForDonor.deleteMany({
+    requestorUsername,
+    hospitalPlaceId,
+    username: { $ne: username },
+  });
   console.log(deleteOtherRequests);
 
   if (requestorRequests) {
@@ -1040,7 +1051,7 @@ app.post("/api/myUserName", async (req, res) => {
   console.log(req.session.username);
   const username = await req.session.username;
   console.log(username);
-  res.status(200).json({username});
+  res.status(200).json({ username });
 });
 
 app.listen(PORT, () => {
