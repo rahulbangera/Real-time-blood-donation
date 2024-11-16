@@ -251,7 +251,7 @@
 
 @media (max-width: 500px) {
   #chat-window {
-    max-height: calc(100vh - 10px); /* Responsive height for mobile */
+    max-height: calc(100vh - 40vh); /* Responsive height for mobile */
   }
 }
 
