@@ -297,6 +297,7 @@ app.post("/nearbysearch", async (req, res) => {
           $elemMatch: { placeId: hospital.place_id },
         },
         bloodGroup: bdGroup,
+        username: { $ne: currUsername },
       });
       if (hospital.place_id === "ChIJYZTdbJiyvDsREeCa-AmBcI0") {
         console.log(donorexist);
