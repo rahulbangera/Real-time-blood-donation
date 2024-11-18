@@ -834,7 +834,7 @@ app.post("/api/donationrequests", async (req, res) => {
     acceptorUsername: username,
   });
 
-  if (acceptedData.length > 0) {
+  if (acceptedData) {
     console.log("-------------------------");
     console.log(acceptedData);
     res.status(300).json({
