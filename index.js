@@ -850,14 +850,17 @@ app.post("/api/donationrequests", async (req, res) => {
   let requiredHospitals = [];
 
   const isReserved = await RequestsForDonor.findOne({
-    username: username,
+    username,
     accepted: true,
   });
+
   const acceptedData = await AcceptedRequests.findOne({
     acceptorUsername: username,
   });
 
-  if (isReserved) {
+  if (acceptedData.length > 0) {
+    console.log("-------------------------");
+    console.log(acceptedData);
     res.status(300).json({
       message: "Request already accepted",
       data: { isReserved, acceptedData },
@@ -960,10 +963,8 @@ app.post("/api/acceptrequest", async (req, res) => {
     username: requestorUsername,
   });
 
-  const deleteFromOtherDonors = await RequestsForDonor.deleteMany({
-    requestorUsername,
-    hospitalPlaceId,
-  });
+  console.log("9382398---------------");
+  console.log(deleteFromOtherDonors);
 
   const acceptedRequests = await new AcceptedRequests({
     requestorUsername,
@@ -988,6 +989,7 @@ app.post("/api/acceptrequest", async (req, res) => {
     hospitalPlaceId,
     username: { $ne: username },
   });
+  console.log("---------------------------");
   console.log(deleteOtherRequests);
 
   if (requestorRequests) {
