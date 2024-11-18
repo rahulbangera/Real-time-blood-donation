@@ -963,9 +963,6 @@ app.post("/api/acceptrequest", async (req, res) => {
     username: requestorUsername,
   });
 
-  console.log("9382398---------------");
-  console.log(deleteFromOtherDonors);
-
   const acceptedRequests = await new AcceptedRequests({
     requestorUsername,
     requestorMobile: requestorDetails.mobile,
