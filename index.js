@@ -827,7 +827,7 @@ app.post("/api/donationrequests", async (req, res) => {
 
   const isReserved = await RequestsForDonor.findOne({
     username,
-    accepted: true 
+    accepted: true,
   });
 
   const acceptedData = await AcceptedRequests.findOne({
@@ -943,6 +943,9 @@ app.post("/api/acceptrequest", async (req, res) => {
     requestorUsername,
     hospitalPlaceId,
   });
+
+  console.log("9382398---------------");
+  console.log(deleteFromOtherDonors);
 
   const acceptedRequests = await new AcceptedRequests({
     requestorUsername,
