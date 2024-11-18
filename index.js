@@ -825,15 +825,13 @@ app.post("/api/donationrequests", async (req, res) => {
   let finalizedData = [];
   let requiredHospitals = [];
 
-  const isReserved = await RequestsForDonor.findOne({
-    username: username,
-    accepted: true,
-  });
   const acceptedData = await AcceptedRequests.findOne({
     acceptorUsername: username,
   });
 
-  if (isReserved) {
+  if (acceptedData.length > 0) {
+    console.log("-------------------------");
+    console.log(acceptedData);
     res.status(300).json({
       message: "Request already accepted",
       data: { isReserved, acceptedData },
