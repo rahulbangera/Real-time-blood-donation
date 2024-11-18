@@ -939,11 +939,6 @@ app.post("/api/acceptrequest", async (req, res) => {
     username: requestorUsername,
   });
 
-  const deleteFromOtherDonors = await RequestsForDonor.deleteMany({
-    requestorUsername,
-    hospitalPlaceId,
-  });
-
   console.log("9382398---------------");
   console.log(deleteFromOtherDonors);
 
@@ -970,6 +965,7 @@ app.post("/api/acceptrequest", async (req, res) => {
     hospitalPlaceId,
     username: { $ne: username },
   });
+  console.log("---------------------------");
   console.log(deleteOtherRequests);
 
   if (requestorRequests) {
