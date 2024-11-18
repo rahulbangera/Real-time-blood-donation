@@ -959,6 +959,12 @@ app.post("/api/acceptrequest", async (req, res) => {
   const requestorDetails = await LocalUser.findOne({
     username: requestorUsername,
   });
+
+  const deleteFromOtherDonors = await RequestsForDonor.deleteMany({
+    requestorUsername,
+    hospitalPlaceId,
+  });
+
   const acceptedRequests = await new AcceptedRequests({
     requestorUsername,
     requestorMobile: requestorDetails.mobile,
