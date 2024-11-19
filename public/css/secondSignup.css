@@ -29,7 +29,7 @@ body{
 
 @media (max-width: 1000px) {
     .formContainer{
-        height: 60%;
+        height: 78%;
         max-height: 700px;
     }
 }

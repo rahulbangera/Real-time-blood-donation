@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In</title>
     <link rel="stylesheet" href="css/signup.css">
+    <link rel="stylesheet" href="css/popup.css">
 </head>
 <body>
     <div class="headerContent">
@@ -51,7 +52,19 @@
         </div>
     </div>
 
+    <%- include('components/popup') %>
+
     <script>
+
+        console.log(error);
+        const errDiv = document.getElementById('error-popup');
+        if(error!=""){
+            errDiv.style.display = 'block';
+            setTimeout(() => {
+                errDiv.style.display = 'none';
+            }, 3000);
+        }
+
         function flipForm() {
             document.querySelector('.mainForm').classList.toggle('flipped');
         }

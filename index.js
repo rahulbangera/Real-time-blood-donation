@@ -232,7 +232,7 @@ app.get("/profile", async (req, res) => {
       bloodgroup,
     });
   } else {
-    res.redirect("/signin");
+    res.redirect("/signin", { error: "Login to continue" });
   }
 });
 
@@ -241,7 +241,7 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/signin", (req, res) => {
-  res.render("signin");
+  res.render("signin" , {error: ""});
 });
 
 app.post("/nearbysearch", async (req, res) => {
@@ -355,7 +355,7 @@ app.get("/requestblood", (req, res) => {
   if (req.session.email) {
     res.render("request", { userLoggedIn: true });
   } else {
-    res.redirect("/signin");
+    res.redirect("/signin", { error: "Login to continue" });
   }
 });
 
@@ -367,7 +367,7 @@ app.get("/donateblood", async (req, res) => {
   } else if (req.session.email) {
     res.render("donate", { userLoggedIn: true, active: false });
   } else {
-    res.redirect("/signin");
+    res.redirect("/signin", { error: "Login to continue" });
   }
 });
 
@@ -485,7 +485,7 @@ app.post("/otpVerify", async (req, res) => {
 
       user.verified = true;
       await user.save();
-      res.redirect("/signin");
+      res.redirect("/signin", { error: "User verified, please login" });
     } else {
       res.redirect("/signup");
     }
@@ -524,9 +524,11 @@ app.post("/login", async (req, res) => {
       await req.session.save();
       res.redirect("/");
     } else {
-      res.send("Incorrect password");
+      res.redirect("/signin", { error: "Incorrect Password, please try again!!"});
+      // res.send("Incorrect password");
     }
   } else {
+    res.redirect("/signin", { error: "User not found, please sign up!!"});
     res.send("User not found");
   }
   console.log(req.session.email);
@@ -735,7 +737,7 @@ app.get("/dashboard", (req, res) => {
   if (req.session.email) {
     res.render("dashboard", { userLoggedIn: true });
   } else {
-    res.redirect("/signin");
+    res.redirect("/signin", {error: "Login to continue"});
   }
 });
 

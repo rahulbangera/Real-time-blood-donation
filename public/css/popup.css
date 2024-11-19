@@ -1,0 +1,22 @@
+/* Popup Container */
+.popup {
+  position: fixed;
+  top: -100px; /* Start off-screen */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(219, 207, 207); /* Red for error */
+  color: #f44336;
+  padding: 15px 30px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  z-index: 1000;
+  transition: all 0.5s ease-in-out; /* Smooth slide-in effect */
+}
+
+/* Visible state */
+.popup.show {
+  top: 20px; /* Slide into view */
+}
