@@ -1060,6 +1060,10 @@ app.post("/api/myUserName", async (req, res) => {
   res.status(200).json({ username });
 });
 
+app.get("/sos", async (req, res) => {
+  res.render("sos", { userLoggedIn: false });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

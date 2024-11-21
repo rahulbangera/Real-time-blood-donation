@@ -1,348 +1,350 @@
-@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap");
 
-:root{
-    --lightBloodColor: rgb(218, 69, 69);
-    --bloodColor: rgb(218, 57, 57);
-    --oppBlood: white;
-    --specialFont: Joti One, cursive;
-    --normalFont: 'Inconsolata', monospace;
-    --darkBloodColor: rgb(77, 0, 0);
+:root {
+  --lightBloodColor: rgb(218, 69, 69);
+  --bloodColor: rgb(218, 57, 57);
+  --oppBlood: white;
+  --specialFont: Joti One, cursive;
+  --normalFont: "Inconsolata", monospace;
+  --darkBloodColor: rgb(77, 0, 0);
 }
 
-button{
-    cursor: pointer;
+button {
+  cursor: pointer;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: inconsolata, sans-serif;
+  font-family: inconsolata, sans-serif;
 }
 
-a{
-    text-decoration: none;
+a {
+  text-decoration: none;
 }
 
-
-.others{
-    display: none;
-    animation: 0.6s transist ease-in-out;
+.others {
+  display: none;
+  animation: 0.6s transist ease-in-out;
 }
 
-
-@keyframes transist{
-    0%{
-        opacity: 0;
-    }
-    100%{
-        opacity: 1;
-    }
+@keyframes transist {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-*{
-    /* outline: rgb(22, 240, 69) solid 1px; */
+* {
+  /* outline: rgb(22, 240, 69) solid 1px; */
 }
 
-.hero{
-    height: 90vh;
-    background-color: rgb(231, 179, 179);
+.hero {
+  height: 90vh;
+  background-color: rgb(231, 179, 179);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.4rem;
+  font-family: joti one;
+  font-weight: 200;
+}
+
+.heroButtons {
+  height: 9vh;
+  width: 34vw;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.heroButtons button {
+  height: 80%;
+  width: 40%;
+  background-color: var(--bloodColor);
+  color: var(--oppBlood);
+  border: none;
+  border-radius: 10px;
+  font-family: inconsolata;
+  font-weight: 700;
+  font-size: 50%;
+}
+
+.section {
+  color: white;
+  height: 70vh;
+}
+
+.section h2 {
+  font-size: 3.2rem;
+  font-family: joti one;
+  font-weight: 200;
+  text-align: center;
+  text-align: left;
+}
+
+.section p {
+  font-size: 1.4rem;
+  font-family: inconsolata;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.mainSection {
+  background-color: var(--bloodColor);
+  height: 100vh;
+  width: 100%;
+}
+
+.whyDonate {
+  height: 100%;
+  display: flex;
+  align-content: center;
+  width: 90%;
+  margin: 0 auto;
+  gap: 10%;
+}
+
+.whyDonate .left {
+  width: 50%;
+  align-self: center;
+}
+
+.whyDonate .right {
+  width: 50%;
+  align-self: center;
+  text-align: center;
+}
+
+.whyDonate img {
+  width: 100%;
+  max-height: 460px;
+  max-width: 700px;
+  aspect-ratio: 3/2;
+  border-radius: 20px;
+}
+
+@media (width<1000px) {
+  .whyDonate {
+    flex-direction: column-reverse;
+  }
+  .mainSection {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    font-size: 2.4rem;
-    font-family: joti one;
-    font-weight: 200;
-}
-
-.heroButtons{
-    height: 9vh;
-    width: 34vw;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.heroButtons button{
-    height: 80%;
-    width: 40%;
-    background-color: var(--bloodColor);
-    color: var(--oppBlood);
-    border: none;
-    border-radius: 10px;
-    font-family: inconsolata;
-    font-weight: 700;
-    font-size: 50%;
-}
-
-.section{
-    color: white;
-    height: 70vh;
-}
-
-.section h2{
-    font-size: 3.2rem;
-    font-family: joti one;
-    font-weight: 200;
-    text-align: center;
-    text-align: left;
-}
-
-.section p{
-    font-size: 1.4rem;
-    font-family: inconsolata;
-    font-weight: 400;
-    text-align: center;
-    margin-top: 20px;
-    text-align: left;
-}
-
-.mainSection{
-    background-color: var(--bloodColor);
-    height: 100vh;
+    height: 120vh;
+  }
+  .whyDonate {
     width: 100%;
-}
-
-.whyDonate{
-    height: 100%;
-    display: flex;
-    align-content: center;
+    justify-content: center;
+  }
+  .whyDonate .left {
     width: 90%;
-    margin: 0 auto;
-    gap: 10%;
-}
-
-.whyDonate .left{
-    width: 50%;
-    align-self: center;
-}
-
-.whyDonate .right{
-    width: 50%;
-    align-self: center;
+  }
+  .whyDonate img {
+    width: 70%;
+  }
+  .whyDonate .right {
+    width: 100%;
     text-align: center;
+  }
 }
 
-
-.whyDonate img{
-    width: 100%;
-    max-height: 460px;
-    max-width: 700px;
-    aspect-ratio: 3/2;
-    border-radius: 20px;
+.aboutUsSection {
+  padding: 20px;
+  background-color: rgb(231, 179, 179);
+  display: flex;
+  width: 100%;
 }
 
-@media (width<1000px){
-    .whyDonate{
-        flex-direction: column-reverse;
-    }
-    .mainSection{
-        display: flex;
-        align-items: center;
-        height: 120vh;
-    }
-    .whyDonate{
-        width: 100%;
-        justify-content: center;
-    }
-    .whyDonate .left{width: 90%;
-    }
-    .whyDonate img{
-        width: 70%;
-    }
-    .whyDonate .right{width: 100%;
-        text-align: center;
-    }
+.container-two {
+  width: 94%;
+  margin: 0 auto;
+  margin-top: 60px;
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
 }
 
-.aboutUsSection{
-    padding: 20px;
-    background-color: rgb(231, 179, 179);;
-    display: flex;
-    width: 100%;
+.container-two > .col1 > h1 {
+  color: rgb(131 127 115 / 68%);
+  font-size: 2.4rem;
+  margin-top: 0;
+  font-family: joti one;
 }
 
-.container-two{
-    width: 94%;
-    margin: 0 auto;
-    margin-top: 60px;
-    display: grid;
-    
-    grid-template-columns: 1fr 1fr;
+.container-two > .col1 {
+  align-self: self-start;
+  border-right: 1px solid grey;
+  padding: 8px;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 20px;
 }
 
-.container-two > .col1>h1{
-    color: rgb(131 127 115 / 68%);
-    font-size: 2.4rem;
-    margin-top: 0;
-    font-family: joti one;
+.container-two > .col2 {
+  align-self: center;
+  padding: 8px;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-content: center;
 }
 
-.container-two > .col1{
-    align-self: self-start;
-    border-right: 1px solid grey;
-    padding: 8px;
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    justify-content: space-around;
-    gap: 20px;
+.container-two > .col2 > .im1 > img {
+  width: 80%;
+  border: 4px solid white;
+  border-radius: 6px;
+  max-height: 360px;
+  max-width: 360px;
 }
 
-.container-two > .col2{
-    align-self: center;
-    padding: 8px;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    align-content: center;
-}
-
-.container-two > .col2 > .im1>img{
-    width: 80%;
-    border: 4px solid white;
-    border-radius: 6px;
-    max-height: 360px;
-    max-width: 360px;
-}
-
-
-.container-two > .col2 > .im1{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
+.container-two > .col2 > .im1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
 }
 
 .container-two > .col1 > button {
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 1px solid grey;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    background-color: rgb(58 170 56);
-    transition: 0.3s;
-    width: 40%;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid grey;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  background-color: rgb(58 170 56);
+  transition: 0.3s;
+  width: 40%;
 }
 
 .container-two > .col1 > button:hover {
-    background-color: rgba(207, 113, 123, 0.698);
-    cursor: pointer;
+  background-color: rgba(207, 113, 123, 0.698);
+  cursor: pointer;
 }
 
-.container-two{
-    margin-bottom: 60px;
+.container-two {
+  margin-bottom: 60px;
 }
 
-.container-two p{
-    font-size: 1.4rem;
-    font-family: inconsolata;
-    font-weight: 400;
-    text-align: justify;
-    margin-top: 20px;
+.container-two p {
+  font-size: 1.4rem;
+  font-family: inconsolata;
+  font-weight: 400;
+  text-align: justify;
+  margin-top: 20px;
 }
-
 
 .footer {
-    background-color: var(--bloodColor); 
-    color: white; 
-    text-align: center; 
-    padding: 20px 0; 
-    position: relative; 
-    bottom: 0; 
-    width: 100%; 
+  background-color: var(--bloodColor);
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  position: relative;
+  bottom: 0;
+  width: 100%;
 }
 
 .footer-content {
-    max-width: 1200px; 
-    margin: 0 auto; 
-    padding: 0 20px; 
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .footer-links {
-    margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
 .footer-links a {
-    color: white; 
-    text-decoration: none; 
-    margin: 0 15px; 
-    transition: color 0.3s; 
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  transition: color 0.3s;
 }
 
 .footer-links a:hover {
-    color: #61dafb; 
+  color: #61dafb;
 }
 
 .footer p {
-    margin: 0;
-    font-size: 14px;
+  margin: 0;
+  font-size: 14px;
 }
 
-
-@media (width>1700px){
-    .mainSection{
-        height: 70vh;
-    }
-    .whyDonate{
-        width: 70%;
-    }
-    .container-two{
-        width: 70%;
-    }
+@media (width>1700px) {
+  .mainSection {
+    height: 70vh;
+  }
+  .whyDonate {
+    width: 70%;
+  }
+  .container-two {
+    width: 70%;
+  }
 }
 
-@media (width<600px){
-    img.background-image{
-        height: 100vh;
-    }
-    div.heade{
-        width: 400px;
-    }
-    .container-two{
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    div.im1{
-        grid-row: 1;
-    }
-    div.col1{
-        grid-row: 2;
-    }
-    .container-two > .col1{
-        border-right: none;
-    }
-    .heroButtons{
-        flex-direction: column;
+@media (width<600px) {
+  img.background-image {
+    height: 100vh;
+  }
+  div.heade {
+    width: 400px;
+  }
+  .container-two {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  div.im1 {
+    grid-row: 1;
+  }
+  div.col1 {
+    grid-row: 2;
+  }
+  .container-two > .col1 {
+    border-right: none;
+  }
+  .heroButtons {
+    flex-direction: column;
     gap: 20px;
     height: 16vh;
     width: 100%;
-    }
+  }
 }
 
-.donateStatus{
-    font-size: 1.2rem;
-    display: inline;
-    font-weight: 400;
-    font-family: inconsolata;
+.donateStatus {
+  font-size: 1.2rem;
+  display: inline;
+  font-weight: 400;
+  font-family: inconsolata;
 }
 
-.green{
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    background-color: green;
-    border-radius: 50%;
+.green {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
 }
 
-.red{
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    background-color: rgb(194, 0, 0);
-    border-radius: 50%;
+.red {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: rgb(194, 0, 0);
+  border-radius: 50%;
+}
+
+.sosButton button {
+  scale: 1.1;
+  background-color: var(--darkBloodColor);
+  border: 2px solid white;
 }

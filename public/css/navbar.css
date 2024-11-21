@@ -37,6 +37,11 @@
   border-radius: 40px;
 }
 
+a {
+  color: white;
+  text-decoration: none;
+}
+
 .left-nav {
   background-color: white;
   height: 100%;
@@ -45,7 +50,6 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 20px;
   font-family: joti one;
   clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
 }
