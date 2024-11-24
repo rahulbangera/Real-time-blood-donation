@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="/css/signupnew.css">
+    <link rel="stylesheet" href="/css/secondSignup.css">
+    <style>
+        body{
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="headerContent">
+        <div class="headingItem">
+            <h1>OTP Verification</h1>
+        </div>
+      
+        <div class="quote">
+        <p>Your blood donation is a gift straight from the heart &#9829;</p>
+        </div>
+    </div>
+
+    <div class="popupContainer">
+        <div class="popupContent">
+            <form action="/otpVerify" method="post">
+            <h1>Verify your Email Address</h1>
+            <p>OTP has been sent to your email address</p>
+            <hr>
+            <div class="otpBox">
+                <input style="display: none;" type="email" name="hidemail" id="hidEmail" value="<%- hidemail %>">
+                <input type="text" placeholder="Enter the 6 digit OTP" pattern="^\d{6}$" name="otp" id="otp" required>
+            </div>
+            <div class="verifyButton">
+                <button class="button">Verify otp</button>
+            </div>
+        </form>
+        </div>
+
+    </div>
+</body>
+</html>

@@ -25,6 +25,11 @@ import AcceptedRequests from "./Models/acceptedRequests.js";
 import { Vonage } from "@vonage/server-sdk";
 import { type } from "os";
 import https from "https";
+import resetToken from "./Models/resetToken.js";
+import crypto from "crypto";
+import axios from "axios";
+import sosRequest from "./Models/sosRequests.js";
+import sosReqForDonor from "./Models/sosReqForDonors.js";
 import cors from "cors";
 
 const accountSid = "AC3ec82eb9b05651f92c1a8b69346e1ae9";
@@ -47,16 +52,42 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const OTPLess_API_KEY = "OTPLess_API_KEY";
+
+async function sendOtp(phoneNumber) {
+  try {
+    const response = await axios.post(
+      "https://api.otpless.com/sendOtp",
+      {
+        phone: phoneNumber, // Phone number in international format (e.g., +919876543210)
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${OTPLess_API_KEY}`,
+        },
+      }
+    );
+
+    console.log("OTP sent successfully:", response.data);
+    return response.data; // Store response for further actions
+  } catch (error) {
+    console.error("Error sending OTP:", error.response.data);
+    throw error;
+  }
+}
+
 const vonage = new Vonage({
-  apiKey: "960bb5c8",
-  apiSecret: "mED9PsA8nSqxlzY2",
+  apiKey: "bd4ecdf7",
+  apiSecret: "nhb9LORNL6614wzX",
 });
 
-const vonageUser = "960bb5c8";
-const vonagePass = "mED9PsA8nSqxlzY2";
+const vonageUser = "bd4ecdf7";
+const vonagePass = "nhb9LORNL6614wzX";
 const from = "14157386102";
 
 function sendVonageMessage(to, body) {
+  console.log(to);
+
   const data = JSON.stringify({
     from: { type: "whatsapp", number: from },
     to: { type: "whatsapp", number: to },
@@ -84,8 +115,6 @@ function sendVonageMessage(to, body) {
   };
 
   const req = https.request(options, (res) => {
-    console.log(`statusCode: ${res.statusCode}`);
-
     res.on("data", (d) => {
       process.stdout.write(d);
     });
@@ -164,8 +193,38 @@ app.use(e.urlencoded({ extended: true }));
 
 // req.session.email = "testing";
 
+async function sendOtpEmail(email, username) {
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  const mailOptions = {
+    from: "coderangersverify@gmail.com",
+    to: email,
+    subject: "OTP Verification",
+    text: `Your OTP is: ${otp}`,
+  };
+
+  const dup = await Otps.findOneAndDelete({ email });
+
+  const newOtpUser = new Otps({
+    username: username,
+    email,
+    emailOtp: otp,
+  });
+
+  await newOtpUser.save();
+  // req.session.email = await newOtpUser.email;
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      return res.send("Failed to send OTP");
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+  return;
+}
+
 function sendNotification(userToken, title, body) {
-  console.log(userToken);
   const message = {
     token: userToken,
     notification: {
@@ -234,7 +293,7 @@ app.get("/profile", async (req, res) => {
       bloodgroup,
     });
   } else {
-    res.redirect("/signin");
+    return res.redirect("/signin?error=Login to continue");
   }
 });
 
@@ -243,7 +302,12 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/signin", (req, res) => {
-  res.render("signin");
+  const error = req.query.error;
+  if (error !== undefined) {
+    res.render("signin", { error });
+  } else {
+    res.render("signin", { error: "" });
+  }
 });
 
 app.post("/nearbysearch", async (req, res) => {
@@ -261,7 +325,6 @@ app.post("/nearbysearch", async (req, res) => {
         },
         username: { $ne: currUsername },
       });
-      console.log(donorexist);
       if (donorexist.length > 0) {
         // for (let i = 0; i < donorexist.length; i++) {
         //   // if(donorexist[i].email === req.session.email) {
@@ -302,9 +365,6 @@ app.post("/nearbysearch", async (req, res) => {
       if (hospital.place_id === "ChIJYZTdbJiyvDsREeCa-AmBcI0") {
         console.log(donorexist);
       }
-
-      const test = await Donor.find({ username: "krithika123" });
-      console.log(test);
 
       if (donorexist.length > 0) {
         //   for (let i = 0; i < donorexist.length; i++) {
@@ -357,19 +417,18 @@ app.get("/requestblood", (req, res) => {
   if (req.session.email) {
     res.render("request", { userLoggedIn: true });
   } else {
-    res.redirect("/signin");
+    return res.redirect("/signin?error=Login to continue");
   }
 });
 
 app.get("/donateblood", async (req, res) => {
   const currentUser = await Donor.findOne({ email: req.session.email });
-  console.log(currentUser);
   if (currentUser) {
     res.render("donate", { userLoggedIn: true, active: true });
   } else if (req.session.email) {
     res.render("donate", { userLoggedIn: true, active: false });
   } else {
-    res.redirect("/signin");
+    return res.redirect("/signin?error=Login to continue");
   }
 });
 
@@ -400,23 +459,30 @@ app.post("/donorinactive", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const data = req.body;
-  const { name, userName, email, password, mbNumber, bdGroup } = data;
+  const { formObject } = await req.body;
+  const { name, userName, email, password, mbNumber, bdGroup } = formObject;
   let saltrounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltrounds);
   const verified = false;
 
-  console.log("in");
 
   if (name && userName && email && password && mbNumber && bdGroup) {
-    console.log("in2");
     try {
-      const existingUser = await LocalUser.findOne({ email: email });
-      if (existingUser) {
-        return res.send("User already exists");
+      const existingUserEmail = await LocalUser.findOne({ email: email });
+      if (existingUserEmail) {
+        return res.status(301).send("Email already exists");
+      }
+      const existingUserUsername = await LocalUser.findOne({
+        username: userName,
+      });
+      if (existingUserUsername) {
+        return res.status(300).send("Username already exists");
+      }
+      const existingUserMobile = await LocalUser.findOne({ mobile: mbNumber });
+      if (existingUserMobile) {
+        return res.status(302).send("Mobile number already exists");
       }
 
-      console.log("in3");
       const newUser = new LocalUser({
         name,
         username: userName,
@@ -432,31 +498,13 @@ app.post("/signup", async (req, res) => {
 
       const savedUser = await newUser.save();
 
-      const otp = Math.floor(100000 + Math.random() * 900000);
-      const mailOptions = {
-        from: "coderangersverify@gmail.com",
-        to: email,
-        subject: "OTP Verification",
-        text: `Your OTP is: ${otp}`,
-      };
+      const duplicate = await Otps.findOne({ email });
+      if (duplicate) {
+        await Otps.deleteOne({ email });
+      }
 
-      const newOtpUser = new Otps({
-        username: userName,
-        email,
-        emailOtp: otp,
-      });
-
-      await newOtpUser.save();
-      // req.session.email = await newOtpUser.email;
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-          return res.send("Failed to send OTP");
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      });
+      sendOtpEmail(email, userName);
+      res.status(200).json({ redirect: "/otpverify", hidemail: email });
     } catch (error) {
       console.error("Error during signup:", error);
       res.status(500).send("Internal Server Error");
@@ -467,6 +515,7 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/otpVerify", async (req, res) => {
+  console.log(req.body);
   let { hidemail, otp } = req.body;
   const email1 = hidemail;
   console.log(otp);
@@ -475,6 +524,7 @@ app.post("/otpVerify", async (req, res) => {
 
   try {
     const otpUser = await Otps.findOne({ email: email1 });
+    console.log(otpUser);
     if (!otpUser) {
       return res.status(400).send("No OTP found for this email.");
     }
@@ -487,7 +537,7 @@ app.post("/otpVerify", async (req, res) => {
 
       user.verified = true;
       await user.save();
-      res.redirect("/signin");
+      return res.redirect("/signin?error=User verified, please login");
     } else {
       res.redirect("/signup");
     }
@@ -512,6 +562,12 @@ app.post("/otpVerify", async (req, res) => {
 //   }
 // });
 
+app.get("/otpverify", (req, res) => {
+  const email = req.query.email;
+  console.log(email);
+  res.render("otpverify", { hidemail: email });
+});
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   // req.session.email = email;
@@ -520,18 +576,24 @@ app.post("/login", async (req, res) => {
   if (currentUser) {
     const checkPass = await bcrypt.compare(password, currentUser.password);
     if (checkPass) {
+      if (currentUser.verified === false) {
+        sendOtpEmail(email, currentUser.username);
+        return res.redirect("otpverify" + "?email=" + email);
+      }
       req.session.email = email;
       req.session.name = await currentUser.name;
       req.session.username = await currentUser.username;
       await req.session.save();
-      res.redirect("/");
+      return res.redirect("/");
     } else {
-      res.send("Incorrect password");
+      return res.redirect(
+        "/signin?error=Incorrect Password, please try again!!"
+      );
+      // res.send("Incorrect password");
     }
   } else {
-    res.send("User not found");
+    return res.redirect("/signin?error=User not found, please sign up!!");
   }
-  console.log(req.session.email);
 });
 
 app.get("/logout", (req, res) => {
@@ -757,9 +819,9 @@ function sendMail(to, name, subject, text) {
 
 app.get("/dashboard", (req, res) => {
   if (req.session.email) {
-    res.render("dashboard", { userLoggedIn: true });
+    return res.render("dashboard", { userLoggedIn: true });
   } else {
-    res.redirect("/signin");
+    return res.redirect("/signin?Login to continue");
   }
 });
 
@@ -850,14 +912,17 @@ app.post("/api/donationrequests", async (req, res) => {
   let requiredHospitals = [];
 
   const isReserved = await RequestsForDonor.findOne({
-    username: username,
+    username,
     accepted: true,
   });
+
   const acceptedData = await AcceptedRequests.findOne({
     acceptorUsername: username,
   });
 
-  if (isReserved) {
+  if (acceptedData) {
+    console.log("-------------------------");
+    console.log(acceptedData);
     res.status(300).json({
       message: "Request already accepted",
       data: { isReserved, acceptedData },
@@ -959,6 +1024,7 @@ app.post("/api/acceptrequest", async (req, res) => {
   const requestorDetails = await LocalUser.findOne({
     username: requestorUsername,
   });
+
   const acceptedRequests = await new AcceptedRequests({
     requestorUsername,
     requestorMobile: requestorDetails.mobile,
@@ -982,6 +1048,7 @@ app.post("/api/acceptrequest", async (req, res) => {
     hospitalPlaceId,
     username: { $ne: username },
   });
+  console.log("---------------------------");
   console.log(deleteOtherRequests);
 
   if (requestorRequests) {
@@ -1090,6 +1157,237 @@ app.post("/api/myUserName", async (req, res) => {
   const username = await req.session.username;
   console.log(username);
   res.status(200).json({ username });
+});
+
+app.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await LocalUser.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const uniqueResetToken = crypto.randomBytes(32).toString("hex");
+    console.log(uniqueResetToken);
+
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(uniqueResetToken)
+      .digest("hex");
+
+    console.log("------------------------");
+    console.log(hashedToken);
+
+    const newToken = new resetToken({
+      userId: user._id,
+      token: hashedToken,
+      expiresAt: Date.now() + 3600000, // Token expires in 1 hour
+    });
+
+    newToken.save();
+
+    // Generate the password reset link
+    const resetLink = `https://real-time-blood-donation.onrender.com/reset-password/${uniqueResetToken}`;
+
+    await transporter.sendMail({
+      from: "coderangersverify@gmail.com",
+      to: email,
+      subject: "Password Reset",
+      html: `<p>Click the link below to reset your password:</p>
+             <a href="${resetLink}">${resetLink}</a>
+             <p>The link will expire in 1 hour.</p>`,
+    });
+
+    res
+      .status(200)
+      .json({ message: "Password reset link sent to your email." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong." });
+  }
+});
+
+app.get("/reset-password", (req, res) => {
+  res.render("signin");
+});
+
+app.get("/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const tokenDoc = await resetToken.findOne({
+      token: hashedToken,
+      expiresAt: { $gt: Date.now() },
+    });
+
+    if (!tokenDoc) {
+      return res.status(400).json({ message: "Invalid or expired token." });
+    }
+
+    res.render("resetpass", { token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong." });
+  }
+});
+
+app.post("/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  try {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const tokenDoc = await resetToken.findOne({
+      token: hashedToken,
+      expiresAt: { $gt: Date.now() },
+    });
+
+    if (!tokenDoc) {
+      return res.status(400).json({ message: "Invalid or expired token." });
+    }
+
+    const user = await LocalUser.findById(tokenDoc.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    await resetToken.findByIdAndDelete(tokenDoc._id);
+
+    res.status(200).json({ message: "Password reset successful." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong." });
+  }
+});
+app.get("/sos", async (req, res) => {
+  res.render("sos", { userLoggedIn: false });
+});
+
+app.post("/sos", async (req, res) => {
+  const { data } = req.body;
+  const { name, phone, bloodGroup, hospital, place_id, selectedHospitals } =
+    data;
+  let uniqueDonors = [];
+  const duplicate = await sosRequest.findOne({ phone });
+  if (duplicate) {
+    return res.status(400).json({ message: "Request already exists" });
+  }
+  const newSosRequest = new sosRequest({
+    name,
+    phone,
+    bloodGroup,
+    hospitalName: hospital,
+    hospitalPlaceId: place_id,
+  });
+  await newSosRequest.save();
+
+  selectedHospitals.forEach(async (hospitalele) => {
+    const donors = await Donor.find({
+      hospitals: { $elemMatch: { placeId: hospitalele.hospitalPlaceId } },
+      bloodGroup,
+    });
+    donors.forEach(async (donor) => {
+      const yesno = uniqueDonors.includes(donor.username);
+      if (!yesno) {
+        uniqueDonors.push(donor.username);
+        const dupl = await sosReqForDonor.findOne({
+          username: donor.username,
+          hospitalPlaceId: hospital.place_id,
+          requestorPhone: phone,
+        });
+        if (dupl) {
+          return;
+        }
+        const newSosRequestForDonor = new sosReqForDonor({
+          donorName: donor.name,
+          donorUsername: donor.username,
+          bloodGroup: bloodGroup,
+          requestorPhone: phone,
+          hospitalName: hospital,
+          hospitalPlaceId: place_id,
+        });
+        await newSosRequestForDonor.save();
+        const donorTokenId = await TokenUser.find({ email: donor.email });
+        donorTokenId.forEach((donor) => {
+          sendNotification(
+            donor.tokenId,
+            "SOS Request",
+            `Mobile Number: ${phone} Urgent blood donation request from a nearby hospital`
+          );
+        });
+        sendMail(
+          donor.email,
+          donor.name,
+          "SOS Request",
+          `Urgent Blood Donation request from a nearby hospital
+        To contact the donor, please call ${phone}, or visit the website: ${url}/dashboard
+        `
+        );
+
+        const Local = await LocalUser.findOne({ email: donor.email });
+        const mobile = `+91${Local.mobile}`;
+        const message = `
+            Hi ${donor.name},
+
+           Urgent Blood Donation request from a nearby hospital. To Contact the requestor, please call ${phone} or visit the website.
+
+            To Visit Website: https://real-time-blood-donation.onrender.com/dashboard
+
+            Thank you for your support.
+            `;
+        // sendWhatsappMessage(mobile, message);
+        const mobile2 = `91${Local.mobile}`;
+        sendVonageMessage(mobile2, message);
+      }
+    });
+  });
+  return res.status(200).json({ message: "Request sent" });
+});
+
+app.post("/api/sosrequests", async (req, res) => {
+  const username = req.session.username;
+
+  // Fetch all requests for the donor
+  const mySosRequests = await sosReqForDonor.find({ donorUsername: username });
+
+  // Use Promise.all to handle asynchronous mapping
+  const finalizedData = await Promise.all(
+    mySosRequests.map(async (request) => {
+      return {
+        requestorPhone: request.requestorPhone,
+        bloodGroup: request.bloodGroup,
+        hospitalName: request.hospitalName,
+        hospitalPlaceId: request.hospitalPlaceId,
+      };
+    })
+  );
+
+  // Log the finalized data
+
+  // Send response after data is fully prepared
+  res.status(200).json({ finalizedData });
+});
+
+app.use((req, res, next) => {
+  res.status(404).render("error", {
+    message: "Page not found! The route you requested does not exist.",
+  });
+});
+
+app.use((err, req, res, next) => {
+  console.error("Server Error:", err); // Log the error details for debugging
+
+  // Send a user-friendly error message to the client
+  res.status(500).render("error", {
+    message: err.message || "An unexpected error occurred",
+  });
 });
 
 app.listen(PORT, () => {

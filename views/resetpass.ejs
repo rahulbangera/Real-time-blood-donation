@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password</title>
+  <link rel="stylesheet" href="/css/resetpass.css"> <!-- Link your existing CSS -->
+</head>
+<body>
+  <div class="mainContent">
+    <div class="formContainer">
+      <div class="logo">
+        <img class="logo-img" src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="Logo">
+      </div>
+      <h1>Reset Password</h1>
+      <form id="resetPasswordForm">
+        <div>
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password" required>
+        </div>
+        <div>
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required>
+        </div>
+        <button class="button" type="submit">Reset Password</button>
+      </form>
+      <h6 id="responseMessage" style="color: green; margin-top: 10px;"></h6>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("resetPasswordForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const token = window.location.pathname.split("/").pop();
+      const newPassword = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const responseMessage = document.getElementById("responseMessage");
+
+      if (newPassword !== confirmPassword) {
+        responseMessage.style.color = "red";
+        responseMessage.textContent = "Passwords do not match.";
+        return;
+      }
+
+      try {
+        const response = await fetch(`/reset-password/${token}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ newPassword }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            responseMessage.style.color = "green";
+          responseMessage.textContent = result.message;
+          window.location.href = "/signin";
+        } else {
+          responseMessage.style.color = "red";
+          responseMessage.textContent = result.message;
+        }
+      } catch (err) {
+        responseMessage.style.color = "red";
+        responseMessage.textContent = "An error occurred. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>
