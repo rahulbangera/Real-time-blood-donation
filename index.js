@@ -191,7 +191,7 @@ app.use(e.urlencoded({ extended: true }));
 
 // req.session.email = "testing";
 
-async function sendOtp(email, username) {
+async function sendOtpEmail(email, username) {
   const otp = Math.floor(100000 + Math.random() * 900000);
   const mailOptions = {
     from: "coderangersverify@gmail.com",
@@ -499,7 +499,7 @@ app.post("/signup", async (req, res) => {
         await Otps.deleteOne({ email });
       }
 
-      sendOtp(email, userName);
+      sendOtpEmail(email, userName);
       res.render("otpverify", { hidemail: email });
     } catch (error) {
       console.error("Error during signup:", error);
@@ -565,7 +565,7 @@ app.post("/login", async (req, res) => {
     const checkPass = await bcrypt.compare(password, currentUser.password);
     if (checkPass) {
       if (currentUser.verified === false) {
-        sendOtp(email, currentUser.username);
+        sendOtpEmail(email, currentUser.username);
         res.render("/otpverify", { hidemail: email });
       }
       req.session.email = email;
