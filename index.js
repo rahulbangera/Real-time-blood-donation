@@ -200,6 +200,8 @@ async function sendOtpEmail(email, username) {
     text: `Your OTP is: ${otp}`,
   };
 
+  const dup = await Otps.findOneAndDelete({ email });
+
   const newOtpUser = new Otps({
     username: username,
     email,
@@ -217,6 +219,7 @@ async function sendOtpEmail(email, username) {
       console.log("Email sent: " + info.response);
     }
   });
+  return;
 }
 
 function sendNotification(userToken, title, body) {
@@ -285,7 +288,7 @@ app.get("/profile", async (req, res) => {
       bloodgroup,
     });
   } else {
-    res.redirect("/signin", { error: "Login to continue" });
+    return res.redirect("/signin?error=Login to continue");
   }
 });
 
@@ -409,7 +412,7 @@ app.get("/requestblood", (req, res) => {
   if (req.session.email) {
     res.render("request", { userLoggedIn: true });
   } else {
-    res.redirect("/signin", { error: "Login to continue" });
+    return res.redirect("/signin?error=Login to continue");
   }
 });
 
@@ -420,7 +423,7 @@ app.get("/donateblood", async (req, res) => {
   } else if (req.session.email) {
     res.render("donate", { userLoggedIn: true, active: false });
   } else {
-    res.redirect("/signin", { error: "Login to continue" });
+    return res.redirect("/signin?error=Login to continue");
   }
 });
 
@@ -456,6 +459,7 @@ app.post("/signup", async (req, res) => {
   let saltrounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltrounds);
   const verified = false;
+
 
   if (name && userName && email && password && mbNumber && bdGroup) {
     try {
@@ -495,7 +499,7 @@ app.post("/signup", async (req, res) => {
       }
 
       sendOtpEmail(email, userName);
-      res.render("otpverify", { hidemail: email });
+      res.status(200).json({ redirect: "/otpverify", hidemail: email });
     } catch (error) {
       console.error("Error during signup:", error);
       res.status(500).send("Internal Server Error");
@@ -506,6 +510,7 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/otpVerify", async (req, res) => {
+  console.log(req.body);
   let { hidemail, otp } = req.body;
   const email1 = hidemail;
   console.log(otp);
@@ -514,6 +519,7 @@ app.post("/otpVerify", async (req, res) => {
 
   try {
     const otpUser = await Otps.findOne({ email: email1 });
+    console.log(otpUser);
     if (!otpUser) {
       return res.status(400).send("No OTP found for this email.");
     }
@@ -526,7 +532,7 @@ app.post("/otpVerify", async (req, res) => {
 
       user.verified = true;
       await user.save();
-      res.redirect("/signin", { error: "User verified, please login" });
+      return res.redirect("/signin?error=User verified, please login");
     } else {
       res.redirect("/signup");
     }
@@ -551,6 +557,12 @@ app.post("/otpVerify", async (req, res) => {
 //   }
 // });
 
+app.get("/otpverify", (req, res) => {
+  const email = req.query.email;
+  console.log(email);
+  res.render("otpverify", { hidemail: email });
+});
+
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   // req.session.email = email;
@@ -561,7 +573,7 @@ app.post("/login", async (req, res) => {
     if (checkPass) {
       if (currentUser.verified === false) {
         sendOtpEmail(email, currentUser.username);
-        return res.render("otpverify", { hidemail: email });
+        return res.redirect("otpverify" + "?email=" + email);
       }
       req.session.email = email;
       req.session.name = await currentUser.name;

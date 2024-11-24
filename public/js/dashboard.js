@@ -416,7 +416,7 @@ async function fetchSOSRequests() {
 
 function updateSOSRequests(data) {
   let sosContent = document.getElementById("sos-content");
-  sosContent.innerHTML = "<br><h3>SOS Requests</h3>";
+  sosContent.innerHTML = "<br><h2>SOS Requests</h2>";
   if (data.length === 0) {
     sosContent.innerHTML += "<p>No SOS requests yet.</p>";
   } else {
