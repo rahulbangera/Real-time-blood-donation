@@ -27,7 +27,8 @@ body {
 
 .popupContainer {
   width: 80%;
-  height: 80%;
+  height: 90%;
+  max-height: 1200px;
   display: flex;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
@@ -143,8 +144,14 @@ button#submitRequest:hover {
 
 @media screen and (max-width: 768px) {
   .popupContainer {
+    width: 100%;
     flex-direction: column;
     height: auto;
+  }
+
+  .others{
+    height: auto;
+    padding: 80px 20px;
   }
 
   .left-side,
@@ -157,9 +164,6 @@ button#submitRequest:hover {
     height: 100%;
   }
 
-  .others {
-    height: 180vh;
-  }
 }
 
 /* Overlay styles */
