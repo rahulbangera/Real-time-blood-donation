@@ -17,7 +17,7 @@
 }
 
 body {
-  background-color: var(--bgColor);
+  background-color: var(--darkBloodColor);
   text-align: center;
   height: 100vh;
   font-family: var(--normalFont);

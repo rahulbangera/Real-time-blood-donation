@@ -298,7 +298,13 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/signin", (req, res) => {
-  res.render("signin", { error: "" });
+  const error = req.query.error;
+  if(error!==undefined) {
+  res.render("signin", { error });
+  }
+  else {
+    res.render("signin", {error: ""});
+  }
 });
 
 app.post("/nearbysearch", async (req, res) => {
@@ -452,7 +458,8 @@ app.post("/donorinactive", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const { formObject } = req.body;
+  const { formObject } = await req.body;
+  console.log(formObject);
   const { name, userName, email, password, mbNumber, bdGroup } = formObject;
   let saltrounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltrounds);
@@ -464,7 +471,7 @@ app.post("/signup", async (req, res) => {
     console.log("in2");
     try {
       const existingUserEmail = await LocalUser.findOne({ email: email });
-      if (existingUser) {
+      if (existingUserEmail) {
         return res.status(301).send("Email already exists");
       }
       const existingUserUsername = await LocalUser.findOne({
@@ -566,24 +573,20 @@ app.post("/login", async (req, res) => {
     if (checkPass) {
       if (currentUser.verified === false) {
         sendOtpEmail(email, currentUser.username);
-        res.render("/otpverify", { hidemail: email });
+        return res.render("otpverify", { hidemail: email });
       }
       req.session.email = email;
       req.session.name = await currentUser.name;
       req.session.username = await currentUser.username;
       await req.session.save();
-      res.redirect("/");
+      return res.redirect("/");
     } else {
-      res.redirect("/signin", {
-        error: "Incorrect Password, please try again!!",
-      });
+      return res.redirect("/signin?error=Incorrect Password, please try again!!");
       // res.send("Incorrect password");
     }
   } else {
-    res.redirect("/signin", { error: "User not found, please sign up!!" });
-    res.send("User not found");
+    return res.redirect("/signin?error=User not found, please sign up!!");
   }
-  console.log(req.session.email);
 });
 
 app.get("/logout", (req, res) => {
@@ -787,9 +790,9 @@ function sendMail(to, name, subject, text) {
 
 app.get("/dashboard", (req, res) => {
   if (req.session.email) {
-    res.render("dashboard", { userLoggedIn: true });
+    return res.render("dashboard", { userLoggedIn: true });
   } else {
-    res.redirect("/signin", { error: "Login to continue" });
+    return res.redirect("/signin?Login to continue");
   }
 });
 

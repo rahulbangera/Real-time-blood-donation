@@ -6,6 +6,30 @@
     <title>Sign In</title>
     <link rel="stylesheet" href="css/signup.css">
     <link rel="stylesheet" href="css/popup.css">
+    <style>
+        .popup {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgb(71, 70, 69);
+  color: #f44336;
+  padding: 15px 30px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  z-index: 1000;
+  transition: all 0.5s ease-in-out; 
+}
+
+/* Visible state */
+.popup.show {
+  top: 20px;
+}
+
+    </style>
 </head>
 <body>
     <div class="headerContent">
@@ -62,9 +86,29 @@
         
     </div>
 
+    <% if (error !== "") { %>
+        <div id="error-popup2" class="popup">
+          <span id="popup-message2"><%= error %></span>
+        </div>
+      <% } %>
+      
+
     <%- include('components/popup') %>
 
     <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const errorPopup = document.getElementById('error-popup2');
+    
+    // Check if the popup element exists (only if error exists)
+    if (errorPopup) {
+      errorPopup.classList.add('show');
+
+      setTimeout(() => {
+        errorPopup.classList.remove('show');
+      }, 4000); // 4 seconds timeout to hide the popup
+    }
+  });
+
 
         const errDiv = document.getElementById('error-popup');
         const forgot = document.getElementById('forgotpass');
