@@ -328,10 +328,12 @@ function findNearbyDonors(nearbyHospitals, bdGroup) {
       },
       body: JSON.stringify({ data }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        return res.json();
+      })
       .then((data) => {
         console.log("Data:", data);
-        if (res.status === 200) {
+        if (data.message === "Request sent") {
           alert("Request submitted successfully");
           window.location.href = "/";
         } else {
