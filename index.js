@@ -36,7 +36,7 @@ dotenv.config();
 
 const accountSid = process.env.TWILIO_SID;
 const authToken = process.env.TWILIO_AUTH;
-const client = twilio(accountSid, authToken);
+// const client = twilio(accountSid, authToken);
 
 const app = e();
 const PORT = process.env.PORT || 5000;
@@ -247,15 +247,15 @@ function sendNotification(userToken, title, body) {
     });
 }
 
-function sendWhatsappMessage(to, body) {
-  client.messages
-    .create({
-      from: "whatsapp:+14155238886",
-      body: "Hi you have a request",
-      to: `whatsapp:${to}`,
-    })
-    .then((message) => console.log(message.sid));
-}
+// function sendWhatsappMessage(to, body) {
+//   client.messages
+//     .create({
+//       from: "whatsapp:+14155238886",
+//       body: "Hi you have a request",
+//       to: `whatsapp:${to}`,
+//     })
+//     .then((message) => console.log(message.sid));
+// }
 
 app.get("/favicon.ico", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "favicon.ico"));
@@ -709,7 +709,7 @@ app.post("/searchDonors", async (req, res) => {
       
               Thank you for your support.
               `;
-        sendWhatsappMessage(mobile, message);
+        // sendWhatsappMessage(mobile, message);
         const mobile2 = `91${Local.mobile}`;
         sendVonageMessage(mobile2, message);
       });
