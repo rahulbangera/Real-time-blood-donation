@@ -205,8 +205,11 @@
                 console.log("Android interface not available.");
             }
         }
+
+        function flipForm() {
+            document.querySelector('.mainForm').classList.toggle('flipped');
+        }
     
-        // Adjusting form height dynamically
         const div1 = document.querySelector('.signinFormContainer');
         const div2 = document.querySelector('.resetFormContainer');
         const resizeObserver = new ResizeObserver(() => {
