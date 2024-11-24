@@ -50,6 +50,9 @@ You can find the APP download link in the releases section
 
 ## Run Locally
 
+- YOU NEED SOME CREDENTIALS TO HAVE ALL THE FEATURES WORKING and that should be stored in .env file
+- We have kept an lank env example file, u need to fill in details and turn that into .env file
+
 Clone the project
 
 ```bash

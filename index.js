@@ -31,24 +31,27 @@ import axios from "axios";
 import sosRequest from "./Models/sosRequests.js";
 import sosReqForDonor from "./Models/sosReqForDonors.js";
 import cors from "cors";
+import dotenv from "dotenv";
 
-const accountSid = "AC3ec82eb9b05651f92c1a8b69346e1ae9";
-const authToken = "2c04ee1ad1843d61a2fb7aaf45a1372d";
+dotenv.config();
+
+const accountSid = process.env.TWILIO_SID;
+const authToken = process.env.TWILIO_AUTH;
 const client = twilio(accountSid, authToken);
 
 const app = e();
 const PORT = process.env.PORT || 5000;
 const url =
   process.env.BASE_URL ||
-  "https://real-time-blood-donation-production.up.railway.app";
+  "https://real-time-blood-donation-production-cdfc.up.railway.app";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false,
   auth: {
-    user: "coderangersverify@gmail.com",
-    pass: "vzhykowzuabnjscw ",
+    user: process.env.EMAIL_ID,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
@@ -77,12 +80,12 @@ async function sendOtp(phoneNumber) {
 }
 
 const vonage = new Vonage({
-  apiKey: "bd4ecdf7",
-  apiSecret: "nhb9LORNL6614wzX",
+  apiKey: process.env.VONAGE_USER,
+  apiSecret: process.env.VONAGE_PASS,
 });
 
-const vonageUser = "bd4ecdf7";
-const vonagePass = "nhb9LORNL6614wzX";
+const vonageUser = process.env.VONAGE_USER;
+const vonagePass = process.env.VONAGE_PASS;
 const from = "14157386102";
 
 function sendVonageMessage(to, body) {
@@ -134,13 +137,12 @@ app.set("view engine", "ejs");
 
 app.set("views", path.join(__dirname, "views"));
 
-const serviceAccountPath = path.join(
-  __dirname,
-  "./Models/real-time-blood-donation-c0c32-firebase-adminsdk-2q376-f788502794.json"
-);
+// const serviceAccountPath = path.join(
+//   __dirname,
+//   "./Models/real-time-blood-donation-c0c32-fd651774f25a.json"
+// );
 
-// Read the JSON file synchronously
-const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf-8"));
+const serviceAccount = JSON.parse(process.env.FIREBASE_CRED);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
