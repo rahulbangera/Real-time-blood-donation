@@ -465,7 +465,6 @@ app.post("/signup", async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, saltrounds);
   const verified = false;
 
-
   if (name && userName && email && password && mbNumber && bdGroup) {
     try {
       const existingUserEmail = await LocalUser.findOne({ email: email });
@@ -1267,7 +1266,11 @@ app.post("/reset-password/:token", async (req, res) => {
   }
 });
 app.get("/sos", async (req, res) => {
-  res.render("sos", { userLoggedIn: false });
+  if (req.session.email) {
+    res.render("sos", { userLoggedIn: true });
+  } else {
+    res.render("sos", { userLoggedIn: false });
+  }
 });
 
 app.post("/sos", async (req, res) => {
