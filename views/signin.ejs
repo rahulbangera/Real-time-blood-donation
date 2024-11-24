@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign In</title>
     <link rel="stylesheet" href="css/signup.css">
+    <link rel="stylesheet" href="css/popup.css">
 </head>
 <body>
     <div class="headerContent">
@@ -41,9 +42,9 @@
                     <img src="https://png.pngtree.com/png-clipart/20230426/original/pngtree-blood-drop-blood-red-cartoon-illustration-png-image_9103018.png" alt="Blood Drop" class="logo-img">
                 </div>
                 <h1>Reset Password</h1>
-                <form action="/forgotpass" method="post">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="me@example.com" required>
+                <form action="/forgotpass" method="post" id="forgotpass">
+                    <label for="email2">Email</label>
+                    <input type="email" id="email2" name="email" placeholder="me@example.com" required>
                     <button type="submit" class="button">Reset Password</button>
                 </form>
                 <button class="button" onclick="flipForm()">Back to Sign In</button>
@@ -51,7 +52,55 @@
         </div>
     </div>
 
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loadContainer">
+            <div class="spinner"></div>
+            <!-- Getting all the donors in one place... -->
+             <p>Oboarding you to our Family 😊</p>
+             <div class="qod" id="qod"></div>
+        </div>
+        
+    </div>
+
+    <%- include('components/popup') %>
+
     <script>
+
+        const errDiv = document.getElementById('error-popup');
+        const forgot = document.getElementById('forgotpass');
+        const loader = document.getElementById('loadingOverlay');
+
+        forgot.addEventListener('submit', (e)=>{
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            const formObj = Object.fromEntries(formData.entries());
+            const email = formObj.email;
+            loader.style.display = 'flex';
+            fetch('/forgot-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email
+                })
+            })    
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                    loader.style.display = 'none';
+                    if(data.error){
+                        errDiv.style.display = 'flex';
+                        errDiv.querySelector('p').textContent = data.error;
+                    } else {
+                        errDiv.style.display = 'none';
+                        alert('Password reset link sent to your email');
+                    }
+                })
+            
+        })
+
         function flipForm() {
             document.querySelector('.mainForm').classList.toggle('flipped');
         }
