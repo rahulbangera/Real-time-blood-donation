@@ -25,6 +25,8 @@ import AcceptedRequests from "./Models/acceptedRequests.js";
 import { Vonage } from "@vonage/server-sdk";
 import { type } from "os";
 import https from "https";
+import resetToken from "./Models/resetToken.js";
+import crypto from "crypto";
 import axios from "axios";
 import sosRequest from "./Models/sosRequests.js";
 import sosReqForDonor from "./Models/sosReqForDonors.js";
@@ -191,6 +193,34 @@ app.use(e.urlencoded({ extended: true }));
 
 // req.session.email = "testing";
 
+async function sendOtp(email, username) {
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  const mailOptions = {
+    from: "coderangersverify@gmail.com",
+    to: email,
+    subject: "OTP Verification",
+    text: `Your OTP is: ${otp}`,
+  };
+
+  const newOtpUser = new Otps({
+    username: username,
+    email,
+    emailOtp: otp,
+  });
+
+  await newOtpUser.save();
+  // req.session.email = await newOtpUser.email;
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      return res.send("Failed to send OTP");
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+}
+
 function sendNotification(userToken, title, body) {
   console.log(userToken);
   const message = {
@@ -261,7 +291,7 @@ app.get("/profile", async (req, res) => {
       bloodgroup,
     });
   } else {
-    res.redirect("/signin");
+    res.redirect("/signin", { error: "Login to continue" });
   }
 });
 
@@ -270,7 +300,7 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/signin", (req, res) => {
-  res.render("signin");
+  res.render("signin", { error: "" });
 });
 
 app.post("/nearbysearch", async (req, res) => {
@@ -381,7 +411,7 @@ app.get("/requestblood", (req, res) => {
   if (req.session.email) {
     res.render("request", { userLoggedIn: true });
   } else {
-    res.redirect("/signin");
+    res.redirect("/signin", { error: "Login to continue" });
   }
 });
 
@@ -393,7 +423,7 @@ app.get("/donateblood", async (req, res) => {
   } else if (req.session.email) {
     res.render("donate", { userLoggedIn: true, active: false });
   } else {
-    res.redirect("/signin");
+    res.redirect("/signin", { error: "Login to continue" });
   }
 });
 
@@ -424,8 +454,8 @@ app.post("/donorinactive", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
-  const data = req.body;
-  const { name, userName, email, password, mbNumber, bdGroup } = data;
+  const { formObject } = req.body;
+  const { name, userName, email, password, mbNumber, bdGroup } = formObject;
   let saltrounds = 10;
   const hashedPassword = await bcrypt.hash(password, saltrounds);
   const verified = false;
@@ -435,9 +465,19 @@ app.post("/signup", async (req, res) => {
   if (name && userName && email && password && mbNumber && bdGroup) {
     console.log("in2");
     try {
-      const existingUser = await LocalUser.findOne({ email: email });
+      const existingUserEmail = await LocalUser.findOne({ email: email });
       if (existingUser) {
-        return res.send("User already exists");
+        return res.status(301).send("Email already exists");
+      }
+      const existingUserUsername = await LocalUser.findOne({
+        username: userName,
+      });
+      if (existingUserUsername) {
+        return res.status(300).send("Username already exists");
+      }
+      const existingUserMobile = await LocalUser.findOne({ mobile: mbNumber });
+      if (existingUserMobile) {
+        return res.status(302).send("Mobile number already exists");
       }
 
       console.log("in3");
@@ -456,31 +496,13 @@ app.post("/signup", async (req, res) => {
 
       const savedUser = await newUser.save();
 
-      const otp = Math.floor(100000 + Math.random() * 900000);
-      const mailOptions = {
-        from: "coderangersverify@gmail.com",
-        to: email,
-        subject: "OTP Verification",
-        text: `Your OTP is: ${otp}`,
-      };
+      const duplicate = await Otps.findOne({ email });
+      if (duplicate) {
+        await Otps.deleteOne({ email });
+      }
 
-      const newOtpUser = new Otps({
-        username: userName,
-        email,
-        emailOtp: otp,
-      });
-
-      await newOtpUser.save();
-      // req.session.email = await newOtpUser.email;
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-          return res.send("Failed to send OTP");
-        } else {
-          console.log("Email sent: " + info.response);
-        }
-      });
+      sendOtp(email, userName);
+      res.render("otpverify", { hidemail: email });
     } catch (error) {
       console.error("Error during signup:", error);
       res.status(500).send("Internal Server Error");
@@ -511,7 +533,7 @@ app.post("/otpVerify", async (req, res) => {
 
       user.verified = true;
       await user.save();
-      res.redirect("/signin");
+      res.redirect("/signin", { error: "User verified, please login" });
     } else {
       res.redirect("/signup");
     }
@@ -544,15 +566,23 @@ app.post("/login", async (req, res) => {
   if (currentUser) {
     const checkPass = await bcrypt.compare(password, currentUser.password);
     if (checkPass) {
+      if (currentUser.verified === false) {
+        sendOtp(email, currentUser.username);
+        res.render("/otpverify", { hidemail: email });
+      }
       req.session.email = email;
       req.session.name = await currentUser.name;
       req.session.username = await currentUser.username;
       await req.session.save();
       res.redirect("/");
     } else {
-      res.send("Incorrect password");
+      res.redirect("/signin", {
+        error: "Incorrect Password, please try again!!",
+      });
+      // res.send("Incorrect password");
     }
   } else {
+    res.redirect("/signin", { error: "User not found, please sign up!!" });
     res.send("User not found");
   }
   console.log(req.session.email);
@@ -783,7 +813,7 @@ app.get("/dashboard", (req, res) => {
   if (req.session.email) {
     res.render("dashboard", { userLoggedIn: true });
   } else {
-    res.redirect("/signin");
+    res.redirect("/signin", { error: "Login to continue" });
   }
 });
 
@@ -1121,6 +1151,113 @@ app.post("/api/myUserName", async (req, res) => {
   res.status(200).json({ username });
 });
 
+app.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await LocalUser.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const uniqueResetToken = crypto.randomBytes(32).toString("hex");
+    console.log(uniqueResetToken);
+
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(uniqueResetToken)
+      .digest("hex");
+
+    console.log("------------------------");
+    console.log(hashedToken);
+
+    const newToken = new resetToken({
+      userId: user._id,
+      token: hashedToken,
+      expiresAt: Date.now() + 3600000, // Token expires in 1 hour
+    });
+
+    newToken.save();
+
+    // Generate the password reset link
+    const resetLink = `https://real-time-blood-donation.onrender.com/reset-password/${uniqueResetToken}`;
+
+    await transporter.sendMail({
+      from: "coderangersverify@gmail.com",
+      to: email,
+      subject: "Password Reset",
+      html: `<p>Click the link below to reset your password:</p>
+             <a href="${resetLink}">${resetLink}</a>
+             <p>The link will expire in 1 hour.</p>`,
+    });
+
+    res
+      .status(200)
+      .json({ message: "Password reset link sent to your email." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong." });
+  }
+});
+
+app.get("/reset-password", (req, res) => {
+  res.render("signin");
+});
+
+app.get("/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+
+  try {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const tokenDoc = await resetToken.findOne({
+      token: hashedToken,
+      expiresAt: { $gt: Date.now() },
+    });
+
+    if (!tokenDoc) {
+      return res.status(400).json({ message: "Invalid or expired token." });
+    }
+
+    res.render("resetpass", { token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong." });
+  }
+});
+
+app.post("/reset-password/:token", async (req, res) => {
+  const { token } = req.params;
+  const { newPassword } = req.body;
+
+  try {
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const tokenDoc = await resetToken.findOne({
+      token: hashedToken,
+      expiresAt: { $gt: Date.now() },
+    });
+
+    if (!tokenDoc) {
+      return res.status(400).json({ message: "Invalid or expired token." });
+    }
+
+    const user = await LocalUser.findById(tokenDoc.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    await resetToken.findByIdAndDelete(tokenDoc._id);
+
+    res.status(200).json({ message: "Password reset successful." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something went wrong." });
+  }
+});
 app.get("/sos", async (req, res) => {
   res.render("sos", { userLoggedIn: false });
 });
