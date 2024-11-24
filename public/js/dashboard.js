@@ -152,8 +152,9 @@ function updateAcceptedData(request, request1) {
   requestorMobile = request1.requestorMobile;
   let date = new Date(request.DateRequested);
   console.log("in");
-  let acceptedContent = document.getElementById("donor-content");
-  acceptedContent.innerHTML = `
+  let acceptedContent = document.getElementById("normal-content");
+  acceptedContent.innerHTML = "<br><h3>Requests You Accepted</h3>";
+  acceptedContent.innerHTML += `
   <div class="request-card accepted" id=${request.hospitalPlaceId}>
             <div class = "request-details">
 <h2>Accepted</h2>
@@ -175,7 +176,7 @@ function contactRequestor() {
 }
 
 function updateDonationRequests(data) {
-  let donorContent = document.getElementById("donor-content");
+  let donorContent = document.getElementById("normal-content");
   donorContent.innerHTML = "<h2>Requests You Received</h2>";
   if (data.length === 0) {
     donorContent.innerHTML += "<p>No requests yet.</p>";
@@ -395,5 +396,44 @@ function performButtonAction(button) {
   }
 }
 
+async function fetchSOSRequests() {
+  fetch("/api/sosrequests", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then(async (response) => {
+      const res = await response.json();
+      return res;
+    })
+    .then((data) => {
+      console.log("00000000000000000000000");
+      console.log(data.finalizedData);
+      updateSOSRequests(data.finalizedData);
+    });
+}
+
+function updateSOSRequests(data) {
+  let sosContent = document.getElementById("sos-content");
+  sosContent.innerHTML = "<br><h3>SOS Requests</h3>";
+  if (data.length === 0) {
+    sosContent.innerHTML += "<p>No SOS requests yet.</p>";
+  } else {
+    data.forEach((request) => {
+      sosContent.innerHTML += `
+            <div class="request-card sos-card">
+            <div class = "request-details sos-details">
+                <h3>Location: ${request.hospitalName}</h3>
+                <p>Blood Group: ${request.bloodGroup}</p>
+                <p>Mobile Number: ${request.requestorPhone}</p>
+            </div>
+            </div>
+            `;
+    });
+  }
+}
+
+window.init = fetchSOSRequests();
 window.init = fetchDonationRequests();
 window.init = fetchSentRequests();

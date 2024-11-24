@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate Blood</title>
+    <link rel="stylesheet" href="css/sos.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <script src="https://kit.fontawesome.com/1b792d3ec8.js" crossorigin="anonymous"></script>
+    <script>
+        (g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+          key: "AIzaSyB5gpPpgiOxj-_RHUah9P5auYPtOqRMmqo",
+          v: "weekly",
+          // Use the 'v' parameter to indicate the version to use (weekly, beta, alpha, etc.).
+          // Add other bootstrap parameters as needed, using camel case.
+        });
+      </script>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5gpPpgiOxj-_RHUah9P5auYPtOqRMmqo&libraries=places"></script>
+
+</head>
+<body>
+    <%- include('components/navbar') %>
+    <form>
+
+    <div class="others">
+        <div class="popupContainer">
+            <div class="left-side">
+                <div class="headContent">
+                    <h1>Emergency Blood Request</h1>
+                </div>
+                <div class="leftMainContent">
+                    <p>Fill in the details below to request blood (Emergency) </p>
+                    <label for="name">Your Name:</label>
+                    <input type="text" placeholder="Your Name" name="name" id="name" required>
+                    <label for="mobile">Mobile Number: </label>
+                    <div class="mobile-verify">
+                        <input type="mobile" style="width: 70%;" placeholder="Your Phone" name="mobile" id="mobile" pattern="\d{10}" required>
+                        <!-- <button type="button" class="verify" id="verify">Verify</button> -->
+                    </div>
+                    <label for="bloodGroup">Blood Group: </label>
+                    <select name="bloodGroup" id="bloodGroup" required>
+                        <option value="" disabled selected>Select your blood group</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                    </select>
+                </div>
+            </div>
+    
+            <div class="right-side">
+                <div class="headContent">
+                    <h1>Select the Hospital</h1>
+                </div>
+                <div class="rightMainContent">
+                    <label for="hospital">Hospital Name:</label>
+                    <input type="text" placeholder="Type Hospital name to select" name="hospital" id="hospital">
+                    <div class="mapContainer" id="map"></div>
+                    <button id="submitRequest">Submit Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="overlay" id="popupOverlay">
+        <div class="popup-box">
+          <h2 id="overlayHead">Confirm Request</h2>
+          <div style="text-align: center;" id="extraFiller"></div>
+          <div id="verifyCaptcha"></div>
+          <p id="overlayInfo">Are you sure you want to select <strong id="hospitalName"></strong>?</p>
+          <div class="verifyBox"></div>
+          <div class="buttons">
+            <button class="confirm-btn" id="confirmBtn">Confirm</button>
+            <button class="cancel-btn" id="cancelBtn">Cancel</button>
+          </div>
+         
+        </div>
+      </div>
+    </form>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loadContainer">
+            <div class="spinner"></div>
+            <!-- Getting all the donors in one place... -->
+             <div class="qod" id="qod"></div>
+        </div>
+        
+    </div>
+
+    <!-- <script>
+        function matchBtnHeight(){
+            const mobileInput = document.getElementById('mobile');
+        const verifyBtn = document.getElementById('verify');
+
+        const inpHeight = window.getComputedStyle(mobileInput).height;
+
+        verifyBtn.style.height = inpHeight;
+        }
+      window.addEventListener('load', matchBtnHeight);
+      window.addEventListener('resize', matchBtnHeight);
+    </script> -->
+
+    <script src="js/sos.js"></script>
+    <!-- <script src="js/firebase-mobile-verify.js" type="module"></script -->
+</body>
+</html>

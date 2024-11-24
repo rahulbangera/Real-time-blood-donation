@@ -25,6 +25,9 @@ import AcceptedRequests from "./Models/acceptedRequests.js";
 import { Vonage } from "@vonage/server-sdk";
 import { type } from "os";
 import https from "https";
+import axios from "axios";
+import sosRequest from "./Models/sosRequests.js";
+import sosReqForDonor from "./Models/sosReqForDonors.js";
 import cors from "cors";
 
 const accountSid = "AC3ec82eb9b05651f92c1a8b69346e1ae9";
@@ -46,6 +49,30 @@ const transporter = nodemailer.createTransport({
     pass: "vzhykowzuabnjscw ",
   },
 });
+
+const OTPLess_API_KEY = "OTPLess_API_KEY";
+
+async function sendOtp(phoneNumber) {
+  try {
+    const response = await axios.post(
+      "https://api.otpless.com/sendOtp",
+      {
+        phone: phoneNumber, // Phone number in international format (e.g., +919876543210)
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${OTPLess_API_KEY}`,
+        },
+      }
+    );
+
+    console.log("OTP sent successfully:", response.data);
+    return response.data; // Store response for further actions
+  } catch (error) {
+    console.error("Error sending OTP:", error.response.data);
+    throw error;
+  }
+}
 
 const vonage = new Vonage({
   apiKey: "960bb5c8",
@@ -302,9 +329,6 @@ app.post("/nearbysearch", async (req, res) => {
       if (hospital.place_id === "ChIJYZTdbJiyvDsREeCa-AmBcI0") {
         console.log(donorexist);
       }
-
-      const test = await Donor.find({ username: "krithika123" });
-      console.log(test);
 
       if (donorexist.length > 0) {
         //   for (let i = 0; i < donorexist.length; i++) {
@@ -1095,6 +1119,129 @@ app.post("/api/myUserName", async (req, res) => {
   const username = await req.session.username;
   console.log(username);
   res.status(200).json({ username });
+});
+
+app.get("/sos", async (req, res) => {
+  res.render("sos", { userLoggedIn: false });
+});
+
+app.post("/sos", async (req, res) => {
+  const { data } = req.body;
+  const { name, phone, bloodGroup, hospital, place_id, selectedHospitals } =
+    data;
+  let uniqueDonors = [];
+  const duplicate = await sosRequest.findOne({ phone });
+  if (duplicate) {
+    return res.status(400).json({ message: "Request already exists" });
+  }
+  const newSosRequest = new sosRequest({
+    name,
+    phone,
+    bloodGroup,
+    hospitalName: hospital,
+    hospitalPlaceId: place_id,
+  });
+  await newSosRequest.save();
+
+  selectedHospitals.forEach(async (hospitalele) => {
+    const donors = await Donor.find({
+      hospitals: { $elemMatch: { placeId: hospitalele.hospitalPlaceId } },
+      bloodGroup,
+    });
+
+    console.log("Found");
+    console.log(donors);
+    console.log("Found2");
+    console.log(uniqueDonors);
+
+    donors.forEach(async (donor) => {
+      console.log("INDIDNIWNNSI");
+      const yesno = uniqueDonors.includes(donor.username);
+      if (!yesno) {
+        uniqueDonors.push(donor.username);
+        const dupl = await sosReqForDonor.findOne({
+          username: donor.username,
+          hospitalPlaceId: hospital.place_id,
+          requestorPhone: phone,
+        });
+        if (dupl) {
+          return;
+        }
+        console.log("euiduiuueueubweibwibcibwiewcbiubdcwibiwb");
+        console.log(donor.username);
+        const newSosRequestForDonor = new sosReqForDonor({
+          donorName: donor.name,
+          donorUsername: donor.username,
+          bloodGroup: bloodGroup,
+          requestorPhone: phone,
+          hospitalName: hospital,
+          hospitalPlaceId: place_id,
+        });
+        await newSosRequestForDonor.save();
+        console.log("---------------------------");
+      }
+      // const donorTokenId = await TokenUser.find({ email: donor.email });
+      // donorTokenId.forEach((donor) => {
+      //   sendNotification(
+      //     donor.tokenId,
+      //     "SOS Request",
+      //     "Blood donation request from a user"
+      //   );
+      // });
+
+      // sendMail(
+      //   donor.email,
+      //   donor.name,
+      //   "SOS Request",
+      //   `Blood donation request from a user at a nearby hospital
+      //   To respond, visit the website: ${url}/dashboard
+      //   `
+      // );
+
+      // const Local = await LocalUser.findOne({ email: donor.email });
+      // const mobile = `+91${Local.mobile}`;
+      // console.log(mobile);
+      // console.log(typeof mobile);
+      // const message = `
+      //       Hi ${donor.name},
+
+      //       You have a Blood Donation request from a user at a nearby hospital. Please visit the website to respond.
+      //       Visit the website: https://real-time-blood-donation.onrender.com/dashboard
+
+      //       Thank you for your support.
+      //       `;
+      // sendWhatsappMessage(mobile, message);
+      // const mobile2 = `91${Local.mobile}`;
+      // sendVonageMessage(mobile2, message);
+    });
+  });
+  return res.status(200).json({ message: "Request sent" });
+});
+
+app.post("/api/sosrequests", async (req, res) => {
+  const username = req.session.username;
+
+  // Fetch all requests for the donor
+  const mySosRequests = await sosReqForDonor.find({ donorUsername: username });
+
+  // Use Promise.all to handle asynchronous mapping
+  const finalizedData = await Promise.all(
+    mySosRequests.map(async (request) => {
+      return {
+        requestorPhone: request.requestorPhone,
+        bloodGroup: request.bloodGroup,
+        hospitalName: request.hospitalName,
+        hospitalPlaceId: request.hospitalPlaceId,
+      };
+    })
+  );
+
+  // Log the finalized data
+  console.log("922222222222222222");
+  console.log(finalizedData);
+
+  // Send response after data is fully prepared
+  res.status(200).json({ finalizedData });
 });
 
 app.listen(PORT, () => {
