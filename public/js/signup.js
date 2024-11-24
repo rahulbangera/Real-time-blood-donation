@@ -38,25 +38,24 @@ signupForm.addEventListener("submit", (e) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formObject),
+      body: JSON.stringify({ formObject }),
     })
       .then((res) => {
         if (res.status === 200) {
           loader.style.display = "none";
-          window.location.href = "/login";
-        } else if (res.status === 300){
+          window.location.href = "/signin";
+        } else if (res.status === 300) {
           loader.style.display = "none";
           showErrorPopup("Username already exists, please try another one");
-        }
-        else if(res.status === 301){
+        } else if (res.status === 301) {
           loader.style.display = "none";
           showErrorPopup("Email already exists, please try another one");
-        }
-        else if(res.status === 302){
+        } else if (res.status === 302) {
           loader.style.display = "none";
-          showErrorPopup("Mobile number already exists, please try another one");
-        }
-        else{
+          showErrorPopup(
+            "Mobile number already exists, please try another one"
+          );
+        } else {
           loader.style.display = "none";
           showErrorPopup("Something went wrong. Please try again later");
         }
@@ -68,5 +67,5 @@ signupForm.addEventListener("submit", (e) => {
   } else {
     alert("Please fill all the fields");
   }
-  localStorage.setItem("email", document.querySelector(".email").value);
+  // localStorage.setItem("email", document.querySelector(".email").value);
 });
