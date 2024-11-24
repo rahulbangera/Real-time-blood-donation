@@ -8,29 +8,25 @@ try {
   console.error("Error connecting to MongoDB:", error);
 }
 
-const otpSchema = new mongoose.Schema({
-  username: {
+const tokenSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User",
+  },
+  token: {
     type: String,
     required: true,
-    unique: true,
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  emailOtp: {
-    type: Number,
-    required: true,
-  },
-  createdAt: {
+  expiresAt: {
     type: Date,
-    default: Date.now,
+    required: true,
   },
 });
 
-otpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 300 });
+const resetToken = mongoose.model(
+  "resetToken",
+  tokenSchema
+);
 
-const Otps = mongoose.model("Otp", otpSchema);
-
-export default Otps;
+export default resetToken;

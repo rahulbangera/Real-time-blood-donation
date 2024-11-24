@@ -1,10 +1,10 @@
 /* Popup Container */
 .popup {
   position: fixed;
-  top: -100px; /* Start off-screen */
+  top: -100px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgb(219, 207, 207); /* Red for error */
+  background-color: rgb(71, 70, 69);
   color: #f44336;
   padding: 15px 30px;
   border-radius: 5px;
@@ -13,10 +13,10 @@
   font-weight: bold;
   text-align: center;
   z-index: 1000;
-  transition: all 0.5s ease-in-out; /* Smooth slide-in effect */
+  transition: all 0.5s ease-in-out; 
 }
 
 /* Visible state */
 .popup.show {
-  top: 20px; /* Slide into view */
+  top: 20px;
 }

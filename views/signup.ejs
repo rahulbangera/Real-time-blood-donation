@@ -77,27 +77,6 @@
         </div>
     </div>
 
-
-    <div class="popupContainer">
-        <div class="popupContent">
-            <form action="/otpVerify" method="post">
-            <h1>Verify your Email Address</h1>
-            <p>OTP has been sent to your email address</p>
-            <hr>
-            <div class="otpBox">
-                <input style="display: none;" type="email" name="hidemail" id="hidEmail" value="">
-                <input type="text" placeholder="Enter the 6 digit OTP" pattern="^\d{6}$" name="otp" id="otp" required>
-            </div>
-            <div class="verifyButton">
-                <button class="button">Verify otp</button>
-            </div>
-        </form>
-        </div>
-
-    </div>
-    
-    
-    
     <div class="mainContent">
         <div class="formContainer">
             <div class="logo">
@@ -157,36 +136,34 @@
         </div>
     </div>
 
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loadContainer">
+            <div class="spinner"></div>
+            <!-- Getting all the donors in one place... -->
+             <p>Oboarding you to our Family 😊</p>
+             <div class="qod" id="qod"></div>
+        </div>
+        
+    </div>
+    
+
     <%- include('components/popup') %>
     
     <script>
         
-        document.querySelector('.signupForm').onsubmit = function() {
-    const emailValue = document.getElementById('actemail').value;
-    document.getElementById('hidEmail').value = emailValue; // Set email for OTP verification
-};
+//         document.querySelector('.signupForm').onsubmit = function() {
+//     const emailValue = document.getElementById('actemail').value;
+//     document.getElementById('hidEmail').value = emailValue; // Set email for OTP verification
+// };
 
-function showErrorPopup(message) {
-  // Get the popup element
-  const popup = document.getElementById('error-popup');
 
-  // Update the message
-  document.getElementById('popup-message').textContent = message;
-
-  // Show the popup
-  popup.classList.add('show');
-
-  // Hide the popup after 3 seconds
-  setTimeout(() => {
-    popup.classList.remove('show');
-  }, 3000);
-}
 
 // Example Usage
 // Call this function when there’s an error
 document.getElementById('mbNumber').addEventListener('click', ()=>{
     showErrorPopup('Invalid email address. Please check and try again!');
 })
+
 
 
     </script>
