@@ -1220,7 +1220,7 @@ app.post("/reset-password/:token", async (req, res) => {
     console.error(error);
     res.status(500).json({ message: "Something went wrong." });
   }
-
+});
 app.get("/sos", async (req, res) => {
   res.render("sos", { userLoggedIn: false });
 });
