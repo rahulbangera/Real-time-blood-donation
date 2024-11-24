@@ -43,7 +43,7 @@ signupForm.addEventListener("submit", (e) => {
       .then((res) => {
         if (res.status === 200) {
           loader.style.display = "none";
-          window.location.href = "/signin";
+          return res.json();
         } else if (res.status === 300) {
           loader.style.display = "none";
           showErrorPopup("Username already exists, please try another one");
@@ -58,6 +58,12 @@ signupForm.addEventListener("submit", (e) => {
         } else {
           loader.style.display = "none";
           showErrorPopup("Something went wrong. Please try again later");
+        }
+      })
+      .then((data) => {
+        if (data) {
+          loader.style.display = "none";
+          window.location.href = data.redirect + "?email=" + data.hidemail;
         }
       })
       .catch((err) => {
