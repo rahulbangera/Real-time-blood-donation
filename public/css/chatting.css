@@ -1,5 +1,5 @@
 /* Floating Chat Icon */
-#chat-icon {
+.chat-icon {
   position: fixed;
   bottom: 30px; /* Distance from the bottom */
   right: 40px; /* Distance from the right */
@@ -21,7 +21,7 @@
 }
 
 /* Hover effect */
-#chat-icon:hover {
+.chat-icon:hover {
   transform: scale(1.1); /* Slightly enlarge on hover */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Intensify shadow on hover */
 }
