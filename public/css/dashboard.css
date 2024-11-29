@@ -3,10 +3,28 @@
 :root {
   --lightBloodColor: rgb(218, 69, 69);
   --bloodColor: rgb(218, 57, 57);
-  --oppBlood: white;
+  --oppBlood22: black;
   --specialFont: Joti One, cursive;
   --normalFont: "Inconsolata", monospace;
   --darkBloodColor: rgb(77, 0, 0);
+  --extraShade3: #4d060c;
+  --extraShade4: var(--lightBloodColor);
+  --extraShade6: #f5f5f5;
+  --extraShade8: white;
+}
+
+[data-theme="dark"] {
+  --shade1: #363636;
+  --shade2: rgb(38 38 38);
+  --black-shade-1: rgb(12 12 12);
+  --extraShade1: var(--shade1);
+  --bg-color: #121212;
+  --oppBlood22: #e6e6e6;
+  --text-color: #000000;
+  --extraShade3: var(--black-shade-1);
+  --extraShade4: var(--shade2);
+  --extraShade6: var(--shade1);
+  --extraShade8: var(--black-shade-1);
 }
 
 body {
@@ -58,6 +76,7 @@ body {
 }
 
 .tab-content {
+  background-color: var(--extraShade6);
   display: flex;
   justify-content: center;
   margin-top: 30px;
@@ -66,7 +85,7 @@ body {
 .content-section {
   display: none;
   width: 80%;
-  background-color: #fff;
+  background-color: var(--extraShade4);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -92,7 +111,7 @@ body {
   margin: 10px 0;
   border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--extraShade8);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
 }
@@ -104,7 +123,6 @@ body {
 .request-details h3 {
   margin: 0;
   font-size: 1.2em;
-  color: #333;
 }
 
 .request-details p {
@@ -170,11 +188,11 @@ body {
 
 header.tab-header {
   margin-top: 0px;
-  background-color: #4d060c;
+  background-color: var(--extraShade3);
 }
 
 main.tab-content {
-  background-color: rgb(218, 57, 57);
+  background-color: var(--extraShade6);
   margin-top: 0px;
   padding-top: 30px;
   min-height: 90vh;
@@ -189,7 +207,7 @@ main.tab-content {
   margin: 10px 0;
   border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #fff;
+  background-color: var(--extraShade8);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s;
 }
@@ -389,4 +407,12 @@ main.tab-content {
 
 .sos-details p {
   color: #00ffd2;
+}
+
+* {
+  color: var(--oppBlood22);
+}
+
+.request-card h2 {
+  color: var(--spColor);
 }

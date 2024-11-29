@@ -10,15 +10,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Joti+One&family=Inconsolata:wght@400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/profile.css">
-    <link rel="stylesheet" href="/css/chatting.css">
+    <link rel="stylesheet" href="css/chatting.css">
 </head>
 <body>
 
     <div class="mainContainer">
-        <div class="navbar">
+        <div class="navbar2">
             <a href="/">
                 <i class="fas fa-home"></i> Home
             </a>
+            <div class="dark-mode-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
         </div>
     
         <div class="profile-heading">
@@ -57,7 +63,28 @@
 
     <%- include("components/chatFeature") %>
 
-
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const toggle = document.getElementById("darkModeToggle");
+          const currentTheme = localStorage.getItem("theme");
+      
+          if (currentTheme === "dark") {
+              document.documentElement.setAttribute("data-theme", "dark");
+              toggle.checked = true;
+          }
+      
+          toggle.addEventListener("change", () => {
+              if (toggle.checked) {
+                  document.documentElement.setAttribute("data-theme", "dark");
+                  localStorage.setItem("theme", "dark");
+              } else {
+                  document.documentElement.setAttribute("data-theme", "light");
+                  localStorage.setItem("theme", "light");
+              }
+          });
+      });
+      
+      </script>
  
 </body>
 </html>

@@ -1,38 +1,58 @@
-/* Floating Chat Icon */
+:root {
+  --extra3: #f4f4f4;
+  --extra4: white;
+  --chatIcon: black;
+  --chatI: var(--extra4);
+  --extra2: red;
+  --opposite4: black;
+}
+
+[data-theme="dark"] {
+  --extra3: #363636;
+  --extra4: rgb(38 38 38);
+  --black-shade-1: rgb(12 12 12);
+  --bg-color: #121212;
+  --oppBlood: #e6e6e6;
+  --text-color: #e6e6e6;
+  --hero-bg: var(--black-shade-1);
+  --chatIcon: var(--oppBlood);
+  --chatI: var(--black-shade-1);
+  --extra2: var(--black-shade-1);
+  --opposite4: white;
+}
+
 #chat-icon {
   position: fixed;
-  bottom: 30px; /* Distance from the bottom */
-  right: 40px; /* Distance from the right */
-  width: 60px; /* Width of the circle */
-  height: 60px; /* Height of the circle */
-  background-color: rgb(37, 37, 37); /* Background color of the circle */
-  color: white; /* Icon color */
-  border-radius: 50%; /* Make it a perfect circle */
-  display: flex; /* Flexbox for centering */
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
-  font-size: 24px; /* Icon size */
-  line-height: 1; /* Ensure no extra spacing */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add some shadow */
-  cursor: pointer; /* Change cursor to pointer on hover */
-  z-index: 1000; /* Ensure it's above other elements */
-  overflow: hidden; /* Prevent content from overflowing */
+  bottom: 30px;
+  right: 40px;
+  width: 60px;
+  height: 60px;
+  background-color: var(--chatIcon);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  line-height: 1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  z-index: 1000;
+  overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Hover effect */
 #chat-icon:hover {
-  transform: scale(1.1); /* Slightly enlarge on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Intensify shadow on hover */
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
-/* Chat Window */
+
 #chat-window {
   position: fixed;
   bottom: 30px;
   right: 40px;
   width: 500px;
   height: 70%;
-  background: white;
+  background: var(--extra4);
   border: 2px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
@@ -40,21 +60,20 @@
   flex-direction: column;
   overflow: hidden;
   z-index: 1000;
-  opacity: 0; /* Fully transparent */
-  transform: translateY(50px); /* Start slightly below */
-  transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth transition */
+  opacity: 0;
+  transform: translateY(50px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 #chat-window.open {
-  display: flex; /* Display the chat window */
-  opacity: 1; /* Fully visible */
-  transform: translateY(0); /* Move to its original position */
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
 }
 
-/* Chat Header */
 #chat-header {
-  background: red;
-  color: white;
+  background: var(--extra2);
+  color: var(--opposite4);
   padding: 10px;
   font-size: 16px;
   font-weight: bold;
@@ -68,16 +87,14 @@
   cursor: pointer;
 }
 
-/* Chat Body */
 #chat-body {
   display: flex;
   height: 100%;
 }
 
-/* Sidebar */
 #chat-sidebar {
-  width: 30%; /* Sidebar width */
-  background: #f4f4f4;
+  width: 30%;
+  background: var(--extra3);
   border-right: 1px solid #ccc;
   display: flex;
   flex-direction: column;
@@ -85,8 +102,9 @@
 }
 
 .user {
+  color: var(--text-color);
   padding: 10px;
-  background: #e0e0e0;
+  background: var(--extra4);
   cursor: pointer;
   text-align: center;
   transition: background 0.2s ease;
@@ -96,7 +114,6 @@
   background: #d1d1d1;
 }
 
-/* Main Chat Area */
 #chat-main {
   flex: 1;
   display: flex;
@@ -109,7 +126,7 @@
   display: flex;
   padding: 10px;
   overflow-y: auto;
-  background: #f9f9f9;
+  background: var(--extra4);
 }
 
 .bot-message,
@@ -121,7 +138,7 @@
 }
 
 .bot-message {
-  background: #e0e0e0;
+  background: var(--extra3);
   align-self: flex-start;
 }
 
@@ -131,11 +148,10 @@
   text-align: right;
 }
 
-/* Chat Input Area */
 #chat-input-area {
   display: flex;
   padding: 10px;
-  background: #fff;
+  background: var(--extra3);
   border-top: 1px solid #ccc;
 }
 
@@ -147,7 +163,7 @@
 }
 
 #chat-send {
-  background: red;
+  background: var(--extra2);
   color: white;
   border: none;
   padding: 10px 15px;
@@ -166,6 +182,7 @@
 }
 
 #chat-sidebar h4 {
+  color: var(--textGlobal);
   padding: 4px;
   margin-top: 4px;
 }
@@ -211,47 +228,45 @@
 }
 
 #chat-messages {
-  flex: 1; /* Take up all remaining space */
-  overflow-y: auto; /* Add scroll if content overflows */
+  flex: 1;
+  overflow-y: auto;
 }
 
 #chat-input-area {
-  flex-shrink: 0; /* Prevent this section from shrinking */
-  height: auto; /* Adjust height based on content */
+  flex-shrink: 0;
+  height: auto;
 }
 
 #chat-main {
   display: flex;
   flex-direction: column;
-  height: 100%; /* Make it take exactly the height of the window */
-  box-sizing: border-box; /* Include padding/borders in the height calculation */
+  height: 100%;
+  box-sizing: border-box;
 }
 
 #chat-messages {
-  flex: 1; /* Take all available space remaining after #chat-input-area */
-  overflow-y: auto; /* Add vertical scrolling if content overflows */
-  padding: 10px; /* Optional padding for better design */
-  box-sizing: border-box; /* Prevent padding from expanding height */
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 #chat-input-area {
-  flex-shrink: 0; /* Ensure the input doesn't shrink */
-  height: auto; /* Adjust to the content inside */
-  padding: 10px; /* Optional padding */
+  flex-shrink: 0;
+  height: auto;
+  padding: 10px;
   box-sizing: border-box;
-  background-color: #f1f1f1; /* Example background for input area */
+  background-color: var(--extra3);
 }
 
-/* FIXES ADDED */
-
 #chat-window {
-  height: calc(100vh - 60px); /* Adjust to stay within the viewport */
-  max-height: 70vh; /* Limit the height */
+  height: calc(100vh - 60px);
+  max-height: 70vh;
 }
 
 @media (max-width: 500px) {
   #chat-window {
-    max-height: calc(100vh - 40vh); /* Responsive height for mobile */
+    max-height: calc(100vh - 40vh);
   }
 }
 
@@ -261,5 +276,14 @@
 }
 
 #chat-messages {
-  max-height: 100%; /* Prevent overflow within the messages */
+  max-height: 100%;
+}
+
+.chat-window p,
+.chat-window h4 {
+  color: var(--textGlobal);
+}
+
+#chat-icon .fa-comments {
+  color: var(--chatI);
 }

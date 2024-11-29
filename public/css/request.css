@@ -1,467 +1,513 @@
-@import url('https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap");
 
 :root {
-    --lightBloodColor: rgb(218, 69, 69);
-    --bgColor: rgb(229, 160, 160);
-
-    --bloodColor: rgb(218, 57, 57);
-    --oppBlood: white;
-    --specialFont: 'Joti One', cursive;
-    --normalFont: 'Inconsolata', monospace;
-    --darkBloodColor: rgb(77, 0, 0);
-
+  --lightBloodColor: rgb(218, 69, 69);
+  --bgColor: rgb(229, 160, 160);
+  --bloodColor: rgb(218, 57, 57);
+  --oppBlood: white;
+  --specialFont: "Joti One", cursive;
+  --normalFont: "Inconsolata", monospace;
+  --darkBloodColor: rgb(77, 0, 0);
+  --extraShade14: white;
+  --text-color: black;
+  --textColor2: var(--text-color);
+  --extraShade16: white;
+  --opposite: white;
+  --textColor3: var(--text-color);
+  --extraShade18: #28a745;
+  --extraShade19: #218838;
+  --extrabgColor: var(--darkBloodColor);
+  --extraShade23: rgb(179, 214, 210);
+  --extraTextColor2: black;
+  --extraShade24: rgb(177 216 255);
+  --extraHover2: rgb(149, 179, 209);
 }
 
-
-.navbar{
-    position: relative;
+[data-theme="dark"] {
+  --shade1: #363636;
+  --shade2: rgb(38 38 38);
+  --black-shade-1: rgb(12 12 12);
+  --bg-color: #121212;
+  --oppBlood: #e6e6e6;
+  --text-color: #e6e6e6;
+  --textGlobal: white;
+  --extraShade14: var(--shade2);
+  --textColor2: #d3d3d3;
+  --opposite: var(--black-shade-1);
+  --extraShade16: var(--shade1);
+  --textColor3: #a9acaf;
+  --extraShade18: var(--shade1);
+  --extraShade19: #313030;
+  --extrabgColor: var(--black-shade-1);
+  --extraShade23: var(--shade2);
+  --extraTextColor2: rgb(202, 216, 228);
+  --extraShade24: var(--shade2);
+  --extraHover2: rgb(34, 34, 34);
 }
 
-.left-nav{
-    padding: 0px;
+.navbar {
+  position: relative;
 }
-body{
-    margin: 0;
-    padding: 0;
-    background-color: var(--darkBloodColor);
-    overflow: hidden;
+
+.left-nav {
+  padding: 0px;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--extrabgColor);
+  overflow: hidden;
 }
 .quote-section {
-    font-family: var(--specialFont);
-    width: 100%;
-    color: var(--bloodColor);
-    text-align: center;
-    padding: 20px 0;
-    font-size: 1.5em;
+  font-family: var(--specialFont);
+  width: 100%;
+  color: var(--bloodColor);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 1.5em;
 }
 .main-container {
-    display: flex;
-    width: 90%;
-    max-width: 1600px;
-    margin-top: 20px;
-    margin: 0 auto;
-    height: calc(100vh - 100px); 
+  display: flex;
+  width: 90%;
+  max-width: 1600px;
+  margin-top: 20px;
+  margin: 0 auto;
+  height: calc(100vh - 100px);
 }
 .filters-column {
-    width: 25%;
-    padding: 10px;
-    border-radius: 10px;
-    background-color:rgb(179, 214, 210);
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    overflow: hidden; 
+  width: 25%;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: var(--extraShade23);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
 }
+
+.filters-column h2 {
+  color: var(--extraTextColor2);
+}
+
 .donors-column {
-    border-radius: 10px;
-    width: 75%;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    overflow-y: auto; 
-    height: 100%;
+  border-radius: 10px;
+  width: 75%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  height: 100%;
 }
 .donor-card {
-    padding: 26px;
-    background-color: rgb(177 216 255);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
+  padding: 26px;
+  background-color: var(--extraShade24);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
 }
 
-.donor-card h3{
-    grid-column: span 2;
+.donor-card h3 {
+  grid-column: span 2;
+  color: var(--lightBloodColor);
 }
 
-.donor-card:hover{
-    background-color: rgb(149, 179, 209);
-}
-
-.popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-}
-.popup {
-    background: white;
-    padding: 20px;
-    width: 90%;
-    max-width: 600px;
-    border-radius: 10px;
-    position: relative;
-}
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    cursor: pointer;
-    font-size: 1.2em;
-    color: #d32f2f;
-}
-#map {
-    width: 100%;
-    height: 200px;
-}
-
-.popupContainer{
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    display: flex; /* Testing guyssss */
-    align-items: center;
-    justify-content: center;
-    z-index: 7000;
-    transition: 1s ease-in-out;
-}
-
-.popupContent{
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    width: 60%;
-    margin: 0 auto;
-    max-width: 600px;
-    animation: popup-appear 0.3s ease;
-}
-
-.popupContent h3{
-    margin-top: 0;
-    font-size: 20px;
-    color: #333;
-}
-
-.popupContent label{
-    display: block;
-    margin-bottom: 5px;
-    text-align: left;
-    font-size: 18px;
-    color: #333;
-}
-
-
-.popupContent select, .popupContent input{
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    box-sizing: border-box;
-}
-
-#searchButton {
-    width: 100%;
-    padding: 10px;
-    background-color: #28a745;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  #searchButton:hover {
-    background-color: #218838;
-  }
-  
-  @keyframes popup-appear {
-    from {
-      transform: scale(0.8);
-      opacity: 0;
-    }
-    to {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-
-  @keyframes popup-disappear {
-    from {
-      transform: scale(1);
-      opacity: 1;
-    }
-    to {
-      transform: scale(0.8);
-      opacity: 0;
-    }
-  }
-
-  #map{
-    margin-bottom: 20px;
-  }
-
-  .popupSuccess {
-    position: fixed;
-    top: 20px; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    background-color: #4CAF50; 
-    color: white;
-    padding: 10px 100px; 
-    font-family: joti one;
-    font-size: 1.2rem;
-    border-radius: 5px; 
-    display: none; 
-    z-index: 1000; 
-    transition: opacity 0.5s, top 0.5s;
-  }
-  
-
-::-webkit-scrollbar{
-    width: 13px;
-}
-
-::-webkit-scrollbar-track{
-    background-color: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb{
-    background: rgb(200,45,45);
-background: linear-gradient(81deg, rgba(200,45,45,1) 0%, rgba(200,59,59,1) 23%, rgba(182,37,37,1) 62%, rgba(94,23,23,1) 89%);
-    border-radius: 40px;
-}
-
-
-.showpopup{
-    padding: 8px 12px;
-    font-family: inconsolata;
-    background-color: var(--bloodColor);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.showpopup:hover{
-    background-color: var(--lightBloodColor);
-}
-.donor-card {
-    z-index: 10;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: all 0.4s ease-in-out;
-    transform-style: preserve-3d;
-    cursor: pointer;
-    margin: 3px;
+.donor-card p {
+  color: var(--text-color);
 }
 
 .donor-card:hover {
-    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+  background-color: var(--extraHover2);
 }
 
-  .donor-card:hover {
-    transform: rotateY(15deg) rotateX(10deg);
-  }
-  
-  .donor-card h3, .donor-card p {
-    margin: 5px 0;
-    color: #333;
-  }
-  
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.popup {
+  background: white;
+  padding: 20px;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 10px;
+  position: relative;
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 1.2em;
+  color: #d32f2f;
+}
+#map {
+  width: 100%;
+  height: 200px;
+}
 
+.popupContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 106%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: none; /* Testing guyssss */
+  align-items: center;
+  justify-content: center;
+  z-index: 7000;
+  transition: 1s ease-in-out;
+}
 
-  .donor-button{
-    grid-column: 3;
-    grid-row: span(2);
+.popupContent {
+  background-color: var(--extraShade14);
+  padding: 20px;
+  border-radius: 10px;
+  width: 60%;
+  margin: 0 auto;
+  max-width: 600px;
+  animation: popup-appear 0.3s ease;
+}
+
+.popupContent h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: var(--text-color);
+}
+
+.popupContent label {
+  display: block;
+  margin-bottom: 5px;
+  text-align: left;
+  font-size: 18px;
+  color: var(--textColor2);
+}
+
+.popupContent select,
+.popupContent input {
+  background-color: var(--extraShade16);
+  color: var(--textColor3);
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid var(--opposite);
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+#searchButton {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--extraShade18);
+  color: var(--textColor3);
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#searchButton:hover {
+  background-color: var(--extraShade19);
+}
+
+@keyframes popup-appear {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes popup-disappear {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+#map {
+  margin-bottom: 20px;
+}
+
+.popupSuccess {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 100px;
+  font-family: joti one;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  display: none;
+  z-index: 9999;
+  transition: opacity 0.5s, top 0.5s;
+}
+
+::-webkit-scrollbar {
+  width: 13px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(200, 45, 45);
+  background: linear-gradient(
+    81deg,
+    rgba(200, 45, 45, 1) 0%,
+    rgba(200, 59, 59, 1) 23%,
+    rgba(182, 37, 37, 1) 62%,
+    rgba(94, 23, 23, 1) 89%
+  );
+  border-radius: 40px;
+}
+
+.showpopup {
+  padding: 8px 12px;
+  font-family: inconsolata;
+  background-color: var(--bloodColor);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.showpopup:hover {
+  background-color: var(--lightBloodColor);
+}
+.donor-card {
+  z-index: 10;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease-in-out;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  margin: 3px;
+}
+
+.donor-card:hover {
+  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+}
+
+.donor-card:hover {
+  transform: rotateY(15deg) rotateX(10deg);
+}
+
+.donor-card h3,
+.donor-card p {
+  margin: 5px 0;
+}
+
+.donor-button {
+  grid-column: 3;
+  grid-row: span(2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--lightBloodColor);
+  color: var(--oppBlood);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+  position: relative;
+}
+
+.donor-button:hover {
+  background-color: var(--bloodColor);
+}
+
+@media (width<800px) {
+  .main-container {
+    flex-direction: column;
+  }
+  .filters-column {
+    height: 8vh;
+    width: 90%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
-    background-color: var(--lightBloodColor);
-    color: var(--oppBlood);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-    position: relative;
+  }
+  .filters-column .showpopup {
+    padding: 6px 8px;
   }
 
-  .donor-button:hover{
-    background-color: var(--bloodColor);
+  .donors-column {
+    width: 90%;
   }
 
-  @media (width<800px){
-    .main-container{
-        flex-direction: column;
-    }
-    .filters-column{
-        height: 8vh;
-        width: 90%;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-    }
-    .filters-column .showpopup{
-        padding: 6px 8px;
-    }
-
-    .donors-column{
-        width: 90%;
-    }
-
-    .donor-card{
-        grid-template-columns: 1fr 1fr;
-    }
-    .donor-button{
-        grid-row: 3;
-        grid-column: span 2;
-        width: 90%;
-    }
-    ::-webkit-scrollbar{
-      display: none;
-    }
-
-    .donor-button{
-      align-self: center;
-      padding: 10px;
-      justify-self: center;
-    }
-
-    .popupContent{
-      width: 80%;
-    }
-
-    .right-nav{
-      font-size: 1rem;
-    }
-
-    .left-nav{
-      font-size: 1.2rem;
-    }
+  .donor-card {
+    grid-template-columns: 1fr 1fr;
   }
+  .donor-button {
+    grid-row: 3;
+    grid-column: span 2;
+    width: 90%;
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  .donor-button {
+    align-self: center;
+    padding: 10px;
+    justify-self: center;
+  }
+
+  .popupContent {
+    width: 80%;
+  }
+
+  .right-nav {
+    font-size: 1rem;
+  }
+
+  .left-nav {
+    font-size: 1.2rem;
+  }
+}
 
 .send-request-button {
-    position: relative;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
-    color: #fff;
-    background-color: #3498db;
-    cursor: pointer;
-    overflow: hidden;
-    outline: none;
+  position: relative;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  color: #fff;
+  background-color: #3498db;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+}
+
+.button-text {
+  transition: opacity 0.3s;
+}
+
+.loading-animation {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 2px;
+  animation: bounce 0.6s infinite alternate;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
   }
-  
-  .button-text {
-    transition: opacity 0.3s;
+  to {
+    transform: translateY(-8px);
   }
-  
-  .loading-animation {
-    display: none;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  .dot {
-    width: 6px;
-    height: 6px;
-    background-color: #fff;
-    border-radius: 50%;
-    display: inline-block;
-    margin: 0 2px;
-    animation: bounce 0.6s infinite alternate;
-  }
-  
-  .dot:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  
-  .dot:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-  
-  @keyframes bounce {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(-8px);
-    }
-  }
-  
+}
 
 .loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 8000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 8000;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .spinner {
-    position: relative;
-    width: 100px;
-    height: 100px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-
-
-.loadContainer{
-    width: 380px;
-    border-radius: 20px;
-    background-color: #fff;
-    height: 300px;
-    color: black;
-    font-weight: bold;
-    text-align: center;
-    font-size: large;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    align-items: center;
-    padding: 6px;
+.loadContainer {
+  width: 380px;
+  border-radius: 20px;
+  background-color: var(--opposite);
+  height: 300px;
+  color: var(--text-color);
+  font-weight: bold;
+  text-align: center;
+  font-size: large;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px;
 }
 
 .spinner::before {
-    content: "";
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #e74c3c;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #e74c3c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.donors-column .donor-card:last-child{
-    margin-bottom: 240px;
+.donors-column .donor-card:last-child {
+  margin-bottom: 240px;
 }
 
-.noDonorsFound{
-    margin-top: 40px;
-    text-align: center;
-    font-size: 2rem;
-    font-family: inconsolata;
-    color: white;
+.noDonorsFound {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 2rem;
+  font-family: inconsolata;
+  color: white;
 }

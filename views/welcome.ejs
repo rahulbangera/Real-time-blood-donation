@@ -148,6 +148,37 @@ window.addEventListener('load', function() {
     }
 
     hideLoader();
+
+    const toggle = document.getElementById("darkModeToggle");
+    const currentTheme = localStorage.getItem("theme");
+
+    if (currentTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        toggle.checked = true;
+    }
+
+    toggle.addEventListener("change", () => {
+        if (toggle.checked) {
+            document.documentElement.setAttribute("data-theme", "dark");
+            localStorage.setItem("theme", "dark");
+        } else {
+            document.documentElement.setAttribute("data-theme", "light");
+            localStorage.setItem("theme", "light");
+        }
+    });
+
+const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+if (!currentTheme) {
+    if (prefersDarkScheme) {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
+    } else {
+        document.documentElement.setAttribute("data-theme", "light");
+        localStorage.setItem("theme", "light");
+    }
+}
+
 });
 
 
