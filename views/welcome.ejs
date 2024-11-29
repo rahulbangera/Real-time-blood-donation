@@ -173,9 +173,11 @@ if (!currentTheme) {
     if (prefersDarkScheme) {
         document.documentElement.setAttribute("data-theme", "dark");
         localStorage.setItem("theme", "dark");
+        toggle.checked = true;
     } else {
         document.documentElement.setAttribute("data-theme", "light");
         localStorage.setItem("theme", "light");
+        toggle.checked = false;
     }
 }
 
