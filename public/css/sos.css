@@ -7,6 +7,26 @@
   --specialFont: "Joti One", cursive;
   --normalFont: "Inconsolata", monospace;
   --darkBloodColor: rgb(77, 0, 0);
+  --otherColor: var(--darkBloodColor);
+  --leftSide: var(--bloodColor);
+  --rightSide: white;
+  --textLeft: white;
+  --textRight: var(--bloodColor);
+}
+
+[data-theme="dark"] {
+  --shade1: #363636;
+  --shade2: rgb(38 38 38);
+  --black-shade-1: rgb(12 12 12);
+  --bg-color: #121212;
+  --oppBlood: #e6e6e6;
+  --text-color: #e6e6e6;
+  --textGlobal: white;
+  --otherColor: rgb(70, 70, 70);
+  --leftSide: var(--black-shade-1);
+  --rightSide: var(--shade1);
+  --textLeft: var(--bloodColor);
+  --textRight: white;
 }
 
 body {
@@ -20,7 +40,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 112vh;
-  background-color: var(--darkBloodColor);
+  background-color: var(--otherColor);
   padding: 20px;
   box-sizing: border-box;
 }
@@ -47,12 +67,12 @@ body {
 }
 
 .left-side {
-  background-color: var(--bloodColor);
+  background-color: var(--leftSide);
   color: var(--oppBlood);
 }
 
 .right-side {
-  background-color: var(--oppBlood);
+  background-color: var(--rightSide);
   color: var(--darkBloodColor);
 }
 
@@ -61,6 +81,10 @@ body {
   font-size: 1.8rem;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.left-side .headContent {
+  color: var(--textLeft);
 }
 
 .leftMainContent,
@@ -149,7 +173,7 @@ button#submitRequest:hover {
     height: auto;
   }
 
-  .others{
+  .others {
     height: auto;
     padding: 80px 20px;
   }
@@ -163,7 +187,6 @@ button#submitRequest:hover {
   .right-side {
     height: 100%;
   }
-
 }
 
 /* Overlay styles */
@@ -288,7 +311,6 @@ input#mobile {
   margin-top: 20px;
 }
 
-
 .loading-overlay {
   position: fixed;
   top: 0;
@@ -303,8 +325,12 @@ input#mobile {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .spinner {
@@ -317,9 +343,7 @@ input#mobile {
   animation: spin 1s linear infinite;
 }
 
-
-
-.loadContainer{
+.loadContainer {
   width: 380px;
   border-radius: 20px;
   background-color: #fff;
@@ -346,4 +370,9 @@ input#mobile {
   border-top: 5px solid #e74c3c;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.right-side .headContent,
+.rightMainContent .headContent label {
+  color: var(--textRight) !important;
 }

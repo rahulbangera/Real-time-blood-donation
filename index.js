@@ -705,7 +705,7 @@ app.post("/searchDonors", async (req, res) => {
               Hi ${donor.name},
       
               You have a Blood Donation request from a user at a nearby hospital. Please visit the website to respond.
-              Visit the website: https://real-time-blood-donation.onrender.com/dashboard
+              Visit the website: ${url}/dashboard
       
               Thank you for your support.
               `;
@@ -1303,7 +1303,7 @@ app.post("/sos", async (req, res) => {
 
            Urgent Blood Donation request from a nearby hospital. To Contact the requestor, please call ${phone} or visit the website.
 
-            To Visit Website: https://real-time-blood-donation.onrender.com/dashboard
+            To Visit Website: ${url}/dashboard
 
             Thank you for your support.
             `;
