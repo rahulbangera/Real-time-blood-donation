@@ -6,12 +6,6 @@
     </div>
 
     <div class="right-nav">
-        <div class="dark-mode-toggle">
-            <label class="switch">
-                <input type="checkbox" id="darkModeToggle">
-                <span class="slider"></span>
-            </label>
-        </div>
         
         <% if(!userLoggedIn) {%>
         <a href="/signup">Register</a>
@@ -33,6 +27,14 @@
         <div class="menu-btn">
             <i class="fa fa-bars"></i>
         </div>
+
+        <div class="dark-mode-toggle" style="margin-left: 20px;">
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        
         <% if(!userLoggedIn) {%>
         <a href="/signup">Register</a>
         <a href="/signin">Login</a>
