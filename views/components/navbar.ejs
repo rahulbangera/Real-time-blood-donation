@@ -6,6 +6,13 @@
     </div>
 
     <div class="right-nav">
+        <div class="dark-mode-toggle">
+            <label class="switch">
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+        
         <% if(!userLoggedIn) {%>
         <a href="/signup">Register</a>
         <a href="/signin">Login</a>

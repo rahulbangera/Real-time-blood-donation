@@ -1,12 +1,26 @@
 @import url("https://fonts.googleapis.com/css2?family=Freckle+Face&family=Inconsolata:wght@200..900&family=Joti+One&family=Rubik+Wet+Paint&display=swap");
 
 :root {
-  --lightBloodColor: rgb(218, 69, 69);
+  --shade2: rgb(218, 57, 57);
   --bloodColor: rgb(218, 57, 57);
   --oppBlood: white;
+  --bg-color: #f5f5f5;
   --specialFont: Joti One, cursive;
   --normalFont: "Inconsolata", monospace;
   --darkBloodColor: rgb(77, 0, 0);
+  --hero-bg: rgb(231, 179, 179);
+  --textGlobal: black;
+}
+
+[data-theme="dark"] {
+  --shade1: #363636;
+  --shade2: rgb(38 38 38);
+  --black-shade-1: rgb(12 12 12);
+  --bg-color: #121212;
+  --oppBlood: #e6e6e6;
+  --text-color: #e6e6e6;
+  --hero-bg: var(--black-shade-1);
+  --textGlobal: white;
 }
 
 button {
@@ -20,6 +34,7 @@ button {
 }
 
 body {
+  background-color: var(--bg-color);
   font-family: inconsolata, sans-serif;
 }
 
@@ -41,11 +56,9 @@ a {
   }
 }
 
-
-
 .hero {
   height: 90vh;
-  background-color: rgb(231, 179, 179);
+  background-color: var(--hero-bg);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -99,7 +112,7 @@ a {
 }
 
 .mainSection {
-  background-color: var(--bloodColor);
+  background-color: var(--shade2);
   height: 100vh;
   width: 100%;
 }
@@ -159,7 +172,7 @@ a {
 
 .aboutUsSection {
   padding: 20px;
-  background-color: rgb(231, 179, 179);
+  background-color: var(--hero-bg);
   display: flex;
   width: 100%;
 }
@@ -243,7 +256,7 @@ a {
 }
 
 .footer {
-  background-color: var(--bloodColor);
+  background-color: var(--shade2);
   color: white;
   text-align: center;
   padding: 20px 0;
@@ -345,4 +358,57 @@ a {
   scale: 1.1;
   background-color: var(--darkBloodColor);
   border: 2px solid white;
+}
+
+/* body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .navbar {
+  background-color: var(--grey-shade-2);
+}
+
+[data-theme="dark"] .left-nav {
+  background-color: var(--grey-shade-1);
+}
+
+[dark-theme="dark"] .hero {
+  background-color: var(--black-shade-1);
+}
+
+[dark-theme="dark"] .heroButtons button {
+  background-color: var(--bloodColor);
+  color: var(--oppBlood);
+}
+
+[dark-theme="dark"] .mainSection {
+  background-color: var(--black-shade-1);
+}
+
+[dark-theme="dark"] .aboutUsSection {
+  background-color: var(--black-shade-1);
+}
+
+[dark-theme="dark"] .footer {
+  background-color: var(--grey-shade-2);
+} */
+
+/* * {
+  color: var(--oppBlood);
+} */
+
+.hero h1,
+.hero p,
+.hero h2 {
+  color: var(--textGlobal);
+}
+
+.mainSection p,
+.mainSection h3 {
+  color: var(--oppBlood);
+}
+
+.aboutUsSection p {
+  color: var(--textGlobal);
 }

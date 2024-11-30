@@ -3,14 +3,23 @@
 :root {
     --lightBloodColor: rgb(218, 69, 69);
     --bgColor: rgb(229, 160, 160);
-
     --bloodColor: rgb(218, 57, 57);
     --oppBlood: white;
     --specialFont: 'Joti One', cursive;
     --normalFont: 'Inconsolata', monospace;
-    --darkBloodColor: rgb(77, 0, 0);
-
+    --extraShade6: rgb(77, 0, 0);
+    --extraShade7: white;
 }
+
+[data-theme="dark"] {
+    --shade1: #363636;
+    --shade2: rgb(38 38 38);
+    --black-shade-1: rgb(12 12 12);
+    --bg-color: #121212;
+    --oppBlood: #e6e6e6;
+    --textGlobal: white;
+    --extraShade6: var(--black-shade-1);
+  }
 
 
 .navbar{
@@ -25,11 +34,11 @@
 body{
     margin: 0;
     padding: 0;
-    background-color: var(--darkBloodColor);
+    background-color: var(--extraShade6);
 }
 
 .popupContainer{
-    background-color: var(--darkBloodColor);
+    background-color: var(--extraShade6);
 }
 
 .statusPopup {

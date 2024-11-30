@@ -15,6 +15,14 @@
           v: "weekly",
         });
       </script>
+
+<style>
+    body {
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out; 
+    }
+  </style>
 </head>
 <body>
     <%- include('components/navbar')%>
@@ -63,8 +71,8 @@
            <div class="noDonorsFound">
                 No Donors Found
            </div>
-          
-            <!-- <div class="donor-card">
+<!--           
+            <div class="donor-card">
                 <h3>Donor Name: --</h3>
                 <p>Blood Group: --</p>
                 <p>Location: --</p>
@@ -109,6 +117,38 @@
         </div>
     </div> -->
     <%- include("components/bottom-bar") %>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const toggle = document.getElementById("darkModeToggle");
+          const currentTheme = localStorage.getItem("theme");
+      
+          if (currentTheme === "dark") {
+              document.documentElement.setAttribute("data-theme", "dark");
+              toggle.checked = true;
+          }
+      
+          toggle.addEventListener("change", () => {
+              if (toggle.checked) {
+                  document.documentElement.setAttribute("data-theme", "dark");
+                  localStorage.setItem("theme", "dark");
+              } else {
+                  document.documentElement.setAttribute("data-theme", "light");
+                  localStorage.setItem("theme", "light");
+              }
+          });
+      });
+      
+      </script>
+
+<script>
+  
+    setTimeout(() => {
+        document.body.style.visibility = 'visible';
+        document.body.style.opacity = '1'; 
+    }, 100);
+    
+  </script>
 
     <script src="js/request.js"></script>
     

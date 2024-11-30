@@ -1,3 +1,22 @@
+:root {
+  --shade1: white;
+  --shade2: #f03a43;
+  --extraShade6: white;
+  --textColo: black;
+  --oppBlood2: white;
+  --extraShader: white;
+}
+
+[data-theme="dark"] {
+  --shade1: #363636;
+  --shade2: rgb(38 38 38);
+  --black-shade-1: rgb(12 12 12);
+  --oppBlood: #e6e6e6;
+  --extraShade6: var(--black-shade-1);
+  --textColo: white;
+  --oppBlood2: black;
+  --extraShader: var(--shade2);
+}
 * {
   margin: 0;
   padding: 0;
@@ -5,7 +24,7 @@
   font-family: "Inconsolata", monospace;
 }
 body {
-  background-color: #f03a43;
+  background-color: var(--shade2);
 }
 
 .mainContainer {
@@ -17,18 +36,19 @@ body {
   padding: 20px;
   overflow: hidden;
 }
-.navbar {
+.navbar2 {
   width: 100%;
   max-width: 1100px;
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
-.navbar a {
+.navbar2 a {
   text-decoration: none;
-  color: #ffffff;
+  color: var(--oppBlood2);
   padding: 10px 20px;
-  background-color: black;
+  background-color: var(--textColo);
   border-radius: 8px;
   font-weight: 500;
   display: flex;
@@ -36,13 +56,13 @@ body {
   gap: 8px;
   transition: background-color 0.3s;
 }
-.navbar a:hover {
+.navbar2 a:hover {
   background-color: #a71d2a;
 }
 .profile-heading {
   font-family: "Joti One", cursive;
   font-size: 36px;
-  color: black;
+  color: var(--textColo);
   margin-bottom: 15px;
   text-align: center;
   background-color: transparent;
@@ -54,7 +74,7 @@ body {
   padding: 60px;
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  background-color: #ffffff;
+  background-color: var(--extraShade6);
   position: relative;
 }
 .profile-image {
@@ -93,16 +113,18 @@ body {
 }
 .profile-info label {
   font-weight: 800;
-  color: #333;
+  color: var(--textColo);
   font-size: 20px;
 }
 .profile-info input {
   border: none;
+  background-color: var(--extraShader);
   border-bottom: 1px solid #ccc;
-  padding: 5px 0;
+  border-radius: 9px;
+  padding: 8px 10px;
   font-size: 17px;
   width: 100%;
-  color: #555;
+  color: var(--textColo);
   font-weight: 400;
 }
 .profile-info input:focus {
@@ -156,7 +178,7 @@ body {
   width: auto;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
   .profile-content {
     flex-direction: column;
     align-items: center;
@@ -171,4 +193,50 @@ body {
   .profile-container {
     height: auto;
   }
+}
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 20px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #4caf50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
 }
