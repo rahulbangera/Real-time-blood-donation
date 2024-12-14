@@ -1149,7 +1149,7 @@ app.post("/forgot-password", async (req, res) => {
     newToken.save();
 
     // Generate the password reset link
-    const resetLink = `https://real-time-blood-donation.onrender.com/reset-password/${uniqueResetToken}`;
+    const resetLink = `${url}/${uniqueResetToken}`;
 
     await transporter.sendMail({
       from: "coderangersverify@gmail.com",
