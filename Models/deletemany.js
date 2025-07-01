@@ -1,16 +1,11 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv"
 
-// try {
-//   mongoose.connect(
-//     "mongodb+srv://myAtlasDBUser:Hero123456@test1.bu7v6.mongodb.net/bloodDonation?retryWrites=true&w=majority&appName=Test1"
-//   );
+dotenv.config()
 
-// } catch (error) {
-//   console.error("Error connecting to MongoDB:", error);
-// }
+const DB_URL = process.env.DATABASE_URL || "";
 
-const mongoUrl =
-  "mongodb+srv://myAtlasDBUser:Hero123456@test1.bu7v6.mongodb.net/bloodDonation?retryWrites=true&w=majority&appName=Test1";
+const mongoUrl = DB_URL;
 
 const deleteCollections = async () => {
   try {

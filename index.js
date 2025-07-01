@@ -44,6 +44,8 @@ const url =
   process.env.BASE_URL ||
   "https://real-time-blood-donation-production-cdfc.up.railway.app";
 
+const DB_URL = process.env.DATABASE_URL || "";
+
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -166,8 +168,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-      mongoUrl:
-        "mongodb+srv://myAtlasDBUser:Hero123456@test1.bu7v6.mongodb.net/bloodDonation?retryWrites=true&w=majority&appName=Test1",
+      mongoUrl: DB_URL,
       collectionName: "sessions",
     }),
     cookie: {

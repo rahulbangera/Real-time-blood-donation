@@ -1,9 +1,14 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv"
+
+dotenv.config()
+
+const DB_URL = process.env.DATABASE_URL || "";
 
 try {
   mongoose.connect(
-    "mongodb+srv://myAtlasDBUser:Hero123456@test1.bu7v6.mongodb.net/bloodDonation?retryWrites=true&w=majority&appName=Test1"
-  );
+    DB_URL
+  );  
 } catch (error) {
   console.error("Error connecting to MongoDB:", error);
 }
